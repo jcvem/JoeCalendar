@@ -1,0 +1,16 @@
+{
+  "name": "캘린더",
+  "id": 1108185179,
+  "region": "korea",
+  "artist": "Apple",
+  "genre": "Productivity",
+  "rating": 4.7354,
+  "ratingsCount": 26663,
+  "url": "https://apps.apple.com/kr/app/%EC%BA%98%EB%A6%B0%EB%8D%94/id1108185179?uo=4",
+  "screenshots": [
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource221/v4/90/a5/97/90a59700-1d6e-8558-6485-b0c70533d667/7328d3c5-3f25-4492-bd9d-7d5b0d3aeba9_Calendar_App_Store_Screenshot_-_iPhone_5-5.001.jpeg/392x696bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/9c/cf/2b/9ccf2b74-0da9-e939-89be-2da42a653481/0ffcbe68-bd25-4686-a562-2bf88ce9884e_Calendar_App_Store_Screenshot_-_iPhone_5-5.003.jpeg/392x696bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/26/74/f6/2674f64f-4ed0-3161-09f7-15ce73399e94/8457c5c1-609b-4be1-9ae7-7d12c62b105a_Calendar_App_Store_Screenshot_-_iPhone_5-5.002.jpeg/392x696bb.jpg",
+    "https://is1-ssl.mzstatic.com/image/thumb/PurpleSource211/v4/1e/a5/8a/1ea58ac4-f85e-f776-3237-8f74813cdd22/fb2ba58e-9f7f-4472-beeb-e90eba08a04f_Calendar_App_Store_Screenshot_-_iPhone_5-5.004.jpeg/392x696bb.jpg"
+  ]
+}

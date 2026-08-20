@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+# Xcode
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+# SwiftPM
+.build/
+# Firebase
+GoogleService-Info.plist
