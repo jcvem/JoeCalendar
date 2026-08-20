@@ -1,0 +1,132 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+    
+    function isGroupMember(groupId) {
+      return isAuthenticated() && 
+        request.auth.uid in get(/databases/$(database)/documents/groups/$(groupId)).data.memberUids;
+    }
+    
+    function isEventVisibleToUser(eventData) {
+      // 1. Creator can always read
+      // 2. Public events are visible to any authenticated user
+      // 3. Group events are strictly limited to members of the event's groupIds
+      // 4. Private events are creator-only
+      return isAuthenticated() && (
+        eventData.createdBy == request.auth.uid ||
+        eventData.visibility.type == 'public' ||
+        (
+          eventData.visibility.type == 'group' &&
+          eventData.visibility.groupIds.size() > 0 &&
+          eventData.visibility.groupIds.hasAny(
+            get(/databases/$(database)/documents/users/$(request.auth.uid)).data.groupIds
+          )
+        )
+      );
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && request.auth.token.admin == true;
+    }
+
+    // -------------------------------------------------------------
+    // Users Collection: users/{uid}
+    // -------------------------------------------------------------
+    match /users/{uid} {
+      allow read: if isAuthenticated();
+      allow create, update: if isOwner(uid);
+      allow delete: if false; // Soft deletes handled via function/admin
+    }
+
+    // -------------------------------------------------------------
+    // Groups Collection: groups/{groupId}
+    // Groups are the core privacy unit (e.g. Workout vs Work vs Family)
+    // -------------------------------------------------------------
+    match /groups/{groupId} {
+      allow read: if isAuthenticated() && (
+        resource.data.ownerUid == request.auth.uid ||
+        request.auth.uid in resource.data.memberUids
+      );
+      allow create: if isAuthenticated() && request.resource.data.ownerUid == request.auth.uid;
+      allow update: if isAuthenticated() && (
+        resource.data.ownerUid == request.auth.uid ||
+        request.auth.uid in resource.data.memberUids
+      );
+      allow delete: if isAuthenticated() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // -------------------------------------------------------------
+    // Friendships Collection: friendships/{id}
+    // -------------------------------------------------------------
+    match /friendships/{friendshipId} {
+      allow read: if isAuthenticated() && (
+        resource.data.uidA == request.auth.uid ||
+        resource.data.uidB == request.auth.uid
+      );
+      allow create: if isAuthenticated() && (
+        request.resource.data.uidA == request.auth.uid ||
+        request.resource.data.uidB == request.auth.uid
+      );
+      allow update, delete: if isAuthenticated() && (
+        resource.data.uidA == request.auth.uid ||
+        resource.data.uidB == request.auth.uid
+      );
+    }
+
+    // -------------------------------------------------------------
+    // Events Collection: events/{eventId}
+    // Strict privacy enforcement: Group-visibility events cannot leak
+    // to unauthorized friend circles (e.g. Work friends won't see Pickleball)
+    // -------------------------------------------------------------
+    match /events/{eventId} {
+      allow read: if isEventVisibleToUser(resource.data);
+      allow create: if isAuthenticated() && request.resource.data.createdBy == request.auth.uid;
+      allow update: if isAuthenticated() && (
+        resource.data.createdBy == request.auth.uid ||
+        (resource.data.visibility.type == 'group' && isEventVisibleToUser(resource.data))
+      );
+      allow delete: if isAuthenticated() && resource.data.createdBy == request.auth.uid;
+    }
+
+    // -------------------------------------------------------------
+    // Local Calendars Collection: localCalendars/{id}
+    // Curated next-14-days feeds, editorially managed by team
+    // -------------------------------------------------------------
+    match /localCalendars/{calendarId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+      
+      match /events/{subEventId} {
+        allow read: if isAuthenticated();
+        allow write: if isAdmin();
+      }
+    }
+
+    // -------------------------------------------------------------
+    // Promotions Collection: promotions/{id}
+    // Commercial ad units for free-tier monetization
+    // -------------------------------------------------------------
+    match /promotions/{promoId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // Subscriptions Collection: subscriptions/{uid}
+    // Paid ad-removal subscriptions managed via StoreKit / webhook
+    // -------------------------------------------------------------
+    match /subscriptions/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow write: if isAdmin(); // Only backend/functions write subscription state
+    }
+  }
+}

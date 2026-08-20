@@ -1,5 +1,6 @@
 # macOS
 .DS_Store
+
 # Xcode
 *.xcworkspace/xcuserdata/
 *.xcodeproj/xcuserdata/
@@ -8,7 +9,17 @@ DerivedData/
 *.ipa
 *.dSYM.zip
 *.dSYM
+
 # SwiftPM
 .build/
-# Firebase
+
+# Firebase & GCP
 GoogleService-Info.plist
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+
+# Node & Functions
+node_modules/
+functions/node_modules/
+functions/lib/
