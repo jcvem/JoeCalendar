@@ -23,3 +23,6 @@ firebase-debug.*.log
 node_modules/
 functions/node_modules/
 functions/lib/
+
+# Node (Cloud Functions deps)
+functions/node_modules/
