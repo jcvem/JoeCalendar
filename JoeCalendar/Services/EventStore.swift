@@ -135,6 +135,20 @@ public final class EventStore: ObservableObject {
             .map { (key: $0.key, events: $0.value.sorted { $0.startDate < $1.startDate }) }
     }
     
+    public func events(for groupId: String) -> [CalendarEvent] {
+        events.filter { event in
+            event.visibility.type == .group && event.visibility.groupIds.contains(groupId)
+        }.sorted { $0.startDate < $1.startDate }
+    }
+    
+    public func selectGroupFilter(_ groupId: String?) {
+        self.selectedGroupId = groupId
+    }
+    
+    public func clearGroupFilter() {
+        self.selectedGroupId = nil
+    }
+    
     // MARK: - Mutations (Create, Edit, Delete)
     
     public func addEvent(_ event: CalendarEvent) async throws {
@@ -169,6 +183,11 @@ public final class EventStore: ObservableObject {
         events.append(mutableEvent)
         events.sort { $0.startDate < $1.startDate }
         persistEvents()
+        
+        // Asynchronously mirror to Firestore `events/{eventId}`
+        Task {
+            try? await pushEventToFirestore(mutableEvent)
+        }
     }
     
     public func updateEvent(_ event: CalendarEvent) async throws {
@@ -204,6 +223,10 @@ public final class EventStore: ObservableObject {
             events[index] = mutableEvent
             events.sort { $0.startDate < $1.startDate }
             persistEvents()
+            
+            Task {
+                try? await pushEventToFirestore(mutableEvent)
+            }
         }
     }
     
@@ -223,6 +246,67 @@ public final class EventStore: ObservableObject {
         
         events.removeAll { $0.id == event.id }
         persistEvents()
+        
+        Task {
+            try? await deleteEventFromFirestore(eventId: event.id)
+        }
+    }
+    
+    // MARK: - Firestore REST Mirror
+    
+    private func pushEventToFirestore(_ event: CalendarEvent) async throws {
+        let projectId = "joecalendar-e8327"
+        guard let url = URL(string: "https://firestore.googleapis.com/v1/projects/\(projectId)/databases/(default)/documents/events/\(event.id)") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let isoFormatter = ISO8601DateFormatter()
+        let createdByUid = event.createdBy.isEmpty ? FriendService.shared.currentUser.id : event.createdBy
+        
+        var fields: [String: Any] = [
+            "title": ["stringValue": event.title],
+            "startDate": ["timestampValue": isoFormatter.string(from: event.startDate)],
+            "endDate": ["timestampValue": isoFormatter.string(from: event.endDate)],
+            "isAllDay": ["booleanValue": event.isAllDay],
+            "calendarType": ["stringValue": event.calendarType.rawValue],
+            "visibility": [
+                "mapValue": [
+                    "fields": [
+                        "type": ["stringValue": event.visibility.type.rawValue],
+                        "groupIds": [
+                            "arrayValue": [
+                                "values": event.visibility.groupIds.map { ["stringValue": $0] }
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            "recurrence": ["stringValue": event.recurrence.rawValue],
+            "createdBy": ["stringValue": createdByUid],
+            "colorHex": ["stringValue": event.colorHex],
+            "source": ["stringValue": event.source ?? event.calendarType.rawValue],
+            "createdAt": ["timestampValue": isoFormatter.string(from: event.createdAt)],
+            "updatedAt": ["timestampValue": isoFormatter.string(from: event.updatedAt)]
+        ]
+        
+        if let location = event.location {
+            fields["location"] = ["stringValue": location]
+        }
+        if let notes = event.notes {
+            fields["notes"] = ["stringValue": notes]
+        }
+        
+        request.httpBody = try? JSONSerialization.data(withJSONObject: ["fields": fields])
+        _ = try? await URLSession.shared.data(for: request)
+    }
+    
+    private func deleteEventFromFirestore(eventId: String) async throws {
+        let projectId = "joecalendar-e8327"
+        guard let url = URL(string: "https://firestore.googleapis.com/v1/projects/\(projectId)/databases/(default)/documents/events/\(eventId)") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        _ = try? await URLSession.shared.data(for: request)
     }
     
     // MARK: - Synchronization

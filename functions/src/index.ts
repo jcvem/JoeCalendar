@@ -1,8 +1,8 @@
 /**
- * JoeCalendar — Cloud Functions (Phase 0 Foundation Stubs)
+ * JoeCalendar — Cloud Functions (Phase 2 Social Groups)
  * 
  * Functions:
- * 1. fanOutGroupEvent: Triggered on event create/update. Fans out events to allowed group members only.
+ * 1. fanOutGroupEvent: Triggered on event create/update. Fans out notifications to verified group members.
  * 2. targetPromotionsForUser: Callable endpoint delivering targeted promo ad-units to free users (filtered out for ad-free subscribers).
  * 3. publishLocalCalendarWindow: Daily scheduled job managing the curated 14-day discovery window.
  */
@@ -17,9 +17,11 @@ const db = admin.firestore();
 /**
  * Triggered whenever an event is created or modified.
  * If visibility is 'group', ensures only verified group members receive notification / sync fan-out.
- * Explicitly blocks leakage of private/social events (e.g. Pickleball) to work circles.
+ * Explicitly blocks leakage of private/social events (e.g. Pickleball) to unauthorized circles.
  */
-export const fanOutGroupEvent = functions.firestore
+export const fanOutGroupEvent = functions
+  .region("asia-east1")
+  .firestore
   .document("events/{eventId}")
   .onWrite(async (change, context) => {
     const eventId = context.params.eventId;
@@ -33,22 +35,28 @@ export const fanOutGroupEvent = functions.firestore
 
     const { visibility, createdBy, title } = afterData;
 
-    if (!visibility || visibility.type !== "group" || !Array.isArray(visibility.groupIds)) {
+    if (!visibility || visibility.type !== "group" || !Array.isArray(visibility.groupIds) || visibility.groupIds.length === 0) {
       // Not a group-scoped event
       return null;
     }
 
     const groupIds: string[] = visibility.groupIds;
     const recipientUids = new Set<string>();
+    const groupNames: string[] = [];
 
     for (const groupId of groupIds) {
       const groupDoc = await db.collection("groups").doc(groupId).get();
       if (groupDoc.exists) {
         const groupData = groupDoc.data();
-        if (groupData && Array.isArray(groupData.memberUids)) {
-          for (const uid of groupData.memberUids) {
-            if (uid !== createdBy) {
-              recipientUids.add(uid);
+        if (groupData) {
+          if (groupData.name) {
+            groupNames.push(groupData.name);
+          }
+          if (Array.isArray(groupData.memberUids)) {
+            for (const uid of groupData.memberUids) {
+              if (uid !== createdBy) {
+                recipientUids.add(uid);
+              }
             }
           }
         }
@@ -56,25 +64,46 @@ export const fanOutGroupEvent = functions.firestore
     }
 
     console.log(
-      `Fanning out event '${title}' (${eventId}) to ${recipientUids.size} group members across groups: ${groupIds.join(", ")}`
+      `Fanning out event '${title}' (${eventId}) to ${recipientUids.size} members across groups: ${groupNames.join(", ")}`
     );
 
-    // Batch fan-out feed updates / push notifications to allowed members
+    if (recipientUids.size === 0) {
+      return null;
+    }
+
     const batch = db.batch();
+    const primaryGroupName = groupNames[0] || "Friend Group";
+
     for (const memberUid of recipientUids) {
-      const notificationRef = db
+      // 1. Write to member's subcollection
+      const userNotificationRef = db
         .collection("users")
         .doc(memberUid)
         .collection("notifications")
         .doc(`event_${eventId}`);
       
-      batch.set(notificationRef, {
+      const payload = {
         type: "group_event_added",
         eventId,
-        eventTitle: title,
+        eventTitle: title || "New Event",
         groupIds,
+        groupName: primaryGroupName,
+        createdBy: createdBy || "friend",
+        message: `New event in ${primaryGroupName}: ${title || "New Event"}`,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         read: false,
+      };
+
+      batch.set(userNotificationRef, payload);
+
+      // 2. Write to top-level notifications collection for global index queries
+      const globalNotificationRef = db
+        .collection("notifications")
+        .doc(`${eventId}_${memberUid}`);
+      
+      batch.set(globalNotificationRef, {
+        recipientUid: memberUid,
+        ...payload,
       });
     }
 
@@ -86,7 +115,9 @@ export const fanOutGroupEvent = functions.firestore
  * Returns active promotions for a free user based on their region and interests.
  * If the user has an active ad-free subscription, returns an empty list.
  */
-export const targetPromotionsForUser = functions.https.onCall(async (data, context) => {
+export const targetPromotionsForUser = functions
+  .region("asia-east1")
+  .https.onCall(async (data, context) => {
   const uid = context.auth?.uid;
   if (!uid) {
     throw new functions.https.HttpsError(
@@ -141,7 +172,9 @@ export const targetPromotionsForUser = functions.https.onCall(async (data, conte
  * Daily scheduled function (running at 00:00 UTC) to manage the curated 14-day window for local calendars.
  * Updates publication flags and aggregates upcoming curated local event feeds.
  */
-export const publishLocalCalendarWindow = functions.pubsub
+export const publishLocalCalendarWindow = functions
+  .region("asia-east1")
+  .pubsub
   .schedule("0 0 * * *")
   .timeZone("Asia/Tokyo")
   .onRun(async (context) => {

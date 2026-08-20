@@ -53,7 +53,7 @@ public enum FriendshipStatus: String, Codable {
     case blocked = "blocked"
 }
 
-public struct Friendship: Identifiable, Codable, Equatable {
+public struct Friendship: Identifiable, Codable, Equatable, Hashable {
     public var id: String
     public var uidA: String
     public var uidB: String
