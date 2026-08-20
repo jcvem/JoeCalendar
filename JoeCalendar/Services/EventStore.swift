@@ -72,12 +72,17 @@ public final class EventStore: ObservableObject {
     
     public var filteredEvents: [CalendarEvent] {
         events.filter { event in
+            // Guardrail: Never inject promo ad units into private, group, or calendar grid views
+            if event.calendarType == .promo {
+                return false
+            }
+            
             // Source type filter
             if let filter = selectedSourceFilter, event.calendarType != filter {
                 return false
             }
             
-            // Group filter
+            // Group filter (strict privacy isolation)
             if let groupId = selectedGroupId {
                 if event.visibility.type != .group || !event.visibility.groupIds.contains(groupId) {
                     return false

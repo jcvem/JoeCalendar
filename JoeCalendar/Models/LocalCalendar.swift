@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 public struct LocalCalendar: Identifiable, Codable, Equatable, Hashable {
     public var id: String
@@ -14,6 +15,8 @@ public struct LocalCalendar: Identifiable, Codable, Equatable, Hashable {
     public var description: String
     public var coverImageUrl: String?
     public var region: String
+    public var category: String
+    public var colorHex: String
     public var tags: [String]
     public var windowStartDate: Date
     public var windowEndDate: Date
@@ -28,6 +31,8 @@ public struct LocalCalendar: Identifiable, Codable, Equatable, Hashable {
         description: String,
         coverImageUrl: String? = nil,
         region: String = "Tokyo",
+        category: String = "Culture",
+        colorHex: String = AppColor.GroupPastel.sage.hexString,
         tags: [String] = [],
         windowStartDate: Date = Date(),
         windowEndDate: Date = Calendar.current.date(byAdding: .day, value: 14, to: Date()) ?? Date(),
@@ -41,6 +46,8 @@ public struct LocalCalendar: Identifiable, Codable, Equatable, Hashable {
         self.description = description
         self.coverImageUrl = coverImageUrl
         self.region = region
+        self.category = category
+        self.colorHex = colorHex
         self.tags = tags
         self.windowStartDate = windowStartDate
         self.windowEndDate = windowEndDate
@@ -49,4 +56,9 @@ public struct LocalCalendar: Identifiable, Codable, Equatable, Hashable {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }
+    
+    public var color: Color {
+        Color(hexString: colorHex)
+    }
 }
+

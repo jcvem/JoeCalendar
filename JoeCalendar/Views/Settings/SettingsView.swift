@@ -15,8 +15,10 @@ public struct SettingsView: View {
     @StateObject private var firebaseService = FirebaseService.shared
     @StateObject private var eventKitService = EventKitService.shared
     @StateObject private var googleService = GoogleCalendarService.shared
+    @ObservedObject private var subscriptionService = SubscriptionService.shared
     
     @State private var isGoogleAuthSheetPresented: Bool = false
+    @State private var isPaywallPresented: Bool = false
     @State private var googleEmailInput: String = ""
     
     public init() {}
@@ -52,6 +54,9 @@ public struct SettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $isGoogleAuthSheetPresented) {
                 googleSignInModal
+            }
+            .sheet(isPresented: $isPaywallPresented) {
+                PaywallView()
             }
         }
     }
@@ -328,25 +333,78 @@ public struct SettingsView: View {
                 Text(loc: "settings_subscription")
                     .font(AppTypography.headline())
                     .foregroundColor(AppColor.inkPrimary)
-            }
-            
-            HStack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(loc: "settings_free_plan")
-                        .font(AppTypography.headline())
-                        .foregroundColor(AppColor.inkPrimary)
-                    Text(loc: "settings_free_plan_desc")
-                        .font(AppTypography.footnote())
-                        .foregroundColor(AppColor.inkSecondary)
-                }
                 
                 Spacer()
                 
-                Button(action: {}) {
-                    Text(loc: "settings_upgrade_ad_free")
+                if subscriptionService.isAdFree {
+                    Text(loc: "settings_pro_badge")
                         .font(AppTypography.captionMedium())
+                        .foregroundColor(AppColor.warning)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(AppColor.GroupPastel.yamabuki.bgSubtle)
+                        .clipShape(Capsule())
                 }
-                .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: true))
+            }
+            
+            VStack(spacing: AppSpacing.sm) {
+                HStack {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(loc: subscriptionService.isAdFree ? "settings_pro_active_title" : "settings_free_plan")
+                            .font(AppTypography.headline())
+                            .foregroundColor(AppColor.inkPrimary)
+                        Text(loc: subscriptionService.isAdFree ? "settings_pro_active_desc" : "settings_free_plan_desc")
+                            .font(AppTypography.footnote())
+                            .foregroundColor(AppColor.inkSecondary)
+                    }
+                    
+                    Spacer()
+                    
+                    if !subscriptionService.isAdFree {
+                        Button(action: { isPaywallPresented = true }) {
+                            Text(loc: "settings_upgrade_ad_free")
+                                .font(AppTypography.captionMedium())
+                        }
+                        .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: true))
+                    }
+                }
+                
+                Divider()
+                    .background(AppColor.inkBorderSubtle)
+                
+                // Restore Purchases row
+                HStack {
+                    Button(action: {
+                        Task {
+                            try? await subscriptionService.restorePurchases()
+                        }
+                    }) {
+                        HStack(spacing: 4) {
+                            if subscriptionService.isRestoring {
+                                ProgressView()
+                                    .scaleEffect(0.7)
+                            } else {
+                                Image(systemName: "arrow.clockwise")
+                                    .font(.system(size: 11))
+                            }
+                            Text(loc: "paywall_restore_purchases")
+                                .font(AppTypography.footnote())
+                                .foregroundColor(AppColor.accent)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    
+                    Spacer()
+                    
+                    if !subscriptionService.isAdFree {
+                        Button(action: { isPaywallPresented = true }) {
+                            Text(loc: "settings_remove_ads_action")
+                                .font(AppTypography.footnote())
+                                .foregroundColor(AppColor.accent)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
             }
             .paperCard(padding: AppSpacing.md)
         }
