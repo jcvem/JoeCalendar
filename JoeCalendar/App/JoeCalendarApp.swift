@@ -13,6 +13,8 @@ struct JoeCalendarApp: App {
     @StateObject private var localeManager = LocaleManager.shared
     @StateObject private var firebaseService = FirebaseService.shared
     @StateObject private var eventStore = EventStore.shared
+    @StateObject private var subscriptionService = SubscriptionService.shared
+    @StateObject private var discoverService = DiscoverService.shared
     
     var body: some Scene {
         WindowGroup {
@@ -20,6 +22,8 @@ struct JoeCalendarApp: App {
                 .environmentObject(localeManager)
                 .environmentObject(firebaseService)
                 .environmentObject(eventStore)
+                .environmentObject(subscriptionService)
+                .environmentObject(discoverService)
                 .environment(\.locale, localeManager.effectiveLocale)
         }
     }

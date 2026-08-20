@@ -19,6 +19,7 @@ public struct JoeUser: Identifiable, Codable, Equatable, Hashable {
     public var friendIds: [String]
     public var groupIds: [String]
     public var linkedCalendars: [String]
+    public var followedLocalCalendarIds: [String]
     public var createdAt: Date
     public var updatedAt: Date
     
@@ -33,6 +34,7 @@ public struct JoeUser: Identifiable, Codable, Equatable, Hashable {
         friendIds: [String] = [],
         groupIds: [String] = [],
         linkedCalendars: [String] = [],
+        followedLocalCalendarIds: [String] = [],
         createdAt: Date = Date(),
         updatedAt: Date = Date()
     ) {
@@ -46,6 +48,7 @@ public struct JoeUser: Identifiable, Codable, Equatable, Hashable {
         self.friendIds = friendIds
         self.groupIds = groupIds
         self.linkedCalendars = linkedCalendars
+        self.followedLocalCalendarIds = followedLocalCalendarIds
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }

@@ -45,4 +45,17 @@ public struct Subscription: Identifiable, Codable, Equatable {
         self.cancelAtPeriodEnd = cancelAtPeriodEnd
         self.updatedAt = updatedAt
     }
+    
+    public var isPro: Bool {
+        isAdFree && (status == .active || status == .trialing)
+    }
+    
+    public var isMonthly: Bool {
+        planId.contains("monthly")
+    }
+    
+    public var isYearly: Bool {
+        planId.contains("yearly")
+    }
 }
+
