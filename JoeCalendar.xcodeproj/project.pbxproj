@@ -31,6 +31,10 @@
 		100100000000000000000024 /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000024 /* WeekView.swift */; };
 		100100000000000000000025 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000025 /* ListView.swift */; };
 		100100000000000000000026 /* EventFormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000026 /* EventFormSheet.swift */; };
+		100100000000000000000027 /* FriendService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000027 /* FriendService.swift */; };
+		100100000000000000000028 /* CreateGroupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000028 /* CreateGroupSheet.swift */; };
+		100100000000000000000029 /* GroupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000029 /* GroupDetailView.swift */; };
+		100100000000000000000030 /* AddFriendSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000030 /* AddFriendSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +64,10 @@
 		200100000000000000000024 /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
 		200100000000000000000025 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		200100000000000000000026 /* EventFormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFormSheet.swift; sourceTree = "<group>"; };
+		200100000000000000000027 /* FriendService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendService.swift; sourceTree = "<group>"; };
+		200100000000000000000028 /* CreateGroupSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupSheet.swift; sourceTree = "<group>"; };
+		200100000000000000000029 /* GroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailView.swift; sourceTree = "<group>"; };
+		200100000000000000000030 /* AddFriendSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +139,7 @@
 				200100000000000000000021 /* EventKitService.swift */,
 				200100000000000000000022 /* GoogleCalendarService.swift */,
 				200100000000000000000023 /* EventStore.swift */,
+				200100000000000000000027 /* FriendService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -163,6 +172,9 @@
 			isa = PBXGroup;
 			children = (
 				200100000000000000000014 /* FriendsView.swift */,
+				200100000000000000000028 /* CreateGroupSheet.swift */,
+				200100000000000000000029 /* GroupDetailView.swift */,
+				200100000000000000000030 /* AddFriendSheet.swift */,
 			);
 			path = Friends;
 			sourceTree = "<group>";
@@ -295,6 +307,10 @@
 				100100000000000000000024 /* WeekView.swift in Sources */,
 				100100000000000000000025 /* ListView.swift in Sources */,
 				100100000000000000000026 /* EventFormSheet.swift in Sources */,
+				100100000000000000000027 /* FriendService.swift in Sources */,
+				100100000000000000000028 /* CreateGroupSheet.swift in Sources */,
+				100100000000000000000029 /* GroupDetailView.swift in Sources */,
+				100100000000000000000030 /* AddFriendSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

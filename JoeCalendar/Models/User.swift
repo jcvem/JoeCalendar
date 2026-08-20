@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct JoeUser: Identifiable, Codable, Equatable {
+public struct JoeUser: Identifiable, Codable, Equatable, Hashable {
     public var id: String // uid
     public var displayName: String
     public var email: String?

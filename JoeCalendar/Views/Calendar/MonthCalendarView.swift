@@ -12,6 +12,7 @@ import SwiftUI
 public struct MonthCalendarView: View {
     @EnvironmentObject private var localeManager: LocaleManager
     @EnvironmentObject private var eventStore: EventStore
+    @ObservedObject private var friendService = FriendService.shared
     
     @State private var displayedMonth: Date = Date()
     @State private var activeSheetMode: EventFormMode? = nil
@@ -38,6 +39,11 @@ public struct MonthCalendarView: View {
                     sourceFilterBar
                         .padding(.horizontal, AppSpacing.lg)
                         .padding(.bottom, AppSpacing.sm)
+                    
+                    // Active Group Filter Banner
+                    if let groupId = eventStore.selectedGroupId, let group = friendService.userGroups.first(where: { $0.id == groupId }) {
+                        groupFilterBanner(group: group)
+                    }
                     
                     // Active View Content
                     switch eventStore.viewMode {
@@ -170,10 +176,11 @@ public struct MonthCalendarView: View {
                 // All Filter
                 Button(action: {
                     eventStore.selectedSourceFilter = nil
+                    eventStore.clearGroupFilter()
                 }) {
                     Text(loc: "calendar_filter_all")
                 }
-                .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: eventStore.selectedSourceFilter == nil))
+                .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: eventStore.selectedSourceFilter == nil && eventStore.selectedGroupId == nil))
                 
                 // Joe Filter
                 Button(action: {
@@ -184,7 +191,7 @@ public struct MonthCalendarView: View {
                         Text(loc: CalendarType.joe.displayNameKey)
                     }
                 }
-                .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: eventStore.selectedSourceFilter == .joe))
+                .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: eventStore.selectedSourceFilter == .joe && eventStore.selectedGroupId == nil))
                 
                 // Apple Device Filter
                 Button(action: {
@@ -195,7 +202,7 @@ public struct MonthCalendarView: View {
                         Text(loc: CalendarType.device.displayNameKey)
                     }
                 }
-                .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: eventStore.selectedSourceFilter == .device))
+                .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: eventStore.selectedSourceFilter == .device && eventStore.selectedGroupId == nil))
                 
                 // Google Filter
                 Button(action: {
@@ -206,17 +213,72 @@ public struct MonthCalendarView: View {
                         Text(loc: CalendarType.google.displayNameKey)
                     }
                 }
-                .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: eventStore.selectedSourceFilter == .google))
+                .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: eventStore.selectedSourceFilter == .google && eventStore.selectedGroupId == nil))
+                
+                // User Groups Filters
+                ForEach(friendService.userGroups) { group in
+                    let isSelected = eventStore.selectedGroupId == group.id
+                    Button(action: {
+                        if isSelected {
+                            eventStore.clearGroupFilter()
+                        } else {
+                            eventStore.selectedSourceFilter = nil
+                            eventStore.selectGroupFilter(group.id)
+                        }
+                    }) {
+                        HStack(spacing: 4) {
+                            Circle()
+                                .fill(Color(hexString: group.colorHex))
+                                .frame(width: 7, height: 7)
+                            Text(group.name)
+                        }
+                    }
+                    .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: isSelected))
+                }
             }
         }
     }
     
     private func toggleFilter(_ type: CalendarType) {
+        eventStore.clearGroupFilter()
         if eventStore.selectedSourceFilter == type {
             eventStore.selectedSourceFilter = nil
         } else {
             eventStore.selectedSourceFilter = type
         }
+    }
+    
+    private func groupFilterBanner(group: FriendGroup) -> some View {
+        HStack(spacing: 6) {
+            Circle()
+                .fill(Color(hexString: group.colorHex))
+                .frame(width: 8, height: 8)
+            
+            Text(group.name)
+                .font(AppTypography.captionMedium())
+                .foregroundColor(AppColor.inkPrimary)
+            
+            Text(loc: "calendar_filter_active")
+                .font(AppTypography.caption())
+                .foregroundColor(AppColor.inkSecondary)
+            
+            Spacer()
+            
+            Button(action: {
+                eventStore.clearGroupFilter()
+            }) {
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundColor(AppColor.inkTertiary)
+                    .font(.system(size: 14))
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, AppSpacing.md)
+        .padding(.vertical, 6)
+        .background(Color(hexString: group.colorHex).opacity(0.16))
+        .clipShape(RoundedRectangle(cornerRadius: AppRadius.sm, style: .continuous))
+        .padding(.horizontal, AppSpacing.lg)
+        .padding(.bottom, AppSpacing.xs)
     }
     
     // MARK: - Month Content

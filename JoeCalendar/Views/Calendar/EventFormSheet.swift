@@ -2,15 +2,15 @@
 //  EventFormSheet.swift
 //  JoeCalendar
 //
-//  Created for JoeCalendar Phase 1 Core Calendar.
+//  Created for JoeCalendar Phase 1 Core Calendar & Extended for Phase 2 Social Groups.
 //  TimeTree-inspired Japanese calm event editor supporting creation,
-//  editing, recurrence rules, source dispatch, and social group picking.
+//  editing, recurrence rules, source dispatch, and real multi-group privacy picker.
 //
 
 import SwiftUI
 
 public enum EventFormMode: Equatable {
-    case new(defaultDate: Date)
+    case new(defaultDate: Date, preselectedGroupId: String? = nil)
     case edit(event: CalendarEvent)
 }
 
@@ -18,6 +18,7 @@ public struct EventFormSheet: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var localeManager: LocaleManager
     @EnvironmentObject private var eventStore: EventStore
+    @ObservedObject private var friendService = FriendService.shared
     
     private let mode: EventFormMode
     private let existingEvent: CalendarEvent?
@@ -29,7 +30,7 @@ public struct EventFormSheet: View {
     @State private var recurrence: EventRecurrence
     @State private var calendarType: CalendarType
     @State private var visibilityType: EventVisibilityType
-    @State private var selectedGroupId: String
+    @State private var selectedGroupIds: Set<String>
     @State private var selectedColorHex: String
     @State private var location: String
     @State private var notes: String
@@ -37,17 +38,10 @@ public struct EventFormSheet: View {
     @State private var isShowingDeleteAlert: Bool = false
     @State private var isSaving: Bool = false
     
-    // Sample groups for Social Unit differentiator
-    private let availableGroups: [FriendGroup] = [
-        FriendGroup(id: "workout_friends", name: "Workout Crew", ownerUid: "me", colorHex: AppColor.GroupPastel.sage.hexString),
-        FriendGroup(id: "family", name: "Family", ownerUid: "me", colorHex: AppColor.GroupPastel.sakura.hexString),
-        FriendGroup(id: "work_team", name: "Work Team", ownerUid: "me", colorHex: AppColor.GroupPastel.mist.hexString)
-    ]
-    
     public init(mode: EventFormMode) {
         self.mode = mode
         switch mode {
-        case .new(let defaultDate):
+        case .new(let defaultDate, let preselectedGroupId):
             self.existingEvent = nil
             _title = State(initialValue: "")
             _isAllDay = State(initialValue: false)
@@ -57,9 +51,22 @@ public struct EventFormSheet: View {
             _endDate = State(initialValue: end)
             _recurrence = State(initialValue: .none)
             _calendarType = State(initialValue: .joe)
-            _visibilityType = State(initialValue: .private)
-            _selectedGroupId = State(initialValue: "workout_friends")
-            _selectedColorHex = State(initialValue: AppColor.GroupPastel.sage.hexString)
+            
+            if let preGroupId = preselectedGroupId {
+                _visibilityType = State(initialValue: .group)
+                _selectedGroupIds = State(initialValue: [preGroupId])
+                if let grp = FriendService.shared.userGroups.first(where: { $0.id == preGroupId }) {
+                    _selectedColorHex = State(initialValue: grp.colorHex)
+                } else {
+                    _selectedColorHex = State(initialValue: AppColor.GroupPastel.sage.hexString)
+                }
+            } else {
+                _visibilityType = State(initialValue: .private)
+                let firstGroup = FriendService.shared.userGroups.first
+                _selectedGroupIds = State(initialValue: firstGroup.map { Set([$0.id]) } ?? [])
+                _selectedColorHex = State(initialValue: firstGroup?.colorHex ?? AppColor.GroupPastel.sage.hexString)
+            }
+            
             _location = State(initialValue: "")
             _notes = State(initialValue: "")
             
@@ -72,7 +79,7 @@ public struct EventFormSheet: View {
             _recurrence = State(initialValue: event.recurrence)
             _calendarType = State(initialValue: event.calendarType)
             _visibilityType = State(initialValue: event.visibility.type)
-            _selectedGroupId = State(initialValue: event.visibility.groupIds.first ?? "workout_friends")
+            _selectedGroupIds = State(initialValue: Set(event.visibility.groupIds))
             _selectedColorHex = State(initialValue: event.colorHex)
             _location = State(initialValue: event.location ?? "")
             _notes = State(initialValue: event.notes ?? "")
@@ -99,7 +106,7 @@ public struct EventFormSheet: View {
                         // Source / Calendar Type Card
                         sourceCard
                         
-                        // Visibility & Social Group Card
+                        // Visibility & Social Multi-Group Card
                         visibilityCard
                         
                         // Pastel Color Tag Picker
@@ -260,25 +267,57 @@ public struct EventFormSheet: View {
             .pickerStyle(.segmented)
             
             if visibilityType == .group {
-                VStack(alignment: .leading, spacing: AppSpacing.xs) {
+                VStack(alignment: .leading, spacing: AppSpacing.sm) {
                     Text(loc: "calendar_select_groups")
-                        .font(AppTypography.caption())
+                        .font(AppTypography.captionMedium())
                         .foregroundColor(AppColor.inkSecondary)
                     
-                    HStack(spacing: AppSpacing.sm) {
-                        ForEach(availableGroups) { group in
-                            Button(action: {
-                                selectedGroupId = group.id
-                                selectedColorHex = group.colorHex
-                            }) {
-                                HStack(spacing: 4) {
-                                    Circle()
-                                        .fill(Color(hexString: group.colorHex))
-                                        .frame(width: 8, height: 8)
-                                    Text(group.name)
+                    if friendService.userGroups.isEmpty {
+                        Text(loc: "calendar_no_groups_prompt")
+                            .font(AppTypography.footnote())
+                            .foregroundColor(AppColor.inkTertiary)
+                            .padding(.vertical, 4)
+                    } else {
+                        // Multi-select group chips
+                        FlowLayout(spacing: AppSpacing.sm) {
+                            ForEach(friendService.userGroups) { group in
+                                let isSelected = selectedGroupIds.contains(group.id)
+                                Button(action: {
+                                    if isSelected {
+                                        selectedGroupIds.remove(group.id)
+                                    } else {
+                                        selectedGroupIds.insert(group.id)
+                                        // Auto-match pastel color on first selection
+                                        if selectedGroupIds.count == 1 {
+                                            selectedColorHex = group.colorHex
+                                        }
+                                    }
+                                }) {
+                                    HStack(spacing: 6) {
+                                        Circle()
+                                            .fill(Color(hexString: group.colorHex))
+                                            .frame(width: 10, height: 10)
+                                        
+                                        Text(group.name)
+                                            .font(AppTypography.subheadline())
+                                        
+                                        if isSelected {
+                                            Image(systemName: "checkmark")
+                                                .font(.system(size: 11, weight: .bold))
+                                        }
+                                    }
+                                    .padding(.vertical, 6)
+                                    .padding(.horizontal, 12)
+                                    .background(isSelected ? Color(hexString: group.colorHex).opacity(0.2) : AppColor.surfaceSubtle)
+                                    .foregroundColor(isSelected ? AppColor.inkPrimary : AppColor.inkSecondary)
+                                    .clipShape(Capsule())
+                                    .overlay(
+                                        Capsule()
+                                            .stroke(isSelected ? Color(hexString: group.colorHex) : AppColor.inkBorder, lineWidth: isSelected ? 1.5 : 1)
+                                    )
                                 }
+                                .buttonStyle(.plain)
                             }
-                            .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: selectedGroupId == group.id))
                         }
                     }
                     
@@ -387,6 +426,12 @@ public struct EventFormSheet: View {
         let finalTitle = trimmedTitle.isEmpty ? "New Event" : trimmedTitle
         let finalEnd = isAllDay ? startDate : (endDate < startDate ? startDate.addingTimeInterval(3600) : endDate)
         
+        var effectiveGroupIds = Array(selectedGroupIds)
+        // If group visibility chosen but none explicitly selected, fallback to first available user group
+        if visibilityType == .group && effectiveGroupIds.isEmpty, let firstGroup = friendService.userGroups.first {
+            effectiveGroupIds = [firstGroup.id]
+        }
+        
         isSaving = true
         
         Task {
@@ -400,7 +445,7 @@ public struct EventFormSheet: View {
                 updated.calendarType = calendarType
                 updated.visibility = EventVisibility(
                     type: visibilityType,
-                    groupIds: visibilityType == .group ? [selectedGroupId] : []
+                    groupIds: visibilityType == .group ? effectiveGroupIds : []
                 )
                 updated.colorHex = selectedColorHex
                 updated.location = location.isEmpty ? nil : location
@@ -418,10 +463,10 @@ public struct EventFormSheet: View {
                     calendarType: calendarType,
                     visibility: EventVisibility(
                         type: visibilityType,
-                        groupIds: visibilityType == .group ? [selectedGroupId] : []
+                        groupIds: visibilityType == .group ? effectiveGroupIds : []
                     ),
                     recurrence: recurrence,
-                    createdBy: "me",
+                    createdBy: friendService.currentUser.id,
                     colorHex: selectedColorHex,
                     source: calendarType.rawValue
                 )
@@ -439,6 +484,54 @@ public struct EventFormSheet: View {
         Task {
             try? await eventStore.deleteEvent(existing)
             dismiss()
+        }
+    }
+}
+
+// MARK: - Flow Layout Helper for Multi-Group Wrapping
+
+public struct FlowLayout: Layout {
+    public var spacing: CGFloat
+    
+    public init(spacing: CGFloat = 8) {
+        self.spacing = spacing
+    }
+    
+    public func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let width = proposal.width ?? 0
+        var currentX: CGFloat = 0
+        var currentY: CGFloat = 0
+        var lineHeight: CGFloat = 0
+        
+        for subview in subviews {
+            let size = subview.sizeThatFits(.unspecified)
+            if currentX + size.width > width && currentX > 0 {
+                currentX = 0
+                currentY += lineHeight + spacing
+                lineHeight = 0
+            }
+            currentX += size.width + spacing
+            lineHeight = max(lineHeight, size.height)
+        }
+        
+        return CGSize(width: width, height: currentY + lineHeight)
+    }
+    
+    public func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        var currentX: CGFloat = bounds.minX
+        var currentY: CGFloat = bounds.minY
+        var lineHeight: CGFloat = 0
+        
+        for subview in subviews {
+            let size = subview.sizeThatFits(.unspecified)
+            if currentX + size.width > bounds.maxX && currentX > bounds.minX {
+                currentX = bounds.minX
+                currentY += lineHeight + spacing
+                lineHeight = 0
+            }
+            subview.place(at: CGPoint(x: currentX, y: currentY), proposal: ProposedViewSize(size))
+            currentX += size.width + spacing
+            lineHeight = max(lineHeight, size.height)
         }
     }
 }
