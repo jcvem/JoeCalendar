@@ -2,52 +2,19 @@
 //  MonthCalendarView.swift
 //  JoeCalendar
 //
-//  Created for JoeCalendar Phase 0 Foundation.
-//  TimeTree-inspired Japanese calm month view with high whitespace,
-//  pastel group tags, and smooth date selection.
+//  Created for JoeCalendar Phase 0 Foundation & Extended for Phase 1 Core Calendar.
+//  TimeTree-inspired Japanese calm calendar with view switcher (Month, Week, List),
+//  source filters, pastel group tags, and unified event store integration.
 //
 
 import SwiftUI
 
 public struct MonthCalendarView: View {
     @EnvironmentObject private var localeManager: LocaleManager
-    @State private var selectedDate: Date = Date()
-    @State private var displayedMonth: Date = Date()
-    @State private var isAddEventPresented: Bool = false
+    @EnvironmentObject private var eventStore: EventStore
     
-    // Sample events for Phase 0 demonstration
-    @State private var events: [CalendarEvent] = [
-        CalendarEvent(
-            title: "Morning Pickleball",
-            startDate: Calendar.current.date(bySettingHour: 7, minute: 30, second: 0, of: Date()) ?? Date(),
-            endDate: Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date()) ?? Date(),
-            location: "Tokyo Sports Dome",
-            notes: "Bring racket and extra balls",
-            calendarType: .joe,
-            visibility: EventVisibility(type: .group, groupIds: ["workout_friends"]),
-            colorHex: AppColor.GroupPastel.sage.hexString
-        ),
-        CalendarEvent(
-            title: "Design System Review",
-            startDate: Calendar.current.date(bySettingHour: 14, minute: 0, second: 0, of: Date()) ?? Date(),
-            endDate: Calendar.current.date(bySettingHour: 15, minute: 30, second: 0, of: Date()) ?? Date(),
-            location: "Online / Meet",
-            notes: "Review Japanese-calm tokens and TimeTree alignment",
-            calendarType: .google,
-            visibility: EventVisibility(type: .private),
-            colorHex: AppColor.GroupPastel.mist.hexString
-        ),
-        CalendarEvent(
-            title: "Omotesando Art Exhibition",
-            startDate: Calendar.current.date(byAdding: .day, value: 2, to: Date()) ?? Date(),
-            endDate: Calendar.current.date(byAdding: .day, value: 2, to: Date()) ?? Date(),
-            isAllDay: true,
-            location: "Mori Arts Center",
-            calendarType: .local,
-            visibility: EventVisibility(type: .public),
-            colorHex: AppColor.GroupPastel.sakura.hexString
-        )
-    ]
+    @State private var displayedMonth: Date = Date()
+    @State private var activeSheetMode: EventFormMode? = nil
     
     private let calendar = Calendar.current
     private let daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
@@ -61,32 +28,31 @@ public struct MonthCalendarView: View {
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                    // Header Bar
-                    headerBar
+                    // Top Navigation & View Mode Selector Bar
+                    topBar
                         .padding(.horizontal, AppSpacing.lg)
                         .padding(.top, AppSpacing.sm)
-                        .padding(.bottom, AppSpacing.md)
-                    
-                    // Days of week bar
-                    daysOfWeekHeader
-                        .padding(.horizontal, AppSpacing.sm)
                         .padding(.bottom, AppSpacing.xs)
                     
-                    // Month Grid
-                    monthGrid
-                        .padding(.horizontal, AppSpacing.sm)
+                    // Source Filter Capsules (All, Joe, Apple, Google, Groups)
+                    sourceFilterBar
+                        .padding(.horizontal, AppSpacing.lg)
+                        .padding(.bottom, AppSpacing.sm)
                     
-                    Divider()
-                        .background(AppColor.inkBorder)
-                        .padding(.top, AppSpacing.sm)
-                    
-                    // Selected Day's Event List
-                    dayEventList
+                    // Active View Content
+                    switch eventStore.viewMode {
+                    case .month:
+                        monthContent
+                    case .week:
+                        WeekView()
+                    case .list:
+                        ListView()
+                    }
                 }
                 
                 // Floating Action Button (+ Add Event)
                 Button(action: {
-                    isAddEventPresented = true
+                    activeSheetMode = .new(defaultDate: eventStore.selectedDate)
                 }) {
                     Image(systemName: "plus")
                         .font(.system(size: 20, weight: .semibold))
@@ -105,21 +71,20 @@ public struct MonthCalendarView: View {
                 .padding(.bottom, AppSpacing.xl)
             }
             .navigationBarHidden(true)
-            .sheet(isPresented: $isAddEventPresented) {
-                DayDetailSheet(
-                    selectedDate: selectedDate,
-                    onSave: { newEvent in
-                        events.append(newEvent)
-                    }
-                )
-                .environmentObject(localeManager)
+            .sheet(item: Binding<IdentifiableEventFormMode?>(
+                get: { activeSheetMode.map { IdentifiableEventFormMode(mode: $0) } },
+                set: { activeSheetMode = $0?.mode }
+            )) { item in
+                EventFormSheet(mode: item.mode)
+                    .environmentObject(localeManager)
+                    .environmentObject(eventStore)
             }
         }
     }
     
-    // MARK: - Header Bar
+    // MARK: - Top Bar
     
-    private var headerBar: some View {
+    private var topBar: some View {
         HStack(alignment: .center) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(monthYearString(from: displayedMonth))
@@ -129,31 +94,54 @@ public struct MonthCalendarView: View {
             
             Spacer()
             
-            HStack(spacing: AppSpacing.sm) {
+            // View Mode Switcher (Month / Week / List)
+            HStack(spacing: 2) {
+                ForEach(CalendarViewMode.allCases) { mode in
+                    Button(action: {
+                        withAnimation(.easeInOut(duration: 0.15)) {
+                            eventStore.viewMode = mode
+                        }
+                    }) {
+                        Image(systemName: mode.iconName)
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(eventStore.viewMode == mode ? .white : AppColor.inkSecondary)
+                            .frame(width: 32, height: 32)
+                            .background(eventStore.viewMode == mode ? AppColor.accent : Color.clear)
+                            .clipShape(Circle())
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(2)
+            .background(AppColor.surfaceSubtle)
+            .clipShape(Capsule())
+            
+            // Month navigation chevrons & Today button
+            HStack(spacing: 4) {
                 Button(action: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         displayedMonth = calendar.date(byAdding: .month, value: -1, to: displayedMonth) ?? displayedMonth
                     }
                 }) {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(.system(size: 13, weight: .semibold))
                         .foregroundColor(AppColor.inkSecondary)
-                        .frame(width: 32, height: 32)
+                        .frame(width: 30, height: 30)
                         .background(AppColor.surface)
                         .clipShape(Circle())
                 }
                 
                 Button(action: {
                     withAnimation(.easeInOut(duration: 0.2)) {
-                        selectedDate = Date()
+                        eventStore.selectedDate = Date()
                         displayedMonth = Date()
                     }
                 }) {
                     Text(loc: "calendar_today")
-                        .font(AppTypography.subheadline())
+                        .font(AppTypography.captionMedium())
                         .foregroundColor(AppColor.accent)
-                        .padding(.horizontal, AppSpacing.md)
-                        .padding(.vertical, 6)
+                        .padding(.horizontal, AppSpacing.sm)
+                        .padding(.vertical, 5)
                         .background(AppColor.accentLight)
                         .clipShape(Capsule())
                 }
@@ -164,13 +152,92 @@ public struct MonthCalendarView: View {
                     }
                 }) {
                     Image(systemName: "chevron.right")
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(.system(size: 13, weight: .semibold))
                         .foregroundColor(AppColor.inkSecondary)
-                        .frame(width: 32, height: 32)
+                        .frame(width: 30, height: 30)
                         .background(AppColor.surface)
                         .clipShape(Circle())
                 }
             }
+        }
+    }
+    
+    // MARK: - Source Filter Bar
+    
+    private var sourceFilterBar: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: AppSpacing.xs) {
+                // All Filter
+                Button(action: {
+                    eventStore.selectedSourceFilter = nil
+                }) {
+                    Text(loc: "calendar_filter_all")
+                }
+                .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: eventStore.selectedSourceFilter == nil))
+                
+                // Joe Filter
+                Button(action: {
+                    toggleFilter(.joe)
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: CalendarType.joe.iconName)
+                        Text(loc: CalendarType.joe.displayNameKey)
+                    }
+                }
+                .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: eventStore.selectedSourceFilter == .joe))
+                
+                // Apple Device Filter
+                Button(action: {
+                    toggleFilter(.device)
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: CalendarType.device.iconName)
+                        Text(loc: CalendarType.device.displayNameKey)
+                    }
+                }
+                .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: eventStore.selectedSourceFilter == .device))
+                
+                // Google Filter
+                Button(action: {
+                    toggleFilter(.google)
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: CalendarType.google.iconName)
+                        Text(loc: CalendarType.google.displayNameKey)
+                    }
+                }
+                .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: eventStore.selectedSourceFilter == .google))
+            }
+        }
+    }
+    
+    private func toggleFilter(_ type: CalendarType) {
+        if eventStore.selectedSourceFilter == type {
+            eventStore.selectedSourceFilter = nil
+        } else {
+            eventStore.selectedSourceFilter = type
+        }
+    }
+    
+    // MARK: - Month Content
+    
+    private var monthContent: some View {
+        VStack(spacing: 0) {
+            // Days of week bar
+            daysOfWeekHeader
+                .padding(.horizontal, AppSpacing.sm)
+                .padding(.bottom, AppSpacing.xs)
+            
+            // Month Grid
+            monthGrid
+                .padding(.horizontal, AppSpacing.sm)
+            
+            Divider()
+                .background(AppColor.inkBorder)
+                .padding(.top, AppSpacing.sm)
+            
+            // Selected Day's Event List
+            dayEventList
         }
     }
     
@@ -209,12 +276,12 @@ public struct MonthCalendarView: View {
     
     private func dayCell(for date: Date) -> some View {
         let isCurrentMonth = calendar.isDate(date, equalTo: displayedMonth, toGranularity: .month)
-        let isSelected = calendar.isDate(date, inSameDayAs: selectedDate)
+        let isSelected = calendar.isDate(date, inSameDayAs: eventStore.selectedDate)
         let isToday = calendar.isDateInToday(date)
-        let dayEvents = eventsForDate(date)
+        let dayEvents = eventStore.events(for: date)
         
         return Button(action: {
-            selectedDate = date
+            eventStore.selectedDate = date
         }) {
             VStack(spacing: 2) {
                 ZStack {
@@ -233,7 +300,7 @@ public struct MonthCalendarView: View {
                         .fontWeight(isSelected || isToday ? .semibold : .regular)
                         .foregroundColor(
                             isSelected ? .white :
-                            (!isCurrentMonth ? AppColor.inkTertiary.opacity(0.5) :
+                            (!isCurrentMonth ? AppColor.inkTertiary.opacity(0.4) :
                             (isToday ? AppColor.accent : AppColor.inkPrimary))
                         )
                 }
@@ -260,7 +327,7 @@ public struct MonthCalendarView: View {
     // MARK: - Selected Day Event List
     
     private var dayEventList: some View {
-        let selectedDayEvents = eventsForDate(selectedDate)
+        let selectedDayEvents = eventStore.events(for: eventStore.selectedDate)
         
         return ScrollView {
             VStack(alignment: .leading, spacing: AppSpacing.md) {
@@ -298,13 +365,18 @@ public struct MonthCalendarView: View {
                 } else {
                     VStack(spacing: AppSpacing.sm) {
                         ForEach(selectedDayEvents) { event in
-                            eventCard(event: event)
+                            Button(action: {
+                                activeSheetMode = .edit(event: event)
+                            }) {
+                                eventCard(event: event)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
                     .padding(.horizontal, AppSpacing.lg)
                 }
             }
-            .padding(.bottom, 80) // Leave space for floating action button
+            .padding(.bottom, 80)
         }
     }
     
@@ -320,14 +392,15 @@ public struct MonthCalendarView: View {
                     Text(event.title)
                         .font(AppTypography.headline())
                         .foregroundColor(AppColor.inkPrimary)
+                        .lineLimit(1)
                     
                     Spacer()
                     
-                    // Visibility Badge
+                    // Source / Visibility Badge
                     HStack(spacing: 3) {
-                        Image(systemName: event.visibility.type == .group ? "person.2.fill" : (event.visibility.type == .public ? "globe" : "lock.fill"))
+                        Image(systemName: event.calendarType.iconName)
                             .font(.system(size: 9))
-                        Text(loc: event.visibility.type.displayNameKey)
+                        Text(loc: event.calendarType.displayNameKey)
                             .font(AppTypography.caption())
                     }
                     .foregroundColor(AppColor.inkSecondary)
@@ -354,6 +427,7 @@ public struct MonthCalendarView: View {
                                 .font(.system(size: 10))
                             Text(location)
                                 .font(AppTypography.caption())
+                                .lineLimit(1)
                         }
                         .foregroundColor(AppColor.inkTertiary)
                     }
@@ -379,10 +453,6 @@ public struct MonthCalendarView: View {
     
     // MARK: - Helpers
     
-    private func eventsForDate(_ date: Date) -> [CalendarEvent] {
-        events.filter { calendar.isDate($0.startDate, inSameDayAs: date) }
-    }
-    
     private func monthYearString(from date: Date) -> String {
         let formatter = DateFormatter()
         formatter.locale = localeManager.effectiveLocale
@@ -394,7 +464,7 @@ public struct MonthCalendarView: View {
         let formatter = DateFormatter()
         formatter.locale = localeManager.effectiveLocale
         formatter.dateStyle = .full
-        return formatter.string(from: selectedDate)
+        return formatter.string(from: eventStore.selectedDate)
     }
     
     private func timeString(from date: Date) -> String {
@@ -421,6 +491,12 @@ public struct MonthCalendarView: View {
         }
         return days
     }
+}
+
+// Wrapper for Identifiable sheet binding
+private struct IdentifiableEventFormMode: Identifiable {
+    let id = UUID()
+    let mode: EventFormMode
 }
 
 // MARK: - Array Chunk Helper

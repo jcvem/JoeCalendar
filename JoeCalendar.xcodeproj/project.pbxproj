@@ -25,6 +25,12 @@
 		100100000000000000000016 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000016 /* SettingsView.swift */; };
 		100100000000000000000017 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000017 /* Assets.xcassets */; };
 		100100000000000000000018 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000018 /* Localizable.xcstrings */; };
+		100100000000000000000021 /* EventKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000021 /* EventKitService.swift */; };
+		100100000000000000000022 /* GoogleCalendarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000022 /* GoogleCalendarService.swift */; };
+		100100000000000000000023 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000023 /* EventStore.swift */; };
+		100100000000000000000024 /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000024 /* WeekView.swift */; };
+		100100000000000000000025 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000025 /* ListView.swift */; };
+		100100000000000000000026 /* EventFormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000026 /* EventFormSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +54,12 @@
 		200100000000000000000018 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		200100000000000000000019 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		200100000000000000000020 /* JoeCalendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JoeCalendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		200100000000000000000021 /* EventKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventKitService.swift; sourceTree = "<group>"; };
+		200100000000000000000022 /* GoogleCalendarService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleCalendarService.swift; sourceTree = "<group>"; };
+		200100000000000000000023 /* EventStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStore.swift; sourceTree = "<group>"; };
+		200100000000000000000024 /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
+		200100000000000000000025 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
+		200100000000000000000026 /* EventFormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFormSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +128,9 @@
 			children = (
 				200100000000000000000009 /* LocaleManager.swift */,
 				200100000000000000000010 /* FirebaseService.swift */,
+				200100000000000000000021 /* EventKitService.swift */,
+				200100000000000000000022 /* GoogleCalendarService.swift */,
+				200100000000000000000023 /* EventStore.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -137,6 +152,9 @@
 			children = (
 				200100000000000000000012 /* MonthCalendarView.swift */,
 				200100000000000000000013 /* DayDetailSheet.swift */,
+				200100000000000000000024 /* WeekView.swift */,
+				200100000000000000000025 /* ListView.swift */,
+				200100000000000000000026 /* EventFormSheet.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -271,6 +289,12 @@
 				100100000000000000000014 /* FriendsView.swift in Sources */,
 				100100000000000000000015 /* DiscoverView.swift in Sources */,
 				100100000000000000000016 /* SettingsView.swift in Sources */,
+				100100000000000000000021 /* EventKitService.swift in Sources */,
+				100100000000000000000022 /* GoogleCalendarService.swift in Sources */,
+				100100000000000000000023 /* EventStore.swift in Sources */,
+				100100000000000000000024 /* WeekView.swift in Sources */,
+				100100000000000000000025 /* ListView.swift in Sources */,
+				100100000000000000000026 /* EventFormSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

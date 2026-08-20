@@ -73,7 +73,7 @@ public struct FriendsView: View {
                                 Image(systemName: "shield.lefthalf.filled")
                                     .foregroundColor(AppColor.accent)
                                     .font(.system(size: 13, weight: .semibold))
-                                Text("Circle-based Privacy")
+                                Text(loc: "friends_privacy_title")
                                     .font(AppTypography.captionMedium())
                                     .foregroundColor(AppColor.accent)
                             }
@@ -119,7 +119,7 @@ public struct FriendsView: View {
                                 .foregroundColor(AppColor.accent)
                             
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Phase 2 — Social Groups")
+                                Text(loc: "friends_phase2_badge")
                                     .font(AppTypography.captionMedium())
                                     .foregroundColor(AppColor.inkPrimary)
                                 Text(loc: "friends_coming_soon_hint")
@@ -156,7 +156,7 @@ public struct FriendsView: View {
                     .font(AppTypography.headline())
                     .foregroundColor(AppColor.inkPrimary)
                 
-                Text("\(group.memberUids.count + 1) members")
+                Text("\(group.memberUids.count + 1) " + "members".localized())
                     .font(AppTypography.caption())
                     .foregroundColor(AppColor.inkSecondary)
             }

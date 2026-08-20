@@ -78,7 +78,7 @@ public struct DiscoverView: View {
                                 .foregroundColor(AppColor.accent)
                             
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Phase 3 — Discover & Monetization")
+                                Text(loc: "discover_phase3_badge")
                                     .font(AppTypography.captionMedium())
                                     .foregroundColor(AppColor.inkPrimary)
                                 Text(loc: "discover_coming_soon_hint")
@@ -118,7 +118,7 @@ public struct DiscoverView: View {
                 HStack(spacing: 3) {
                     Image(systemName: "calendar.badge.clock")
                         .font(.system(size: 10))
-                    Text("14-Day Feed")
+                    Text(loc: "discover_14day_feed")
                         .font(AppTypography.caption())
                 }
                 .foregroundColor(AppColor.inkTertiary)
@@ -187,11 +187,11 @@ public struct DiscoverView: View {
                     .clipShape(Capsule())
             }
             
-            Text("Tokyo Coffee Festival 2026 @ Roppongi Hills")
+            Text(loc: "discover_promo_title")
                 .font(AppTypography.headline())
                 .foregroundColor(AppColor.inkPrimary)
             
-            Text("Over 50 boutique roasters from across Japan. Early-bird tasting passes available now.")
+            Text(loc: "discover_promo_desc")
                 .font(AppTypography.footnote())
                 .foregroundColor(AppColor.inkSecondary)
         }

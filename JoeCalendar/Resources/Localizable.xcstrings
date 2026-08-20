@@ -1,622 +1,2490 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "app_name" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "JoeCalendar" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "JoeCalendar" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "JoeCalendar" } }
-      }
-    },
-    "tab_calendar" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Calendar" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カレンダー" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "行事曆" } }
-      }
-    },
-    "tab_friends" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Friends" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "友達・グループ" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "好友與群組" } }
-      }
-    },
-    "tab_discover" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Discover" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "見つける" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "探索" } }
-      }
-    },
-    "tab_settings" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Settings" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "設定" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "設定" } }
-      }
-    },
-    "calendar_today" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Today" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "今日" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "今天" } }
-      }
-    },
-    "calendar_month" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Month" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "月" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "月" } }
-      }
-    },
-    "calendar_week" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Week" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "週" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "週" } }
-      }
-    },
-    "calendar_day" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Day" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "日" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "日" } }
-      }
-    },
-    "calendar_no_events_selected" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "No events for this day" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "この日の予定はありません" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "本日尚無任何行程" } }
-      }
-    },
-    "calendar_add_event" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add Event" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "予定を追加" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "新增行程" } }
-      }
-    },
-    "calendar_new_event" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "New Event" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "新規予定" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "新行程" } }
-      }
-    },
-    "calendar_edit_event" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Edit Event" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "予定を編集" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "編輯行程" } }
-      }
-    },
-    "calendar_event_title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Event Title" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "予定タイトル" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "行程標題" } }
-      }
-    },
-    "calendar_event_title_placeholder" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "What are you planning?" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "予定の内容を入力" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "想安排什麼行程？" } }
-      }
-    },
-    "calendar_all_day" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "All Day" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "終日" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "整天" } }
-      }
-    },
-    "calendar_starts" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Starts" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "開始" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "開始時間" } }
-      }
-    },
-    "calendar_ends" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Ends" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "終了" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "結束時間" } }
-      }
-    },
-    "calendar_location" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Location" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "場所" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "地點" } }
-      }
-    },
-    "calendar_notes" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Notes" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "メモ" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "備忘錄" } }
-      }
-    },
-    "calendar_notes_placeholder" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add details or URL" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "メモやURLを追加" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "新增詳細資訊或網址" } }
-      }
-    },
-    "calendar_color_tag" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Color Tag" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カラータグ" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "色彩標籤" } }
-      }
-    },
-    "calendar_type" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Calendar Source" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カレンダーの種類" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "行事曆來源" } }
-      }
-    },
-    "calendar_visibility" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Visibility" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "公開範囲" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "公開範圍" } }
-      }
-    },
-    "calendar_select_groups" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Select Groups" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "グループを選択" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "選擇群組" } }
-      }
-    },
-    "calendar_groups_helper" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Only members of selected groups can view this event." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "選択したグループのメンバーのみがこの予定を閲覧できます。" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "只有所選群組的成員才能查看此行程。" } }
-      }
-    },
-    "visibility_public" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Public (Anyone)" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "全体公開" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "完全公開（所有人）" } }
-      }
-    },
-    "visibility_group" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Friend Groups Only" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "特定グループのみ" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "僅限指定群組" } }
-      }
-    },
-    "visibility_private" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Private (Only Me)" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "自分のみ（非公開）" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "僅限自己（私人）" } }
-      }
-    },
-    "calendar_type_joe" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "JoeCalendar" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "JoeCalendar" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "JoeCalendar" } }
-      }
-    },
-    "calendar_type_device" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Apple Calendar" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Apple カレンダー" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "Apple 行事曆" } }
-      }
-    },
-    "calendar_type_google" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Google Calendar" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Google カレンダー" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "Google 日曆" } }
-      }
-    },
-    "calendar_type_local" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Local Events" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ローカルイベント" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "在地精選活動" } }
-      }
-    },
-    "calendar_type_promo" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sponsored" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "スポンサー" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "贊助推薦" } }
-      }
-    },
-    "friends_title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Friends & Groups" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "友達とグループ" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "好友與群組" } }
-      }
-    },
-    "friends_search_placeholder" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Search by JoeID or name" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "JoeID または名前で検索" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "搜尋 JoeID 或姓名" } }
-      }
-    },
-    "friends_groups_section" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Friend Groups" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "参加中のグループ" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "我的群組" } }
-      }
-    },
-    "friends_my_friends_section" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Friends" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "友達一覧" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "好友名單" } }
-      }
-    },
-    "friends_create_group" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Create Group" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "新しいグループを作成" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "建立新群組" } }
-      }
-    },
-    "friends_add_friend" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add Friend" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "友達を追加" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "新增好友" } }
-      }
-    },
-    "friends_empty_groups_title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "No Groups Yet" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "グループがありません" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "尚無群組" } }
-      }
-    },
-    "friends_empty_groups_desc" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Create groups like 'Workout Friends' or 'Family' to share events without mixing your circles." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "「ジム仲間」や「家族」などのグループを作成して、仕事やプライベートを分けたまま予定を共有できます。" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "建立例如「健身夥伴」或「家庭」等群組，精準分享行程，避免社交圈混雜。" } }
-      }
-    },
-    "friends_coming_soon_hint" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Group feeds and invite links arriving in Phase 2." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "グループタイムラインと招待リンクは Phase 2 で登場します。" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "群組即時動態與邀請連結將於 Phase 2 推出。" } }
-      }
-    },
-    "discover_title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Discover" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "見つける" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "探索" } }
-      }
-    },
-    "discover_local_calendars" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Curated Local Calendars" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "注目のローカルカレンダー" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "精選在地行事曆" } }
-      }
-    },
-    "discover_local_subtitle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "What's on in your city over the next 14 days" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "お住まいの地域で今後14日間に開催されるイベント" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "未來 14 天城市熱門活動動態" } }
-      }
-    },
-    "discover_promotions" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Featured Highlights" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "おすすめピックアップ" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "熱門推薦精選" } }
-      }
-    },
-    "discover_subscribe" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Follow Calendar" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カレンダーをフォロー" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "追蹤此行事曆" } }
-      }
-    },
-    "discover_subscribed" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Following" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "フォロー中" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "追蹤中" } }
-      }
-    },
-    "discover_coming_soon_hint" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Curated city guides and event subscriptions arriving in Phase 3." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "厳選された都市ガイドとイベント購読機能は Phase 3 で登場します。" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "精選城市導覽與活動訂閱功能將於 Phase 3 推出。" } }
-      }
-    },
-    "settings_title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Settings" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "設定" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "設定" } }
-      }
-    },
-    "settings_language" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Language" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "言語" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "語言" } }
-      }
-    },
-    "settings_language_system" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "System Default" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "端末の言語に合わせる" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "跟隨系統語言" } }
-      }
-    },
-    "settings_account" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Account" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "アカウント" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "帳號" } }
-      }
-    },
-    "settings_sign_in" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sign In" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ログイン" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "登入" } }
-      }
-    },
-    "settings_sign_in_apple" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sign in with Apple" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Appleでサインイン" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "使用 Apple 登入" } }
-      }
-    },
-    "settings_sign_in_google" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sign in with Google" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Googleでログイン" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "使用 Google 登入" } }
-      }
-    },
-    "settings_sign_in_email" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sign in with Email" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "メールアドレスでログイン" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "使用電子郵件登入" } }
-      }
-    },
-    "settings_guest_user" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Guest User" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ゲストユーザー" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "訪客使用者" } }
-      }
-    },
-    "settings_subscription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Subscription" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "プラン・購読" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "訂閱方案" } }
-      }
-    },
-    "settings_free_plan" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Free Plan" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "無料プラン" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "免費方案" } }
-      }
-    },
-    "settings_upgrade_ad_free" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Upgrade to Ad-Free" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "広告非表示にアップグレード" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "升級無廣告尊榮方案" } }
-      }
-    },
-    "settings_sync_section" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sync & Integrations" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カレンダー連携" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "行事曆同步與整合" } }
-      }
-    },
-    "settings_sync_apple" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Apple Calendar (EventKit)" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Apple カレンダー (EventKit)" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "Apple 行事曆 (EventKit)" } }
-      }
-    },
-    "settings_sync_google" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Google Calendar" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Google カレンダー" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "Google 日曆" } }
-      }
-    },
-    "settings_about" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "About" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "JoeCalendarについて" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "關於 JoeCalendar" } }
-      }
-    },
-    "settings_version" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Version 1.0.0 (Phase 0 Foundation)" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "バージョン 1.0.0 (Phase 0 Foundation)" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "版本 1.0.0 (Phase 0 Foundation)" } }
-      }
-    },
-    "settings_privacy_policy" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Privacy Policy" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "プライバシーポリシー" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "隱私權政策" } }
-      }
-    },
-    "settings_terms_of_service" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Terms of Service" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "利用規約" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "服務條款" } }
-      }
-    },
-    "action_done" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Done" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "完了" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "完成" } }
-      }
-    },
-    "action_cancel" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cancel" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "キャンセル" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "取消" } }
-      }
-    },
-    "action_save" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Save" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "保存" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "儲存" } }
-      }
-    },
-    "action_edit" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Edit" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "編集" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "編輯" } }
-      }
-    },
-    "action_delete" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Delete" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "削除" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "刪除" } }
-      }
-    },
-    "action_close" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Close" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "閉じる" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "關閉" } }
-      }
-    },
-    "action_ok" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "OK" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "OK" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "好" } }
-      }
-    },
-    "action_create" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Create" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "作成" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "建立" } }
+  "sourceLanguage": "en",
+  "strings": {
+    "app_name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JoeCalendar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JoeCalendar"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JoeCalendar"
+          }
+        }
+      }
+    },
+    "tab_calendar": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calendar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カレンダー"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "行事曆"
+          }
+        }
+      }
+    },
+    "tab_friends": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friends"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "友達・グループ"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "好友與群組"
+          }
+        }
+      }
+    },
+    "tab_discover": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discover"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "見つける"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "探索"
+          }
+        }
+      }
+    },
+    "tab_settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定"
+          }
+        }
+      }
+    },
+    "calendar_today": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今天"
+          }
+        }
+      }
+    },
+    "calendar_view_month": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Month"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "月"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "月"
+          }
+        }
+      }
+    },
+    "calendar_view_week": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "週"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "週"
+          }
+        }
+      }
+    },
+    "calendar_view_list": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "List"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リスト"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "列表"
+          }
+        }
+      }
+    },
+    "calendar_filter_all": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All Calendars"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべて"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全部行事曆"
+          }
+        }
+      }
+    },
+    "calendar_no_events_selected": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No events for this day"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この日の予定はありません"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本日尚無任何行程"
+          }
+        }
+      }
+    },
+    "calendar_no_events_found": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No upcoming events"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今後の予定はありません"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "近期尚無行程"
+          }
+        }
+      }
+    },
+    "calendar_no_events_hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap the button below to add your first event or sync from Apple/Google calendar."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下のボタンをタップして予定を追加するか、Apple/Googleカレンダーから同期してください。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "點擊下方按鈕新增第一個行程，或從 Apple / Google 行事曆進行同步。"
+          }
+        }
+      }
+    },
+    "calendar_search_placeholder": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search events..."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "予定を検索..."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搜尋行程..."
+          }
+        }
+      }
+    },
+    "calendar_add_event": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Event"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "予定を追加"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新增行程"
+          }
+        }
+      }
+    },
+    "calendar_new_event": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Event"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新規予定"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新行程"
+          }
+        }
+      }
+    },
+    "calendar_edit_event": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit Event"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "予定を編集"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "編輯行程"
+          }
+        }
+      }
+    },
+    "calendar_event_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Event Title"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "予定タイトル"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "行程標題"
+          }
+        }
+      }
+    },
+    "calendar_event_title_placeholder": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What are you planning?"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "予定の内容を入力"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "想安排什麼行程？"
+          }
+        }
+      }
+    },
+    "calendar_all_day": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All Day"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "終日"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "整天"
+          }
+        }
+      }
+    },
+    "calendar_starts": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starts"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開始"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開始時間"
+          }
+        }
+      }
+    },
+    "calendar_ends": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ends"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "終了"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "結束時間"
+          }
+        }
+      }
+    },
+    "calendar_repeat": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repeat"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "繰り返し"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重複頻率"
+          }
+        }
+      }
+    },
+    "recurrence_none": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "なし"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不重複"
+          }
+        }
+      }
+    },
+    "recurrence_daily": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "毎日"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每天"
+          }
+        }
+      }
+    },
+    "recurrence_weekly": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "毎週"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每週"
+          }
+        }
+      }
+    },
+    "recurrence_monthly": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monthly"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "毎月"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每月"
+          }
+        }
+      }
+    },
+    "recurrence_yearly": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yearly"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "毎年"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每年"
+          }
+        }
+      }
+    },
+    "calendar_location": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Location"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "場所"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "地點"
+          }
+        }
+      }
+    },
+    "calendar_notes": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メモ"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "備忘錄"
+          }
+        }
+      }
+    },
+    "calendar_notes_placeholder": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add details or URL"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メモやURLを追加"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新增詳細資訊或網址"
+          }
+        }
+      }
+    },
+    "calendar_color_tag": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color Tag"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カラータグ"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "色彩標籤"
+          }
+        }
+      }
+    },
+    "calendar_type": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calendar Source"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カレンダーの種類"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "行事曆來源"
+          }
+        }
+      }
+    },
+    "calendar_visibility": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visibility"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "公開範囲"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "公開範圍"
+          }
+        }
+      }
+    },
+    "calendar_select_groups": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select Groups"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "グループを選択"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選擇群組"
+          }
+        }
+      }
+    },
+    "calendar_groups_helper": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only members of selected groups can view this event."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選択したグループのメンバーのみがこの予定を閲覧できます。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "只有所選群組的成員才能查看此行程。"
+          }
+        }
+      }
+    },
+    "calendar_delete_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete Event"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "予定を削除"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刪除行程"
+          }
+        }
+      }
+    },
+    "calendar_delete_message": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Are you sure you want to delete this event? This cannot be undone."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この予定を削除してもよろしいですか？この操作は取り消せません。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "確定要刪除此行程嗎？此操作無法復原。"
+          }
+        }
+      }
+    },
+    "visibility_public": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Public (Anyone)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全体公開"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完全公開（所有人）"
+          }
+        }
+      }
+    },
+    "visibility_group": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friend Groups Only"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "特定グループのみ"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "僅限指定群組"
+          }
+        }
+      }
+    },
+    "visibility_private": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Private (Only Me)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自分のみ（非公開）"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "僅限自己（私人）"
+          }
+        }
+      }
+    },
+    "calendar_type_joe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JoeCalendar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JoeCalendar"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JoeCalendar"
+          }
+        }
+      }
+    },
+    "calendar_type_device": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Calendar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple カレンダー"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple 行事曆"
+          }
+        }
+      }
+    },
+    "calendar_type_google": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google Calendar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google カレンダー"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google 日曆"
+          }
+        }
+      }
+    },
+    "calendar_type_local": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local Events"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ローカルイベント"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在地精選活動"
+          }
+        }
+      }
+    },
+    "calendar_type_promo": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sponsored"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スポンサー"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "贊助推薦"
+          }
+        }
+      }
+    },
+    "friends_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friends & Groups"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "友達とグループ"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "好友與群組"
+          }
+        }
+      }
+    },
+    "friends_search_placeholder": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search by JoeID or name"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JoeID または名前で検索"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搜尋 JoeID 或姓名"
+          }
+        }
+      }
+    },
+    "friends_groups_section": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friend Groups"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "参加中のグループ"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "我的群組"
+          }
+        }
+      }
+    },
+    "friends_my_friends_section": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friends"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "友達一覧"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "好友名單"
+          }
+        }
+      }
+    },
+    "friends_create_group": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create Group"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新しいグループを作成"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "建立新群組"
+          }
+        }
+      }
+    },
+    "friends_add_friend": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Friend"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "友達を追加"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新增好友"
+          }
+        }
+      }
+    },
+    "friends_empty_groups_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Groups Yet"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "グループがありません"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尚無群組"
+          }
+        }
+      }
+    },
+    "friends_empty_groups_desc": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create groups like 'Workout Friends' or 'Family' to share events without mixing your circles."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「ジム仲間」や「家族」などのグループを作成して、仕事やプライベートを分けたまま予定を共有できます。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "建立例如「健身夥伴」或「家庭」等群組，精準分享行程，避免社交圈混雜。"
+          }
+        }
+      }
+    },
+    "friends_coming_soon_hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Group feeds and invite links arriving in Phase 2."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "グループタイムラインと招待リンクは Phase 2 で登場します。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "群組即時動態與邀請連結將於 Phase 2 推出。"
+          }
+        }
+      }
+    },
+    "discover_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discover"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "見つける"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "探索"
+          }
+        }
+      }
+    },
+    "discover_local_calendars": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Curated Local Calendars"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "注目のローカルカレンダー"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "精選在地行事曆"
+          }
+        }
+      }
+    },
+    "discover_local_subtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What's on in your city over the next 14 days"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "お住まいの地域で今後14日間に開催されるイベント"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未來 14 天城市熱門活動動態"
+          }
+        }
+      }
+    },
+    "discover_promotions": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Featured Highlights"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おすすめピックアップ"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "熱門推薦精選"
+          }
+        }
+      }
+    },
+    "discover_subscribe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Follow Calendar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カレンダーをフォロー"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "追蹤此行事曆"
+          }
+        }
+      }
+    },
+    "discover_subscribed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Following"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フォロー中"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "追蹤中"
+          }
+        }
+      }
+    },
+    "discover_coming_soon_hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Curated city guides and event subscriptions arriving in Phase 3."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "厳選された都市ガイドとイベント購読機能は Phase 3 で登場します。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "精選城市導覽與活動訂閱功能將於 Phase 3 推出。"
+          }
+        }
+      }
+    },
+    "settings_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定"
+          }
+        }
+      }
+    },
+    "settings_language": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "言語"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "語言"
+          }
+        }
+      }
+    },
+    "settings_language_system": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System Default"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "端末の言語に合わせる"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "跟隨系統語言"
+          }
+        }
+      }
+    },
+    "settings_sync_section": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync & Integrations"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カレンダー連携"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "行事曆同步與整合"
+          }
+        }
+      }
+    },
+    "settings_sync_now": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync Now"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今すぐ同期"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "立即同步"
+          }
+        }
+      }
+    },
+    "settings_sync_apple": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Calendar (EventKit)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple カレンダー (EventKit)"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple 行事曆 (EventKit)"
+          }
+        }
+      }
+    },
+    "settings_sync_google": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google Calendar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google カレンダー"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google 日曆"
+          }
+        }
+      }
+    },
+    "settings_status_connected": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "連携中"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已連線"
+          }
+        }
+      }
+    },
+    "settings_status_disconnected": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not Connected"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未連携"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未連線"
+          }
+        }
+      }
+    },
+    "settings_connect": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "連携する"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "連線"
+          }
+        }
+      }
+    },
+    "settings_disconnect": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disconnect"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解除"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解除連線"
+          }
+        }
+      }
+    },
+    "settings_open_settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定を開く"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開啟系統設定"
+          }
+        }
+      }
+    },
+    "settings_google_auth_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google Calendar Sync"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google カレンダー連携"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google 日曆同步"
+          }
+        }
+      }
+    },
+    "settings_google_auth_desc": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect your Google account to two-way sync personal and work events."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Googleアカウントを連携して、個人や仕事の予定を双方向同期します。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "連結您的 Google 帳號以進行個人與工作行程的雙向即時同步。"
+          }
+        }
+      }
+    },
+    "settings_google_email_label": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google Account Email"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google アカウントのメール"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google 帳號電子郵件"
+          }
+        }
+      }
+    },
+    "settings_account": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アカウント"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "帳號"
+          }
+        }
+      }
+    },
+    "settings_sign_in": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign In"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ログイン"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "登入"
+          }
+        }
+      }
+    },
+    "settings_sign_in_apple": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in with Apple"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appleでサインイン"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 Apple 登入"
+          }
+        }
+      }
+    },
+    "settings_sign_in_google": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in with Google"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Googleでログイン"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 Google 登入"
+          }
+        }
+      }
+    },
+    "settings_sign_in_email": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in with Email"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メールアドレスでログイン"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用電子郵件登入"
+          }
+        }
+      }
+    },
+    "settings_sign_out": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign Out"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ログアウト"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "登出"
+          }
+        }
+      }
+    },
+    "settings_guest_user": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guest User"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ゲストユーザー"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "訪客使用者"
+          }
+        }
+      }
+    },
+    "settings_subscription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subscription"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プラン・購読"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "訂閱方案"
+          }
+        }
+      }
+    },
+    "settings_free_plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free Plan"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無料プラン"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "免費方案"
+          }
+        }
+      }
+    },
+    "settings_free_plan_desc": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Includes social sharing & local feeds with ads"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "グループ共有と地域カレンダー（広告付き）"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "包含群組分享與在地推薦（含廣告）"
+          }
+        }
+      }
+    },
+    "settings_upgrade_ad_free": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade to Ad-Free"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "広告非表示にアップグレード"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "升級無廣告尊榮方案"
+          }
+        }
+      }
+    },
+    "settings_about": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JoeCalendarについて"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "關於 JoeCalendar"
+          }
+        }
+      }
+    },
+    "settings_version": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version 1.0.0 (Phase 1 Core Calendar)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "バージョン 1.0.0 (Phase 1 Core Calendar)"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "版本 1.0.0 (Phase 1 Core Calendar)"
+          }
+        }
+      }
+    },
+    "settings_privacy_policy": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy Policy"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プライバシーポリシー"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "隱私權政策"
+          }
+        }
+      }
+    },
+    "settings_terms_of_service": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terms of Service"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "利用規約"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "服務條款"
+          }
+        }
+      }
+    },
+    "action_done": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完了"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完成"
+          }
+        }
+      }
+    },
+    "action_cancel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャンセル"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "取消"
+          }
+        }
+      }
+    },
+    "action_save": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "儲存"
+          }
+        }
+      }
+    },
+    "action_edit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "編集"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "編輯"
+          }
+        }
+      }
+    },
+    "action_delete": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "削除"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刪除"
+          }
+        }
+      }
+    },
+    "action_close": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "閉じる"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "關閉"
+          }
+        }
+      }
+    },
+    "action_ok": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "好"
+          }
+        }
+      }
+    },
+    "action_create": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "作成"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "建立"
+          }
+        }
+      }
+    },
+    "friends_privacy_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Circle-based Privacy"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "グループ別の安心プライバシー"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "圈子隱私機制"
+          }
+        }
+      }
+    },
+    "friends_phase2_badge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phase 2 — Social Groups"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phase 2 — 友達・グループ機能"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phase 2 — 好友與社群"
+          }
+        }
+      }
+    },
+    "friends_members_count": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld members"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld 人のメンバー"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld 位成員"
+          }
+        }
+      }
+    },
+    "discover_14day_feed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "14-Day Feed"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "14日間の予定"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "14 天在地動態"
+          }
+        }
+      }
+    },
+    "discover_phase3_badge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phase 3 — Discover & Monetization"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phase 3 — 見つける・ローカル連携"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phase 3 — 探索與在地推薦"
+          }
+        }
+      }
+    },
+    "discover_promo_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tokyo Coffee Festival 2026 @ Roppongi Hills"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tokyo Coffee Festival 2026 @ 六本木ヒルズ"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2026 東京精品咖啡節 ＠ 六本木之丘"
+          }
+        }
+      }
+    },
+    "discover_promo_desc": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Over 50 boutique roasters from across Japan. Early-bird tasting passes available now."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全国から50以上のこだわりロースターが集結。お得な試飲チケット発売中。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匯集全日本超過 50 家頂級烘焙咖啡館，早鳥品飲通票熱烈預售中。"
+          }
+        }
+      }
+    },
+    "members": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "members"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "名"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "位成員"
+          }
+        }
       }
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

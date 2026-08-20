@@ -2,19 +2,22 @@
 //  SettingsView.swift
 //  JoeCalendar
 //
-//  Created for JoeCalendar Phase 0 Foundation.
+//  Created for JoeCalendar Phase 0 Foundation & Extended for Phase 1 Core Calendar.
 //  Settings tab with live language switcher (zh-Hant, en, ja),
-//  auth placeholders, sync toggles, and subscription status.
+//  Apple EventKit authorization, Google Calendar OAuth sync, and subscriptions.
 //
 
 import SwiftUI
 
 public struct SettingsView: View {
     @EnvironmentObject private var localeManager: LocaleManager
+    @EnvironmentObject private var eventStore: EventStore
     @StateObject private var firebaseService = FirebaseService.shared
+    @StateObject private var eventKitService = EventKitService.shared
+    @StateObject private var googleService = GoogleCalendarService.shared
     
-    @State private var isAppleSyncEnabled: Bool = false
-    @State private var isGoogleSyncEnabled: Bool = false
+    @State private var isGoogleAuthSheetPresented: Bool = false
+    @State private var googleEmailInput: String = ""
     
     public init() {}
     
@@ -29,14 +32,14 @@ public struct SettingsView: View {
                         // Language Switcher Section (Working i18n switcher)
                         languageSection
                         
+                        // Sync & Integrations (EventKit + Google Calendar)
+                        syncSection
+                        
                         // Account Section
                         accountSection
                         
                         // Subscription Section
                         subscriptionSection
-                        
-                        // Sync & Integrations
-                        syncSection
                         
                         // About App
                         aboutSection
@@ -47,6 +50,9 @@ public struct SettingsView: View {
             }
             .navigationTitle(Text(loc: "settings_title"))
             .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $isGoogleAuthSheetPresented) {
+                googleSignInModal
+            }
         }
     }
     
@@ -103,6 +109,145 @@ public struct SettingsView: View {
         }
     }
     
+    // MARK: - Sync Section (EventKit & Google)
+    
+    private var syncSection: some View {
+        VStack(alignment: .leading, spacing: AppSpacing.sm) {
+            HStack {
+                Image(systemName: "arrow.triangle.2.circlepath")
+                    .foregroundColor(AppColor.accent)
+                Text(loc: "settings_sync_section")
+                    .font(AppTypography.headline())
+                    .foregroundColor(AppColor.inkPrimary)
+                
+                Spacer()
+                
+                Button(action: {
+                    Task {
+                        await eventStore.syncAll()
+                    }
+                }) {
+                    HStack(spacing: 4) {
+                        if eventStore.isSyncing {
+                            ProgressView()
+                                .scaleEffect(0.7)
+                        } else {
+                            Image(systemName: "arrow.clockwise")
+                                .font(.system(size: 12))
+                        }
+                        Text(loc: "settings_sync_now")
+                            .font(AppTypography.captionMedium())
+                    }
+                    .foregroundColor(AppColor.accent)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(AppColor.accentLight)
+                    .clipShape(Capsule())
+                }
+            }
+            
+            VStack(spacing: AppSpacing.md) {
+                // Apple Calendar (EventKit)
+                VStack(spacing: AppSpacing.sm) {
+                    HStack(spacing: AppSpacing.sm) {
+                        Image(systemName: "apple.logo")
+                            .foregroundColor(AppColor.inkPrimary)
+                            .frame(width: 24)
+                        
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(loc: "settings_sync_apple")
+                                .font(AppTypography.body())
+                                .foregroundColor(AppColor.inkPrimary)
+                            
+                            Text(loc: eventKitService.authStatus.isAuthorized ? "settings_status_connected" : "settings_status_disconnected")
+                                .font(AppTypography.caption())
+                                .foregroundColor(eventKitService.authStatus.isAuthorized ? AppColor.success : AppColor.inkTertiary)
+                        }
+                        
+                        Spacer()
+                        
+                        if eventKitService.authStatus.isAuthorized {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(AppColor.success)
+                        } else if eventKitService.authStatus == .denied {
+                            Button(action: {
+                                eventKitService.openSystemSettings()
+                            }) {
+                                Text(loc: "settings_open_settings")
+                                    .font(AppTypography.captionMedium())
+                            }
+                            .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: false))
+                        } else {
+                            Button(action: {
+                                Task {
+                                    let granted = await eventKitService.requestAuthorization()
+                                    if granted {
+                                        await eventStore.syncAll()
+                                    }
+                                }
+                            }) {
+                                Text(loc: "settings_connect")
+                                    .font(AppTypography.captionMedium())
+                            }
+                            .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: true))
+                        }
+                    }
+                }
+                
+                Divider()
+                    .background(AppColor.inkBorder)
+                
+                // Google Calendar (OAuth Sync)
+                VStack(spacing: AppSpacing.sm) {
+                    HStack(spacing: AppSpacing.sm) {
+                        Image(systemName: "g.circle.fill")
+                            .foregroundColor(Color(hex: 0x4285F4))
+                            .frame(width: 24)
+                        
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(loc: "settings_sync_google")
+                                .font(AppTypography.body())
+                                .foregroundColor(AppColor.inkPrimary)
+                            
+                            if googleService.isSignedIn, let email = googleService.userEmail {
+                                Text(email)
+                                    .font(AppTypography.caption())
+                                    .foregroundColor(AppColor.success)
+                            } else {
+                                Text(loc: "settings_status_disconnected")
+                                    .font(AppTypography.caption())
+                                    .foregroundColor(AppColor.inkTertiary)
+                            }
+                        }
+                        
+                        Spacer()
+                        
+                        if googleService.isSignedIn {
+                            Button(action: {
+                                googleService.signOut()
+                                Task { await eventStore.syncAll() }
+                            }) {
+                                Text(loc: "settings_disconnect")
+                                    .font(AppTypography.captionMedium())
+                                    .foregroundColor(AppColor.destructive)
+                            }
+                            .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: false))
+                        } else {
+                            Button(action: {
+                                isGoogleAuthSheetPresented = true
+                            }) {
+                                Text(loc: "settings_connect")
+                                    .font(AppTypography.captionMedium())
+                            }
+                            .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: true))
+                        }
+                    }
+                }
+            }
+            .paperCard(padding: AppSpacing.md)
+        }
+    }
+    
     // MARK: - Account Section
     
     private var accountSection: some View {
@@ -140,7 +285,7 @@ public struct SettingsView: View {
                         Button(action: {
                             firebaseService.signOut()
                         }) {
-                            Text("Sign Out")
+                            Text(loc: "settings_sign_out")
                                 .font(AppTypography.captionMedium())
                                 .foregroundColor(AppColor.destructive)
                         }
@@ -190,7 +335,7 @@ public struct SettingsView: View {
                     Text(loc: "settings_free_plan")
                         .font(AppTypography.headline())
                         .foregroundColor(AppColor.inkPrimary)
-                    Text("Includes social sharing & local feeds with ads")
+                    Text(loc: "settings_free_plan_desc")
                         .font(AppTypography.footnote())
                         .foregroundColor(AppColor.inkSecondary)
                 }
@@ -202,48 +347,6 @@ public struct SettingsView: View {
                         .font(AppTypography.captionMedium())
                 }
                 .buttonStyle(TimeTreeCapsuleButtonStyle(isSelected: true))
-            }
-            .paperCard(padding: AppSpacing.md)
-        }
-    }
-    
-    // MARK: - Sync Section
-    
-    private var syncSection: some View {
-        VStack(alignment: .leading, spacing: AppSpacing.sm) {
-            HStack {
-                Image(systemName: "arrow.triangle.2.circlepath")
-                    .foregroundColor(AppColor.accent)
-                Text(loc: "settings_sync_section")
-                    .font(AppTypography.headline())
-                    .foregroundColor(AppColor.inkPrimary)
-            }
-            
-            VStack(spacing: AppSpacing.md) {
-                Toggle(isOn: $isAppleSyncEnabled) {
-                    HStack(spacing: AppSpacing.sm) {
-                        Image(systemName: "calendar")
-                            .foregroundColor(AppColor.inkSecondary)
-                        Text(loc: "settings_sync_apple")
-                            .font(AppTypography.body())
-                            .foregroundColor(AppColor.inkPrimary)
-                    }
-                }
-                .tint(AppColor.accent)
-                
-                Divider()
-                    .background(AppColor.inkBorder)
-                
-                Toggle(isOn: $isGoogleSyncEnabled) {
-                    HStack(spacing: AppSpacing.sm) {
-                        Image(systemName: "envelope.circle")
-                            .foregroundColor(AppColor.inkSecondary)
-                        Text(loc: "settings_sync_google")
-                            .font(AppTypography.body())
-                            .foregroundColor(AppColor.inkPrimary)
-                    }
-                }
-                .tint(AppColor.accent)
             }
             .paperCard(padding: AppSpacing.md)
         }
@@ -304,6 +407,77 @@ public struct SettingsView: View {
                 RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous)
                     .stroke(AppColor.inkBorder, lineWidth: 1)
             )
+        }
+    }
+    
+    // MARK: - Google Sign-In Sheet
+    
+    private var googleSignInModal: some View {
+        NavigationStack {
+            ZStack {
+                AppColor.paper.ignoresSafeArea()
+                
+                VStack(spacing: AppSpacing.lg) {
+                    Image(systemName: "g.circle.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(Color(hex: 0x4285F4))
+                        .padding(.top, AppSpacing.xl)
+                    
+                    Text(loc: "settings_google_auth_title")
+                        .font(AppTypography.title2())
+                        .foregroundColor(AppColor.inkPrimary)
+                    
+                    Text(loc: "settings_google_auth_desc")
+                        .font(AppTypography.body())
+                        .foregroundColor(AppColor.inkSecondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, AppSpacing.lg)
+                    
+                    VStack(alignment: .leading, spacing: AppSpacing.xs) {
+                        Text(loc: "settings_google_email_label")
+                            .font(AppTypography.captionMedium())
+                            .foregroundColor(AppColor.inkSecondary)
+                        
+                        TextField("user@gmail.com", text: $googleEmailInput)
+                            .font(AppTypography.body())
+                            .padding(AppSpacing.md)
+                            .background(AppColor.surface)
+                            .clipShape(RoundedRectangle(cornerRadius: AppRadius.md))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: AppRadius.md)
+                                    .stroke(AppColor.inkBorder, lineWidth: 1)
+                            )
+                    }
+                    .padding(.horizontal, AppSpacing.lg)
+                    .padding(.top, AppSpacing.md)
+                    
+                    Button(action: {
+                        let finalEmail = googleEmailInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                            ? "user@gmail.com"
+                            : googleEmailInput
+                        Task {
+                            try? await googleService.signIn(email: finalEmail)
+                            await eventStore.syncAll()
+                            isGoogleAuthSheetPresented = false
+                        }
+                    }) {
+                        Text(loc: "settings_connect")
+                    }
+                    .buttonStyle(TimeTreePrimaryButtonStyle())
+                    .padding(.horizontal, AppSpacing.lg)
+                    
+                    Spacer()
+                }
+            }
+            .navigationTitle(Text(loc: "settings_sync_google"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(action: { isGoogleAuthSheetPresented = false }) {
+                        Text(loc: "action_cancel")
+                    }
+                }
+            }
         }
     }
 }

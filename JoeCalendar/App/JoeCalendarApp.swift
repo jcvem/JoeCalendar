@@ -12,12 +12,14 @@ import SwiftUI
 struct JoeCalendarApp: App {
     @StateObject private var localeManager = LocaleManager.shared
     @StateObject private var firebaseService = FirebaseService.shared
+    @StateObject private var eventStore = EventStore.shared
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(localeManager)
                 .environmentObject(firebaseService)
+                .environmentObject(eventStore)
                 .environment(\.locale, localeManager.effectiveLocale)
         }
     }
