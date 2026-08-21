@@ -2,16 +2,26 @@
 //  GoogleCalendarService.swift
 //  JoeCalendar
 //
-//  Created for JoeCalendar Phase 1 Core Calendar.
-//  Encapsulates Google Calendar API (v3) OAuth state, REST endpoints,
-//  and two-way synchronization for Google Calendar events.
+//  Created for JoeCalendar Phase 1 Core Calendar & Upgraded for Real Google OAuth + Calendar Sync.
+//  Encapsulates Google Calendar API (v3) OAuth state via GoogleSignIn-iOS SDK,
+//  secure token refresh, REST endpoints (calendarList, events pull/push/delete),
+//  and graceful offline demo fallback.
 //
 
 import Foundation
 import Combine
 import SwiftUI
+import UIKit
 
-public struct GoogleCalendarItem: Identifiable, Codable, Equatable {
+#if canImport(GoogleSignIn)
+import GoogleSignIn
+#endif
+
+#if canImport(FirebaseAuth)
+import FirebaseAuth
+#endif
+
+public struct GoogleCalendarItem: Identifiable, Codable, Equatable, Hashable {
     public var id: String
     public var summary: String
     public var description: String?
@@ -27,21 +37,45 @@ public struct GoogleCalendarItem: Identifiable, Codable, Equatable {
     }
 }
 
+public enum GoogleCalendarConfig {
+    /// OAuth 2.0 Client ID for Google Sign-In (iOS Bundle: com.vemstudio.joecalendar).
+    /// Founder note: Set via GoogleService-Info.plist or Info.plist GIDClientID.
+    /// FLAG: NEED_GOOGLE_OAUTH_CLIENT_ID
+    public static let fallbackClientID: String = "950611334449-8274paf82h4qpmmq9fuapr8lmtllpbk9.apps.googleusercontent.com"
+}
+
 @MainActor
 public final class GoogleCalendarService: ObservableObject {
     public static let shared = GoogleCalendarService()
     
+    // MARK: - Published Properties
+    
     @Published public private(set) var isSignedIn: Bool = false
+    @Published public var isGoogleConnected: Bool = false
+    @Published public private(set) var isConfigured: Bool = true
     @Published public private(set) var userEmail: String?
+    @Published public private(set) var userDisplayName: String?
+    @Published public private(set) var userAvatarUrl: URL?
     @Published public private(set) var isSyncing: Bool = false
     @Published public private(set) var lastSyncDate: Date?
     @Published public var availableCalendars: [GoogleCalendarItem] = []
     @Published public var selectedCalendarId: String = "primary"
+    @Published public var authErrorMessage: String? = nil
     
+    // MARK: - OAuth Scopes
+    
+    public static let calendarScopes: [String] = [
+        "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/calendar.readonly",
+        "https://www.googleapis.com/auth/calendar.events"
+    ]
+    
+    // In-memory access token (secure: never saved in plaintext UserDefaults)
     private var accessToken: String?
-    private let tokenKey = "joecalendar_google_access_token"
+    
     private let emailKey = "joecalendar_google_user_email"
     private let selectedCalKey = "joecalendar_google_selected_cal_id"
+    private let legacyTokenKey = "joecalendar_google_access_token"
     
     private let isoFormatter: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
@@ -66,31 +100,174 @@ public final class GoogleCalendarService: ObservableObject {
     @Published private var mockGoogleEvents: [CalendarEvent] = []
     
     private init() {
+        checkConfiguration()
         loadStoredSession()
-    }
-    
-    private func loadStoredSession() {
-        if let token = UserDefaults.standard.string(forKey: tokenKey), !token.isEmpty {
-            self.accessToken = token
-            self.userEmail = UserDefaults.standard.string(forKey: emailKey)
-            self.selectedCalendarId = UserDefaults.standard.string(forKey: selectedCalKey) ?? "primary"
-            self.isSignedIn = true
-        } else {
-            self.isSignedIn = false
+        Task {
+            await restorePreviousSignIn()
         }
     }
     
-    // MARK: - Sign In / Sign Out
+    // MARK: - Client ID & Configuration
     
-    public func signIn(email: String? = nil, token: String? = nil) async throws {
+    public var resolvedClientID: String? {
+        if let id = Bundle.main.object(forInfoDictionaryKey: "GIDClientID") as? String, !id.isEmpty {
+            return id
+        }
+        if let id = Bundle.main.object(forInfoDictionaryKey: "GoogleSignInClientID") as? String, !id.isEmpty {
+            return id
+        }
+        if let path = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist"),
+           let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
+           let id = dict["CLIENT_ID"] as? String, !id.isEmpty {
+            return id
+        }
+        if !GoogleCalendarConfig.fallbackClientID.isEmpty {
+            return GoogleCalendarConfig.fallbackClientID
+        }
+        return nil
+    }
+    
+    private func checkConfiguration() {
+        if let clientID = resolvedClientID, !clientID.isEmpty {
+            self.isConfigured = true
+            #if canImport(GoogleSignIn)
+            GIDSignIn.sharedInstance.configuration = GIDConfiguration(clientID: clientID)
+            #endif
+        } else {
+            self.isConfigured = false
+            print("GoogleCalendarService: No Google OAuth Client ID found. Running with demo fallback.")
+        }
+    }
+    
+    private func loadStoredSession() {
+        // Clean legacy plaintext token if previously persisted
+        UserDefaults.standard.removeObject(forKey: legacyTokenKey)
+        
+        self.userEmail = UserDefaults.standard.string(forKey: emailKey)
+        self.selectedCalendarId = UserDefaults.standard.string(forKey: selectedCalKey) ?? "primary"
+        if let email = self.userEmail, !email.isEmpty {
+            self.isSignedIn = true
+            self.isGoogleConnected = true
+        }
+    }
+    
+    // MARK: - Google Sign-In (Real OAuth)
+    
+    /// Presents Google Sign-In sheet, requests Calendar scopes, and binds real OAuth access token
+    public func signIn(presenting viewController: UIViewController? = nil) async throws {
+        self.authErrorMessage = nil
+        
+        #if canImport(GoogleSignIn)
+        guard let clientID = resolvedClientID, !clientID.isEmpty else {
+            print("GoogleCalendarService: Missing Client ID, falling back to demo sign-in.")
+            try await signInWithDemo()
+            return
+        }
+        
+        GIDSignIn.sharedInstance.configuration = GIDConfiguration(clientID: clientID)
+        
+        guard let presentingVC = viewController ?? getTopViewController() else {
+            let error = NSError(
+                domain: "JoeCalendar.GoogleCalendar",
+                code: 400,
+                userInfo: [NSLocalizedDescriptionKey: "Could not find a presenting view controller for Google Sign-In."]
+            )
+            self.authErrorMessage = error.localizedDescription
+            throw error
+        }
+        
+        do {
+            let result = try await GIDSignIn.sharedInstance.signIn(
+                withPresenting: presentingVC,
+                hint: nil,
+                additionalScopes: Self.calendarScopes
+            )
+            
+            applyGoogleUser(result.user)
+            
+            // Link or authenticate Firebase with Google credential if Firebase is available
+            #if canImport(FirebaseAuth)
+            if let idToken = result.user.idToken?.tokenString {
+                let credential = GoogleAuthProvider.credential(
+                    withIDToken: idToken,
+                    accessToken: result.user.accessToken.tokenString
+                )
+                do {
+                    _ = try await Auth.auth().signIn(with: credential)
+                    print("GoogleCalendarService: Firebase Auth linked successfully with Google user!")
+                } catch {
+                    print("GoogleCalendarService: Firebase Auth link note: \(error.localizedDescription)")
+                }
+            }
+            #endif
+            
+            // Fetch the user's real Google Calendar list
+            await fetchAvailableCalendars()
+            
+        } catch {
+            self.authErrorMessage = error.localizedDescription
+            print("GoogleCalendarService: Google Sign-In failed: \(error.localizedDescription)")
+            throw error
+        }
+        #else
+        // If GoogleSignIn SDK is not linked at runtime, fall back gracefully to demo mode
+        try await signInWithDemo()
+        #endif
+    }
+    
+    #if canImport(GoogleSignIn)
+    private func applyGoogleUser(_ user: GIDGoogleUser) {
+        let token = user.accessToken.tokenString
+        let email = user.profile?.email ?? "user@gmail.com"
+        let displayName = user.profile?.name
+        let avatarUrl = user.profile?.imageURL(withDimension: 120)
+        
+        self.accessToken = token
+        self.userEmail = email
+        self.userDisplayName = displayName
+        self.userAvatarUrl = avatarUrl
+        self.isSignedIn = true
+        self.isGoogleConnected = true
+        
+        UserDefaults.standard.set(email, forKey: emailKey)
+        
+        // Seed default primary calendar if list is empty
+        if self.availableCalendars.isEmpty {
+            self.availableCalendars = [
+                GoogleCalendarItem(id: "primary", summary: email, isPrimary: true, backgroundColor: "#4285F4")
+            ]
+        }
+    }
+    #endif
+    
+    /// Restores a previously active Google sign-in session from secure keychain on app launch
+    public func restorePreviousSignIn() async {
+        #if canImport(GoogleSignIn)
+        guard GIDSignIn.sharedInstance.hasPreviousSignIn() else { return }
+        do {
+            let user = try await GIDSignIn.sharedInstance.restorePreviousSignIn()
+            applyGoogleUser(user)
+            await fetchAvailableCalendars()
+            print("GoogleCalendarService: Restored previous Google session for \(user.profile?.email ?? "user")")
+        } catch {
+            print("GoogleCalendarService: Previous session restore note: \(error.localizedDescription)")
+        }
+        #endif
+    }
+    
+    // MARK: - Demo Fallback Mode
+    
+    /// Fallback demo mode for offline testing or when client ID is not configured
+    public func signInWithDemo(email: String? = nil, token: String? = nil) async throws {
         let finalEmail = email ?? "user@gmail.com"
         let finalToken = token ?? "demo_oauth_token_\(UUID().uuidString)"
         
         self.accessToken = finalToken
         self.userEmail = finalEmail
+        self.userDisplayName = "Demo Google User"
         self.isSignedIn = true
+        self.isGoogleConnected = true
         
-        UserDefaults.standard.set(finalToken, forKey: tokenKey)
         UserDefaults.standard.set(finalEmail, forKey: emailKey)
         
         // Seed default calendar
@@ -104,18 +281,120 @@ public final class GoogleCalendarService: ObservableObject {
         }
     }
     
+    // MARK: - Sign Out
+    
     public func signOut() {
+        #if canImport(GoogleSignIn)
+        GIDSignIn.sharedInstance.signOut()
+        #endif
+        
         self.isSignedIn = false
+        self.isGoogleConnected = false
         self.accessToken = nil
         self.userEmail = nil
+        self.userDisplayName = nil
+        self.userAvatarUrl = nil
         self.availableCalendars = []
         self.mockGoogleEvents = []
-        UserDefaults.standard.removeObject(forKey: tokenKey)
+        self.authErrorMessage = nil
+        
         UserDefaults.standard.removeObject(forKey: emailKey)
         UserDefaults.standard.removeObject(forKey: selectedCalKey)
+        UserDefaults.standard.removeObject(forKey: legacyTokenKey)
     }
     
-    // MARK: - Fetch Events (Pull)
+    // MARK: - Token Refresh & Management
+    
+    /// Retrieves a fresh access token, proactively refreshing via GoogleSignIn SDK if expired
+    private func getFreshAccessToken() async throws -> String? {
+        #if canImport(GoogleSignIn)
+        if let currentUser = GIDSignIn.sharedInstance.currentUser {
+            do {
+                let refreshedUser = try await currentUser.refreshTokensIfNeeded()
+                let freshToken = refreshedUser.accessToken.tokenString
+                self.accessToken = freshToken
+                return freshToken
+            } catch {
+                print("GoogleCalendarService: Token refresh failed: \(error.localizedDescription)")
+                throw error
+            }
+        }
+        #endif
+        return self.accessToken
+    }
+    
+    // MARK: - Fetch Calendars List (calendarList)
+    
+    public func fetchAvailableCalendars() async {
+        guard isSignedIn, let token = accessToken, !token.starts(with: "demo_oauth_token_") else {
+            return
+        }
+        
+        do {
+            let calendars = try await fetchCalendarListViaAPI(token: token, isRetry: false)
+            if !calendars.isEmpty {
+                self.availableCalendars = calendars
+            }
+        } catch {
+            print("GoogleCalendarService: Failed to fetch calendar list: \(error.localizedDescription)")
+        }
+    }
+    
+    private func fetchCalendarListViaAPI(token: String, isRetry: Bool) async throws -> [GoogleCalendarItem] {
+        guard let url = URL(string: "https://www.googleapis.com/calendar/v3/users/me/calendarList") else {
+            return []
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NSError(domain: "JoeCalendar.GoogleCalendar", code: 500, userInfo: [NSLocalizedDescriptionKey: "Invalid network response"])
+        }
+        
+        // Handle 401 Token Expiry -> Refresh and retry once
+        if httpResponse.statusCode == 401 && !isRetry {
+            print("GoogleCalendarService: Received 401 on calendarList fetch. Refreshing token...")
+            if let freshToken = try await getFreshAccessToken() {
+                return try await fetchCalendarListViaAPI(token: freshToken, isRetry: true)
+            }
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw NSError(domain: "JoeCalendar.GoogleCalendar", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: "Calendar list fetch returned status \(httpResponse.statusCode)"])
+        }
+        
+        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let items = json["items"] as? [[String: Any]] else {
+            return []
+        }
+        
+        var parsedCalendars: [GoogleCalendarItem] = []
+        for item in items {
+            guard let id = item["id"] as? String,
+                  let summary = item["summary"] as? String else {
+                continue
+            }
+            let description = item["description"] as? String
+            let isPrimary = (item["primary"] as? Bool) ?? false
+            let bgColor = item["backgroundColor"] as? String
+            
+            parsedCalendars.append(GoogleCalendarItem(
+                id: id,
+                summary: summary,
+                description: description,
+                isPrimary: isPrimary,
+                backgroundColor: bgColor
+            ))
+        }
+        
+        return parsedCalendars
+    }
+    
+    // MARK: - Fetch Events (REST Pull)
     
     public func fetchEvents(startDate: Date, endDate: Date) async throws -> [CalendarEvent] {
         guard isSignedIn else { return [] }
@@ -129,8 +408,9 @@ public final class GoogleCalendarService: ObservableObject {
         // If we have a real network token, attempt REST API
         if let token = accessToken, !token.starts(with: "demo_oauth_token_") {
             do {
-                return try await fetchEventsViaAPI(startDate: startDate, endDate: endDate, token: token)
+                return try await fetchEventsViaAPI(startDate: startDate, endDate: endDate, token: token, isRetry: false)
             } catch {
+                print("GoogleCalendarService: Real REST API fetch error: \(error.localizedDescription). Returning cached events.")
                 // Fallback to local mock cache on network error
                 return mockGoogleEvents.filter {
                     ($0.startDate >= startDate && $0.startDate <= endDate) ||
@@ -146,12 +426,12 @@ public final class GoogleCalendarService: ObservableObject {
         }
     }
     
-    private func fetchEventsViaAPI(startDate: Date, endDate: Date, token: String) async throws -> [CalendarEvent] {
+    private func fetchEventsViaAPI(startDate: Date, endDate: Date, token: String, isRetry: Bool) async throws -> [CalendarEvent] {
         let calendarIdEncoded = selectedCalendarId.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? "primary"
         let startISO = isoFormatter.string(from: startDate).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         let endISO = isoFormatter.string(from: endDate).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         
-        guard let url = URL(string: "https://www.googleapis.com/calendar/v3/calendars/\(calendarIdEncoded)/events?timeMin=\(startISO)&timeMax=\(endISO)&singleEvents=true") else {
+        guard let url = URL(string: "https://www.googleapis.com/calendar/v3/calendars/\(calendarIdEncoded)/events?timeMin=\(startISO)&timeMax=\(endISO)&singleEvents=true&orderBy=startTime") else {
             return []
         }
         
@@ -161,8 +441,20 @@ public final class GoogleCalendarService: ObservableObject {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
         let (data, response) = try await URLSession.shared.data(for: request)
-        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
-            throw NSError(domain: "JoeCalendar.GoogleCalendar", code: 400, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch Google Calendar events"])
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NSError(domain: "JoeCalendar.GoogleCalendar", code: 500, userInfo: [NSLocalizedDescriptionKey: "Invalid network response"])
+        }
+        
+        // Handle 401 Token Expiry -> Refresh and retry once
+        if httpResponse.statusCode == 401 && !isRetry {
+            print("GoogleCalendarService: Received 401 on events fetch. Refreshing token...")
+            if let freshToken = try await getFreshAccessToken() {
+                return try await fetchEventsViaAPI(startDate: startDate, endDate: endDate, token: freshToken, isRetry: true)
+            }
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw NSError(domain: "JoeCalendar.GoogleCalendar", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch Google Calendar events (HTTP \(httpResponse.statusCode))"])
         }
         
         return try parseGoogleEventsJSON(data: data)
@@ -186,7 +478,11 @@ public final class GoogleCalendarService: ObservableObject {
         
         // If real token available, push via REST API
         if let token = accessToken, !token.starts(with: "demo_oauth_token_") {
-            try? await pushEventViaAPI(mutableEvent, token: token)
+            do {
+                try await pushEventViaAPI(mutableEvent, token: token, isRetry: false)
+            } catch {
+                print("GoogleCalendarService: pushEvent error: \(error.localizedDescription)")
+            }
         }
         
         // Update local cache
@@ -199,7 +495,7 @@ public final class GoogleCalendarService: ObservableObject {
         return eventId
     }
     
-    private func pushEventViaAPI(_ event: CalendarEvent, token: String) async throws {
+    private func pushEventViaAPI(_ event: CalendarEvent, token: String, isRetry: Bool) async throws {
         let calendarIdEncoded = selectedCalendarId.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? "primary"
         let isUpdate = event.externalId != nil && !event.externalId!.starts(with: "gcal_")
         
@@ -234,7 +530,14 @@ public final class GoogleCalendarService: ObservableObject {
         }
         
         request.httpBody = try JSONSerialization.data(withJSONObject: bodyDict)
-        _ = try await URLSession.shared.data(for: request)
+        let (_, response) = try await URLSession.shared.data(for: request)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 && !isRetry {
+            print("GoogleCalendarService: Received 401 on event push. Refreshing token...")
+            if let freshToken = try await getFreshAccessToken() {
+                try await pushEventViaAPI(event, token: freshToken, isRetry: true)
+            }
+        }
     }
     
     // MARK: - Delete Event
@@ -247,12 +550,24 @@ public final class GoogleCalendarService: ObservableObject {
         
         // If real token available, delete via REST API
         if let token = accessToken, !token.starts(with: "demo_oauth_token_"), !externalId.starts(with: "gcal_") {
-            let calendarIdEncoded = selectedCalendarId.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? "primary"
-            guard let url = URL(string: "https://www.googleapis.com/calendar/v3/calendars/\(calendarIdEncoded)/events/\(externalId)") else { return }
-            var request = URLRequest(url: url)
-            request.httpMethod = "DELETE"
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            _ = try? await URLSession.shared.data(for: request)
+            try await deleteEventViaAPI(externalId: externalId, token: token, isRetry: false)
+        }
+    }
+    
+    private func deleteEventViaAPI(externalId: String, token: String, isRetry: Bool) async throws {
+        let calendarIdEncoded = selectedCalendarId.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? "primary"
+        guard let url = URL(string: "https://www.googleapis.com/calendar/v3/calendars/\(calendarIdEncoded)/events/\(externalId)") else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        let (_, response) = try await URLSession.shared.data(for: request)
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 && !isRetry {
+            print("GoogleCalendarService: Received 401 on event delete. Refreshing token...")
+            if let freshToken = try await getFreshAccessToken() {
+                try await deleteEventViaAPI(externalId: externalId, token: freshToken, isRetry: true)
+            }
         }
     }
     
@@ -333,6 +648,23 @@ public final class GoogleCalendarService: ObservableObject {
         return parsedEvents
     }
     
+    // MARK: - Top View Controller Helper
+    
+    private func getTopViewController() -> UIViewController? {
+        let scenes = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .filter { $0.activationState == .foregroundActive }
+        
+        let window = scenes.flatMap { $0.windows }.first(where: { $0.isKeyWindow })
+            ?? UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.flatMap { $0.windows }.first
+        
+        var topController = window?.rootViewController
+        while let presented = topController?.presentedViewController {
+            topController = presented
+        }
+        return topController
+    }
+    
     // MARK: - Sample Seed
     
     private func seedSampleEvents() {
@@ -377,3 +709,4 @@ public final class GoogleCalendarService: ObservableObject {
         mockGoogleEvents = [sample1, sample2]
     }
 }
+

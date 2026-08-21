@@ -49,11 +49,8 @@ public struct ListView: View {
             }
         }
         .background(AppColor.paper)
-        .sheet(item: Binding<IdentifiableEventFormMode?>(
-            get: { activeSheetMode.map { IdentifiableEventFormMode(mode: $0) } },
-            set: { activeSheetMode = $0?.mode }
-        )) { item in
-            EventFormSheet(mode: item.mode)
+        .sheet(item: $activeSheetMode) { mode in
+            EventFormSheet(mode: mode)
                 .environmentObject(localeManager)
                 .environmentObject(eventStore)
         }
@@ -282,10 +279,4 @@ public struct ListView: View {
         formatter.timeStyle = .short
         return formatter.string(from: date)
     }
-}
-
-// Wrapper for Identifiable sheet binding
-private struct IdentifiableEventFormMode: Identifiable {
-    let id = UUID()
-    let mode: EventFormMode
 }

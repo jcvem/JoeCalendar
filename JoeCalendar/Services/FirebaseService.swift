@@ -119,8 +119,10 @@ public final class FirebaseService: ObservableObject {
         guard isConfigured else {
             // Local fallback initial state
             if currentUser == nil {
-                self.currentUser = loadFallbackUser()
-                self.isAuthenticated = (currentUser != nil)
+                let fallback = loadFallbackUser()
+                self.currentUser = fallback
+                self.isAuthenticated = true
+                FriendService.shared.updateCurrentUser(fallback)
             }
             return
         }
@@ -130,10 +132,21 @@ public final class FirebaseService: ObservableObject {
                 guard let self = self else { return }
                 if let fbUser = firebaseUser {
                     self.isAuthenticated = true
+                    print("FirebaseService: Auth state changed -> Logged in UID: \(fbUser.uid)")
                     await self.syncUserProfile(for: fbUser)
                 } else {
-                    self.isAuthenticated = false
-                    self.currentUser = nil
+                    print("FirebaseService: No user signed in. Attempting automatic anonymous sign-in...")
+                    do {
+                        let authResult = try await Auth.auth().signInAnonymously()
+                        print("FirebaseService: Auto-signed in anonymously -> UID: \(authResult.user.uid)")
+                        await self.syncUserProfile(for: authResult.user)
+                    } catch {
+                        print("FirebaseService: Anonymous sign-in failed: \(error.localizedDescription)")
+                        self.isAuthenticated = false
+                        let fallback = self.loadFallbackUser()
+                        self.currentUser = fallback
+                        FriendService.shared.updateCurrentUser(fallback)
+                    }
                 }
             }
         }
@@ -166,7 +179,7 @@ public final class FirebaseService: ObservableObject {
         case .apple:
             try await signInWithAppleStub()
         case .google:
-            try await signInWithGoogleStub()
+            try await signInWithGoogle()
         }
         #else
         self.currentUser = loadFallbackUser()
@@ -249,11 +262,19 @@ public final class FirebaseService: ObservableObject {
         try await signInAnonymously()
     }
     
-    /// Sign in with Google placeholder (ready for GoogleSignIn SDK or OAuth token)
-    private func signInWithGoogleStub() async throws {
-        // Note: Full GoogleSignIn-iOS SDK requires GoogleSignIn pod/framework.
-        // Falls back to anonymous auth linked session for testability.
-        try await signInAnonymously()
+    /// Sign in with Google (invokes GoogleCalendarService and links credential with Firebase Auth)
+    public func signInWithGoogle() async throws {
+        do {
+            try await GoogleCalendarService.shared.signIn()
+            #if canImport(FirebaseAuth)
+            if let fbUser = Auth.auth().currentUser {
+                await syncUserProfile(for: fbUser)
+            }
+            #endif
+        } catch {
+            self.authErrorMessage = error.localizedDescription
+            throw error
+        }
     }
     #endif
     
@@ -285,6 +306,7 @@ public final class FirebaseService: ObservableObject {
                     let user = parseJoeUser(id: uid, data: data)
                     self.currentUser = user
                     self.isAuthenticated = true
+                    FriendService.shared.updateCurrentUser(user)
                     return
                 } else {
                     // Initialize new user doc in Firestore
@@ -292,6 +314,7 @@ public final class FirebaseService: ObservableObject {
                         id: uid,
                         displayName: displayName,
                         email: email,
+                        joeId: "joe_\(uid.prefix(6).lowercased())",
                         locale: LocaleManager.shared.effectiveLanguageCode,
                         isAdFree: false,
                         friendIds: [],
@@ -302,6 +325,7 @@ public final class FirebaseService: ObservableObject {
                     try await saveUserProfile(newUser)
                     self.currentUser = newUser
                     self.isAuthenticated = true
+                    FriendService.shared.updateCurrentUser(newUser)
                     return
                 }
             } catch {
@@ -311,14 +335,17 @@ public final class FirebaseService: ObservableObject {
         #endif
         
         // Fallback user object if Firestore document read fails
-        self.currentUser = JoeUser(
+        let fallback = JoeUser(
             id: uid,
             displayName: displayName,
             email: email,
+            joeId: "joe_\(uid.prefix(6).lowercased())",
             locale: LocaleManager.shared.effectiveLanguageCode,
             isAdFree: false
         )
+        self.currentUser = fallback
         self.isAuthenticated = true
+        FriendService.shared.updateCurrentUser(fallback)
     }
     #endif
     
