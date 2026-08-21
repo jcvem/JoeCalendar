@@ -9,6 +9,39 @@
 
 import SwiftUI
 import Combine
+import ObjectiveC
+
+// MARK: - Bundle language override
+// SwiftUI's .environment(\.locale) does NOT reliably re-localize an .xcstrings catalog,
+// and String(localized:)/NSLocalizedString always read Bundle.main's process locale.
+// Overriding Bundle.main's localizedString makes ALL localization paths follow the
+// selected language immediately, without an app restart.
+private var bundleOverrideKey: UInt8 = 0
+
+private final class JoeBundleOverride: Bundle {
+    override func localizedString(forKey key: String, value: String?, table tableName: String?) -> String {
+        if let forced = objc_getAssociatedObject(self, &bundleOverrideKey) as? Bundle {
+            return forced.localizedString(forKey: key, value: value, table: tableName)
+        }
+        return super.localizedString(forKey: key, value: value, table: tableName)
+    }
+}
+
+extension Bundle {
+    /// Force Bundle.main to resolve strings from the given language's .lproj (e.g. "ja", "zh-Hant").
+    static func joe_setLanguage(_ languageCode: String) {
+        object_setClass(Bundle.main, JoeBundleOverride.self)
+        if let path = Bundle.main.path(forResource: languageCode, ofType: "lproj"),
+           let bundle = Bundle(path: path) {
+            objc_setAssociatedObject(Bundle.main, &bundleOverrideKey, bundle, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        } else if let path = Bundle.main.path(forResource: "en", ofType: "lproj"),
+                  let bundle = Bundle(path: path) {
+            objc_setAssociatedObject(Bundle.main, &bundleOverrideKey, bundle, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        } else {
+            objc_setAssociatedObject(Bundle.main, &bundleOverrideKey, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+}
 
 public enum AppLanguage: String, CaseIterable, Identifiable {
     case system = "system"
@@ -56,12 +89,14 @@ public final class LocaleManager: ObservableObject {
         let detected = Self.resolveLanguageCode(for: initialLang)
         self.effectiveLanguageCode = detected
         self.effectiveLocale = Locale(identifier: detected)
+        Bundle.joe_setLanguage(detected)
     }
     
     private func updateEffectiveLocale() {
         let code = Self.resolveLanguageCode(for: selectedLanguage)
         self.effectiveLanguageCode = code
         self.effectiveLocale = Locale(identifier: code)
+        Bundle.joe_setLanguage(code)
     }
     
     public static func resolveLanguageCode(for language: AppLanguage) -> String {
