@@ -20,6 +20,8 @@ public struct SettingsView: View {
     @State private var isGoogleAuthSheetPresented: Bool = false
     @State private var isPaywallPresented: Bool = false
     @State private var googleEmailInput: String = ""
+    @State private var isGoogleSigningIn: Bool = false
+    @State private var showDemoModePicker: Bool = false
     
     public init() {}
     
@@ -476,56 +478,122 @@ public struct SettingsView: View {
             ZStack {
                 AppColor.paper.ignoresSafeArea()
                 
-                VStack(spacing: AppSpacing.lg) {
-                    Image(systemName: "g.circle.fill")
-                        .font(.system(size: 60))
-                        .foregroundColor(Color(hex: 0x4285F4))
-                        .padding(.top, AppSpacing.xl)
-                    
-                    Text(loc: "settings_google_auth_title")
-                        .font(AppTypography.title2())
-                        .foregroundColor(AppColor.inkPrimary)
-                    
-                    Text(loc: "settings_google_auth_desc")
-                        .font(AppTypography.body())
-                        .foregroundColor(AppColor.inkSecondary)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, AppSpacing.lg)
-                    
-                    VStack(alignment: .leading, spacing: AppSpacing.xs) {
-                        Text(loc: "settings_google_email_label")
-                            .font(AppTypography.captionMedium())
-                            .foregroundColor(AppColor.inkSecondary)
+                ScrollView {
+                    VStack(spacing: AppSpacing.lg) {
+                        Image(systemName: "g.circle.fill")
+                            .font(.system(size: 60))
+                            .foregroundColor(Color(hex: 0x4285F4))
+                            .padding(.top, AppSpacing.xl)
                         
-                        TextField("user@gmail.com", text: $googleEmailInput)
+                        Text(loc: "settings_google_auth_title")
+                            .font(AppTypography.title2())
+                            .foregroundColor(AppColor.inkPrimary)
+                        
+                        Text(loc: "settings_google_auth_desc")
                             .font(AppTypography.body())
-                            .padding(AppSpacing.md)
-                            .background(AppColor.surface)
-                            .clipShape(RoundedRectangle(cornerRadius: AppRadius.md))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: AppRadius.md)
-                                    .stroke(AppColor.inkBorder, lineWidth: 1)
-                            )
-                    }
-                    .padding(.horizontal, AppSpacing.lg)
-                    .padding(.top, AppSpacing.md)
-                    
-                    Button(action: {
-                        let finalEmail = googleEmailInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                            ? "user@gmail.com"
-                            : googleEmailInput
-                        Task {
-                            try? await googleService.signIn(email: finalEmail)
-                            await eventStore.syncAll()
-                            isGoogleAuthSheetPresented = false
+                            .foregroundColor(AppColor.inkSecondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, AppSpacing.lg)
+                        
+                        if let errorMsg = googleService.authErrorMessage {
+                            HStack(spacing: 8) {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundColor(AppColor.destructive)
+                                Text(errorMsg)
+                                    .font(AppTypography.caption())
+                                    .foregroundColor(AppColor.destructive)
+                            }
+                            .padding(AppSpacing.sm)
+                            .background(AppColor.destructive.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: AppRadius.sm))
+                            .padding(.horizontal, AppSpacing.lg)
                         }
-                    }) {
-                        Text(loc: "settings_connect")
+                        
+                        // Real Google Sign-In Button
+                        Button(action: {
+                            isGoogleSigningIn = true
+                            Task {
+                                defer { isGoogleSigningIn = false }
+                                do {
+                                    try await googleService.signIn()
+                                    await eventStore.syncAll()
+                                    isGoogleAuthSheetPresented = false
+                                } catch {
+                                    // Error is surfaced via googleService.authErrorMessage
+                                }
+                            }
+                        }) {
+                            HStack(spacing: 8) {
+                                if isGoogleSigningIn {
+                                    ProgressView()
+                                        .tint(.white)
+                                } else {
+                                    Image(systemName: "g.circle.fill")
+                                    Text(loc: "settings_sign_in_google")
+                                }
+                            }
+                        }
+                        .buttonStyle(TimeTreePrimaryButtonStyle())
+                        .disabled(isGoogleSigningIn)
+                        .padding(.horizontal, AppSpacing.lg)
+                        
+                        // Fallback / Demo Mode Section
+                        VStack(spacing: AppSpacing.sm) {
+                            Button(action: {
+                                withAnimation {
+                                    showDemoModePicker.toggle()
+                                }
+                            }) {
+                                HStack {
+                                    Text(loc: "settings_google_demo_mode")
+                                        .font(AppTypography.captionMedium())
+                                        .foregroundColor(AppColor.inkSecondary)
+                                    Image(systemName: showDemoModePicker ? "chevron.up" : "chevron.down")
+                                        .font(.system(size: 11))
+                                        .foregroundColor(AppColor.inkTertiary)
+                                }
+                            }
+                            .buttonStyle(.plain)
+                            .padding(.top, AppSpacing.sm)
+                            
+                            if showDemoModePicker {
+                                VStack(alignment: .leading, spacing: AppSpacing.xs) {
+                                    Text(loc: "settings_google_email_label")
+                                        .font(AppTypography.captionMedium())
+                                        .foregroundColor(AppColor.inkSecondary)
+                                    
+                                    TextField("user@gmail.com", text: $googleEmailInput)
+                                        .font(AppTypography.body())
+                                        .padding(AppSpacing.md)
+                                        .background(AppColor.surface)
+                                        .clipShape(RoundedRectangle(cornerRadius: AppRadius.md))
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: AppRadius.md)
+                                                .stroke(AppColor.inkBorder, lineWidth: 1)
+                                        )
+                                    
+                                    Button(action: {
+                                        let finalEmail = googleEmailInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                                            ? "user@gmail.com"
+                                            : googleEmailInput
+                                        Task {
+                                            try? await googleService.signInWithDemo(email: finalEmail)
+                                            await eventStore.syncAll()
+                                            isGoogleAuthSheetPresented = false
+                                        }
+                                    }) {
+                                        Text(loc: "settings_connect")
+                                    }
+                                    .buttonStyle(TimeTreeSecondaryButtonStyle())
+                                    .padding(.top, 4)
+                                }
+                                .padding(.horizontal, AppSpacing.lg)
+                                .transition(.opacity.combined(with: .move(edge: .top)))
+                            }
+                        }
+                        
+                        Spacer(minLength: AppSpacing.xl)
                     }
-                    .buttonStyle(TimeTreePrimaryButtonStyle())
-                    .padding(.horizontal, AppSpacing.lg)
-                    
-                    Spacer()
                 }
             }
             .navigationTitle(Text(loc: "settings_sync_google"))

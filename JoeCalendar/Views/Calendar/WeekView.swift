@@ -53,11 +53,8 @@ public struct WeekView: View {
             selectedDate = newDate
             updateStartOfWeek(for: newDate)
         }
-        .sheet(item: Binding<IdentifiableEventFormMode?>(
-            get: { activeSheetMode.map { IdentifiableEventFormMode(mode: $0) } },
-            set: { activeSheetMode = $0?.mode }
-        )) { item in
-            EventFormSheet(mode: item.mode)
+        .sheet(item: $activeSheetMode) { mode in
+            EventFormSheet(mode: mode)
                 .environmentObject(localeManager)
                 .environmentObject(eventStore)
         }
@@ -418,10 +415,4 @@ public struct WeekView: View {
         let totalHours = CGFloat(hour) + CGFloat(minute) / 60.0
         return totalHours * hourHeight
     }
-}
-
-// Wrapper for Identifiable sheet binding
-private struct IdentifiableEventFormMode: Identifiable {
-    let id = UUID()
-    let mode: EventFormMode
 }

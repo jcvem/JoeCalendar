@@ -112,11 +112,8 @@ public struct GroupDetailView: View {
                 }
             }
         }
-        .sheet(item: Binding<IdentifiableEventFormMode?>(
-            get: { activeSheetMode.map { IdentifiableEventFormMode(mode: $0) } },
-            set: { activeSheetMode = $0?.mode }
-        )) { item in
-            EventFormSheet(mode: item.mode)
+        .sheet(item: $activeSheetMode) { mode in
+            EventFormSheet(mode: mode)
                 .environmentObject(localeManager)
                 .environmentObject(eventStore)
         }
@@ -562,10 +559,4 @@ private struct AddGroupMemberSheet: View {
             }
         }
     }
-}
-
-// Wrapper for Identifiable sheet binding
-private struct IdentifiableEventFormMode: Identifiable {
-    let id = UUID()
-    let mode: EventFormMode
 }

@@ -15,6 +15,10 @@ import SwiftUI
 import FirebaseFirestore
 #endif
 
+#if canImport(FirebaseAuth)
+import FirebaseAuth
+#endif
+
 public struct FriendRequestItem: Identifiable, Equatable {
     public var id: String { friendship.id }
     public var friendship: Friendship
@@ -83,6 +87,48 @@ public final class FriendService: ObservableObject {
         }
     }
     
+    // MARK: - Current User Synchronization
+    
+    public var currentAuthUid: String {
+        #if canImport(FirebaseAuth)
+        if let authUid = Auth.auth().currentUser?.uid {
+            return authUid
+        }
+        #endif
+        return currentUser.id
+    }
+    
+    public func updateCurrentUser(_ user: JoeUser) {
+        let oldId = self.currentUser.id
+        self.currentUser = user
+        
+        // If transitioning from default stub "user_me_001" to real Firebase Auth UID, migrate local records
+        if oldId != user.id {
+            for i in 0..<userGroups.count {
+                if userGroups[i].ownerUid == oldId {
+                    userGroups[i].ownerUid = user.id
+                }
+                if let idx = userGroups[i].memberUids.firstIndex(of: oldId) {
+                    userGroups[i].memberUids[idx] = user.id
+                }
+            }
+            for i in 0..<allFriendships.count {
+                if allFriendships[i].uidA == oldId {
+                    allFriendships[i].uidA = user.id
+                }
+                if allFriendships[i].uidB == oldId {
+                    allFriendships[i].uidB = user.id
+                }
+            }
+        }
+        
+        refreshDerivedLists()
+        persistData()
+        Task {
+            try? await pushUserToFirestore(user)
+        }
+    }
+    
     // MARK: - User Search
     
     /// Searches users by JoeCalendar ID (@username), display name, or email address
@@ -124,22 +170,23 @@ public final class FriendService: ObservableObject {
     
     /// Sends a friend request to a target user
     public func sendFriendRequest(to targetUser: JoeUser) async throws {
-        guard targetUser.id != currentUser.id else { return }
+        let myUid = currentAuthUid
+        guard targetUser.id != myUid else { return }
         
         // Check if already friends or request already exists
         if currentUser.friendIds.contains(targetUser.id) {
             return
         }
         if allFriendships.contains(where: {
-            ($0.uidA == currentUser.id && $0.uidB == targetUser.id) ||
-            ($0.uidA == targetUser.id && $0.uidB == currentUser.id)
+            ($0.uidA == myUid && $0.uidB == targetUser.id) ||
+            ($0.uidA == targetUser.id && $0.uidB == myUid)
         }) {
             return
         }
         
         let newFriendship = Friendship(
             id: "friendship_\(UUID().uuidString)",
-            uidA: currentUser.id,
+            uidA: myUid,
             uidB: targetUser.id,
             status: .pending,
             createdAt: Date()
@@ -151,7 +198,11 @@ public final class FriendService: ObservableObject {
         
         // Sync to Firestore
         Task {
-            try? await pushFriendshipToFirestore(newFriendship)
+            do {
+                try await pushFriendshipToFirestore(newFriendship)
+            } catch {
+                print("FriendService: Failed to push friendship: \(error.localizedDescription)")
+            }
         }
     }
     
@@ -246,16 +297,17 @@ public final class FriendService: ObservableObject {
         let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
         let finalName = trimmedName.isEmpty ? "New Group" : trimmedName
         
+        let myUid = currentAuthUid
         // Ensure owner is included in group members
         var members = memberUids
-        if !members.contains(currentUser.id) {
-            members.append(currentUser.id)
+        if !members.contains(myUid) {
+            members.append(myUid)
         }
         
         let newGroup = FriendGroup(
             id: "group_\(UUID().uuidString)",
             name: finalName,
-            ownerUid: currentUser.id,
+            ownerUid: myUid,
             memberUids: members,
             colorHex: colorHex,
             iconName: iconName,
@@ -580,7 +632,13 @@ public final class FriendService: ObservableObject {
                 "createdAt": Timestamp(date: user.createdAt),
                 "updatedAt": Timestamp(date: user.updatedAt)
             ]
-            try await docRef.setData(data, merge: true)
+            do {
+                try await docRef.setData(data, merge: true)
+                print("FriendService: Successfully pushed user \(user.id) to Firestore!")
+            } catch {
+                print("FriendService: Error pushing user to Firestore: \(error.localizedDescription)")
+                throw error
+            }
             return
         }
         #endif
@@ -619,7 +677,13 @@ public final class FriendService: ObservableObject {
                 "createdAt": Timestamp(date: group.createdAt),
                 "updatedAt": Timestamp(date: group.updatedAt)
             ]
-            try await docRef.setData(data, merge: true)
+            do {
+                try await docRef.setData(data, merge: true)
+                print("FriendService: Successfully pushed group \(group.id) to Firestore!")
+            } catch {
+                print("FriendService: Error pushing group to Firestore: \(error.localizedDescription)")
+                throw error
+            }
             return
         }
         #endif
@@ -667,7 +731,18 @@ public final class FriendService: ObservableObject {
                 "status": friendship.status.rawValue,
                 "createdAt": Timestamp(date: friendship.createdAt)
             ]
-            try await docRef.setData(data, merge: true)
+            do {
+                try await docRef.setData(data, merge: true)
+                print("FriendService: Successfully pushed friendship \(friendship.id) to Firestore (uidA: \(friendship.uidA), uidB: \(friendship.uidB))!")
+            } catch {
+                #if canImport(FirebaseAuth)
+                let authUid = Auth.auth().currentUser?.uid ?? "nil"
+                #else
+                let authUid = "no-auth"
+                #endif
+                print("FriendService: Error pushing friendship to Firestore: \(error.localizedDescription) [Current Auth UID: \(authUid), uidA: \(friendship.uidA)]")
+                throw error
+            }
             return
         }
         #endif

@@ -9,9 +9,18 @@
 
 import SwiftUI
 
-public enum EventFormMode: Equatable {
+public enum EventFormMode: Identifiable, Equatable {
     case new(defaultDate: Date, preselectedGroupId: String? = nil)
     case edit(event: CalendarEvent)
+    
+    public var id: String {
+        switch self {
+        case .new(let defaultDate, let preselectedGroupId):
+            return "new_\(defaultDate.timeIntervalSince1970)_\(preselectedGroupId ?? "none")"
+        case .edit(let event):
+            return "edit_\(event.id)"
+        }
+    }
 }
 
 public struct EventFormSheet: View {
