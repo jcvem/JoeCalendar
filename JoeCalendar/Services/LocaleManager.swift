@@ -18,7 +18,7 @@ import ObjectiveC
 // selected language immediately, without an app restart.
 private var bundleOverrideKey: UInt8 = 0
 
-private final class JoeBundleOverride: Bundle {
+private final class JoeBundleOverride: Bundle, @unchecked Sendable {
     override func localizedString(forKey key: String, value: String?, table tableName: String?) -> String {
         if let forced = objc_getAssociatedObject(self, &bundleOverrideKey) as? Bundle {
             return forced.localizedString(forKey: key, value: value, table: tableName)
