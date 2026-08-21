@@ -12,6 +12,14 @@ import Foundation
 import Combine
 import SwiftUI
 
+#if canImport(FirebaseFirestore)
+import FirebaseFirestore
+#endif
+
+#if canImport(FirebaseFunctions)
+import FirebaseFunctions
+#endif
+
 @MainActor
 public final class DiscoverService: ObservableObject {
     public static let shared = DiscoverService()
@@ -188,7 +196,56 @@ public final class DiscoverService: ObservableObject {
         
         let userRegion = selectedRegion == "all" ? "Tokyo" : selectedRegion
         
-        // 1. Attempt Cloud Function callable via REST endpoint
+        // 1. Attempt Cloud Function callable via Firebase SDK
+        #if canImport(FirebaseFunctions)
+        if let functions = FirebaseService.shared.functions {
+            do {
+                let callable = functions.httpsCallable("targetPromotionsForUser")
+                let result = try await callable.call([
+                    "region": userRegion,
+                    "interests": ["Coffee", "Art", "Culture", "Music", "Food"]
+                ])
+                
+                if let data = result.data as? [String: Any] {
+                    if let isAdFree = data["isAdFree"] as? Bool, isAdFree {
+                        self.promotions = []
+                        return
+                    }
+                    
+                    if let promoList = data["promotions"] as? [[String: Any]], !promoList.isEmpty {
+                        var parsed: [Promotion] = []
+                        for item in promoList {
+                            let id = item["id"] as? String ?? UUID().uuidString
+                            let sponsor = item["sponsorName"] as? String ?? "Sponsored Partner"
+                            let title = item["title"] as? String ?? "Featured Event"
+                            let subtitle = item["subtitle"] as? String
+                            let desc = item["description"] as? String ?? ""
+                            let banner = item["bannerImageUrl"] as? String
+                            let action = item["actionUrl"] as? String
+                            
+                            let promo = Promotion(
+                                id: id,
+                                sponsorName: sponsor,
+                                title: title,
+                                subtitle: subtitle,
+                                description: desc,
+                                bannerImageUrl: banner,
+                                actionUrl: action,
+                                targeting: PromotionTargeting(regions: [userRegion])
+                            )
+                            parsed.append(promo)
+                        }
+                        self.promotions = parsed
+                        return
+                    }
+                }
+            } catch {
+                print("DiscoverService: Cloud Functions targetPromotionsForUser call failed: \(error.localizedDescription)")
+            }
+        }
+        #endif
+        
+        // 2. Attempt Cloud Function callable via REST endpoint
         let endpoint = "https://asia-east1-\(projectId).cloudfunctions.net/targetPromotionsForUser"
         if let url = URL(string: endpoint) {
             var request = URLRequest(url: url)
@@ -242,12 +299,65 @@ public final class DiscoverService: ObservableObject {
             }
         }
         
-        // 2. If remote has no items or offline, fallback to curated high-quality promotions
+        // 3. If remote has no items or offline, fallback to curated high-quality promotions
         seedDefaultPromotions()
     }
     
     /// Queries Firestore `localCalendars` collection
     private func fetchCuratedCalendarsFromFirestore() async {
+        #if canImport(FirebaseFirestore)
+        if let firestore = FirebaseService.shared.db {
+            do {
+                let snapshot = try await firestore.collection("localCalendars").whereField("isCurated", isEqualTo: true).getDocuments()
+                var remoteCalendars: [LocalCalendar] = []
+                for doc in snapshot.documents {
+                    let data = doc.data()
+                    let id = doc.documentID
+                    let title = data["title"] as? String ?? "Curated Calendar"
+                    let description = data["description"] as? String ?? ""
+                    let region = data["region"] as? String ?? "Tokyo"
+                    let category = data["category"] as? String ?? "Culture"
+                    let colorHex = data["colorHex"] as? String ?? AppColor.GroupPastel.sage.hexString
+                    let tags = data["tags"] as? [String] ?? []
+                    let count = data["subscriberCount"] as? Int ?? 0
+                    let isCurated = data["isCurated"] as? Bool ?? true
+                    let coverImageUrl = data["coverImageUrl"] as? String
+                    
+                    let windowStart = (data["windowStartDate"] as? Timestamp)?.dateValue() ?? Date()
+                    let windowEnd = (data["windowEndDate"] as? Timestamp)?.dateValue() ?? (Calendar.current.date(byAdding: .day, value: 14, to: Date()) ?? Date())
+                    let createdAt = (data["createdAt"] as? Timestamp)?.dateValue() ?? Date()
+                    let updatedAt = (data["updatedAt"] as? Timestamp)?.dateValue() ?? Date()
+                    
+                    let cal = LocalCalendar(
+                        id: id,
+                        title: title,
+                        description: description,
+                        coverImageUrl: coverImageUrl,
+                        region: region,
+                        category: category,
+                        colorHex: colorHex,
+                        tags: tags,
+                        windowStartDate: windowStart,
+                        windowEndDate: windowEnd,
+                        subscriberCount: count,
+                        isCurated: isCurated,
+                        createdAt: createdAt,
+                        updatedAt: updatedAt
+                    )
+                    remoteCalendars.append(cal)
+                }
+                
+                if !remoteCalendars.isEmpty {
+                    self.localCalendars = remoteCalendars
+                    persistData()
+                    return
+                }
+            } catch {
+                print("DiscoverService: Firestore localCalendars query error: \(error.localizedDescription)")
+            }
+        }
+        #endif
+        
         guard let url = URL(string: "\(firestoreBaseURL)/localCalendars") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -301,7 +411,16 @@ public final class DiscoverService: ObservableObject {
         var user = FriendService.shared.currentUser
         user.followedLocalCalendarIds = Array(followedCalendarIds)
         
-        // Sync to Firestore users/{uid}
+        #if canImport(FirebaseFirestore)
+        if FirebaseService.shared.isConfigured {
+            Task {
+                try? await FirebaseService.shared.updateUserFollowedCalendars(uid: user.id, followedCalendarIds: user.followedLocalCalendarIds)
+            }
+            return
+        }
+        #endif
+        
+        // Sync to Firestore users/{uid} via REST
         guard let url = URL(string: "\(firestoreBaseURL)/users/\(user.id)?updateMask.fieldPaths=followedLocalCalendarIds") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "PATCH"
@@ -320,6 +439,7 @@ public final class DiscoverService: ObservableObject {
             _ = try? await URLSession.shared.data(for: request)
         }
     }
+
     
     private func persistData() {
         let followedArray = Array(followedCalendarIds)

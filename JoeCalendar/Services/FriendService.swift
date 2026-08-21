@@ -11,6 +11,10 @@ import Foundation
 import Combine
 import SwiftUI
 
+#if canImport(FirebaseFirestore)
+import FirebaseFirestore
+#endif
+
 public struct FriendRequestItem: Identifiable, Equatable {
     public var id: String { friendship.id }
     public var friendship: Friendship
@@ -555,9 +559,32 @@ public final class FriendService: ObservableObject {
         persistData()
     }
     
-    // MARK: - Firestore REST Integration (Live Mirror)
+    // MARK: - Firestore Integration (Real SDK + REST Mirror)
     
-    private func pushUserToFirestore(_ user: JoeUser) async throws {
+    public func pushUserToFirestore(_ user: JoeUser) async throws {
+        #if canImport(FirebaseFirestore)
+        if let firestore = FirebaseService.shared.db {
+            let docRef = firestore.collection("users").document(user.id)
+            let data: [String: Any] = [
+                "id": user.id,
+                "displayName": user.displayName,
+                "email": user.email ?? "",
+                "avatarUrl": user.avatarUrl ?? "",
+                "joeId": user.joeId ?? "",
+                "locale": user.locale,
+                "isAdFree": user.isAdFree,
+                "friendIds": user.friendIds,
+                "groupIds": user.groupIds,
+                "linkedCalendars": user.linkedCalendars,
+                "followedLocalCalendarIds": user.followedLocalCalendarIds,
+                "createdAt": Timestamp(date: user.createdAt),
+                "updatedAt": Timestamp(date: user.updatedAt)
+            ]
+            try await docRef.setData(data, merge: true)
+            return
+        }
+        #endif
+        
         guard let url = URL(string: "\(firestoreBaseURL)/users/\(user.id)") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "PATCH"
@@ -577,7 +604,26 @@ public final class FriendService: ObservableObject {
         _ = try? await URLSession.shared.data(for: request)
     }
     
-    private func pushGroupToFirestore(_ group: FriendGroup) async throws {
+    public func pushGroupToFirestore(_ group: FriendGroup) async throws {
+        #if canImport(FirebaseFirestore)
+        if let firestore = FirebaseService.shared.db {
+            let docRef = firestore.collection("groups").document(group.id)
+            let data: [String: Any] = [
+                "id": group.id,
+                "name": group.name,
+                "ownerUid": group.ownerUid,
+                "memberUids": group.memberUids,
+                "colorHex": group.colorHex,
+                "iconName": group.iconName,
+                "defaultPrivacy": group.defaultPrivacy.rawValue,
+                "createdAt": Timestamp(date: group.createdAt),
+                "updatedAt": Timestamp(date: group.updatedAt)
+            ]
+            try await docRef.setData(data, merge: true)
+            return
+        }
+        #endif
+        
         guard let url = URL(string: "\(firestoreBaseURL)/groups/\(group.id)") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "PATCH"
@@ -596,14 +642,36 @@ public final class FriendService: ObservableObject {
         _ = try? await URLSession.shared.data(for: request)
     }
     
-    private func deleteGroupFromFirestore(groupId: String) async throws {
+    public func deleteGroupFromFirestore(groupId: String) async throws {
+        #if canImport(FirebaseFirestore)
+        if let firestore = FirebaseService.shared.db {
+            try await firestore.collection("groups").document(groupId).delete()
+            return
+        }
+        #endif
+        
         guard let url = URL(string: "\(firestoreBaseURL)/groups/\(groupId)") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
         _ = try? await URLSession.shared.data(for: request)
     }
     
-    private func pushFriendshipToFirestore(_ friendship: Friendship) async throws {
+    public func pushFriendshipToFirestore(_ friendship: Friendship) async throws {
+        #if canImport(FirebaseFirestore)
+        if let firestore = FirebaseService.shared.db {
+            let docRef = firestore.collection("friendships").document(friendship.id)
+            let data: [String: Any] = [
+                "id": friendship.id,
+                "uidA": friendship.uidA,
+                "uidB": friendship.uidB,
+                "status": friendship.status.rawValue,
+                "createdAt": Timestamp(date: friendship.createdAt)
+            ]
+            try await docRef.setData(data, merge: true)
+            return
+        }
+        #endif
+        
         guard let url = URL(string: "\(firestoreBaseURL)/friendships/\(friendship.id)") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "PATCH"
@@ -619,14 +687,38 @@ public final class FriendService: ObservableObject {
         _ = try? await URLSession.shared.data(for: request)
     }
     
-    private func deleteFriendshipFromFirestore(friendshipId: String) async throws {
+    public func deleteFriendshipFromFirestore(friendshipId: String) async throws {
+        #if canImport(FirebaseFirestore)
+        if let firestore = FirebaseService.shared.db {
+            try await firestore.collection("friendships").document(friendshipId).delete()
+            return
+        }
+        #endif
+        
         guard let url = URL(string: "\(firestoreBaseURL)/friendships/\(friendshipId)") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
         _ = try? await URLSession.shared.data(for: request)
     }
     
-    private func queryUsersFromFirestore(query: String) async throws -> [JoeUser] {
+    public func queryUsersFromFirestore(query: String) async throws -> [JoeUser] {
+        #if canImport(FirebaseFirestore)
+        if let firestore = FirebaseService.shared.db {
+            let snapshot = try await firestore.collection("users").limit(to: 20).getDocuments()
+            var results: [JoeUser] = []
+            for doc in snapshot.documents {
+                let user = FirebaseService.shared.parseJoeUser(id: doc.documentID, data: doc.data())
+                let matchJoeId = user.joeId?.lowercased().contains(query) ?? false
+                let matchName = user.displayName.lowercased().contains(query)
+                let matchEmail = user.email?.lowercased().contains(query) ?? false
+                if matchJoeId || matchName || matchEmail {
+                    results.append(user)
+                }
+            }
+            return results
+        }
+        #endif
+        
         // Run structured query via REST
         guard let url = URL(string: "https://firestore.googleapis.com/v1/projects/\(projectId)/databases/(default)/documents:runQuery") else { return [] }
         var request = URLRequest(url: url)
@@ -668,3 +760,4 @@ public final class FriendService: ObservableObject {
         return results
     }
 }
+
