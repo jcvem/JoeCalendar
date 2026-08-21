@@ -18,7 +18,15 @@ public struct MonthCalendarView: View {
     @State private var activeSheetMode: EventFormMode? = nil
     
     private let calendar = Calendar.current
-    private let daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
+    private var daysOfWeek: [String] {
+        let formatter = DateFormatter()
+        formatter.locale = localeManager.effectiveLocale
+        if localeManager.effectiveLanguageCode.hasPrefix("zh") || localeManager.effectiveLanguageCode.hasPrefix("ja") {
+            return formatter.veryShortStandaloneWeekdaySymbols ?? ["日", "一", "二", "三", "四", "五", "六"]
+        } else {
+            return formatter.shortStandaloneWeekdaySymbols.map { $0.uppercased() }
+        }
+    }
     
     public init() {}
     

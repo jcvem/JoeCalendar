@@ -2638,19 +2638,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld members"
+            "value" : "members"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld 人のメンバー"
+            "value" : "人のメンバー"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld 位成員"
+            "value" : "位成員"
           }
         }
       }

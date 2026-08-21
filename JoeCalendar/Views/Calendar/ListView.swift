@@ -67,7 +67,7 @@ public struct ListView: View {
                 .foregroundColor(AppColor.inkTertiary)
             
             TextField(
-                String(localized: "calendar_search_placeholder"),
+                "calendar_search_placeholder".localized(),
                 text: $eventStore.searchQuery
             )
             .font(AppTypography.body())

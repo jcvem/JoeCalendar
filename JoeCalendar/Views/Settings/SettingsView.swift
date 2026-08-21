@@ -10,7 +10,7 @@
 import SwiftUI
 
 public struct SettingsView: View {
-    @EnvironmentObject private var localeManager: LocaleManager
+    @ObservedObject private var localeManager = LocaleManager.shared
     @EnvironmentObject private var eventStore: EventStore
     @StateObject private var firebaseService = FirebaseService.shared
     @StateObject private var eventKitService = EventKitService.shared
@@ -95,6 +95,7 @@ public struct SettingsView: View {
                         }
                         .padding(.vertical, AppSpacing.md)
                         .padding(.horizontal, AppSpacing.md)
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     

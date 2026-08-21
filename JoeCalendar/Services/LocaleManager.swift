@@ -90,6 +90,7 @@ public final class LocaleManager: ObservableObject {
         self.effectiveLanguageCode = detected
         self.effectiveLocale = Locale(identifier: detected)
         Bundle.joe_setLanguage(detected)
+        UserDefaults.standard.set([detected], forKey: "AppleLanguages")
     }
     
     private func updateEffectiveLocale() {
@@ -97,6 +98,8 @@ public final class LocaleManager: ObservableObject {
         self.effectiveLanguageCode = code
         self.effectiveLocale = Locale(identifier: code)
         Bundle.joe_setLanguage(code)
+        UserDefaults.standard.set([code], forKey: "AppleLanguages")
+        objectWillChange.send()
     }
     
     public static func resolveLanguageCode(for language: AppLanguage) -> String {
@@ -125,7 +128,18 @@ public final class LocaleManager: ObservableObject {
     public func string(forKey key: String) -> String {
         if let path = Bundle.main.path(forResource: effectiveLanguageCode, ofType: "lproj"),
            let bundle = Bundle(path: path) {
-            return NSLocalizedString(key, tableName: nil, bundle: bundle, value: key, comment: "")
+            let localized = NSLocalizedString(key, tableName: nil, bundle: bundle, value: key, comment: "")
+            if localized != key {
+                return localized
+            }
+        }
+        // Fallback to English if not found in current language bundle
+        if let enPath = Bundle.main.path(forResource: "en", ofType: "lproj"),
+           let enBundle = Bundle(path: enPath) {
+            let enLocalized = NSLocalizedString(key, tableName: nil, bundle: enBundle, value: key, comment: "")
+            if enLocalized != key {
+                return enLocalized
+            }
         }
         return NSLocalizedString(key, comment: "")
     }
@@ -134,8 +148,9 @@ public final class LocaleManager: ObservableObject {
 // MARK: - SwiftUI Extension for quick string localization
 
 public extension Text {
+    @MainActor
     init(loc key: String) {
-        self.init(LocalizedStringKey(key))
+        self.init(LocaleManager.shared.string(forKey: key))
     }
 }
 

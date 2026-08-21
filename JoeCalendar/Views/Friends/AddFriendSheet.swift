@@ -119,7 +119,7 @@ public struct AddFriendSheet: View {
                 .foregroundColor(AppColor.inkTertiary)
             
             TextField(
-                String(localized: "friends_search_placeholder"),
+                "friends_search_placeholder".localized(),
                 text: $searchText
             )
             .font(AppTypography.body())

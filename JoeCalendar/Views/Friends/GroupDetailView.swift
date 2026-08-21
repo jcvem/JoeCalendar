@@ -97,13 +97,13 @@ public struct GroupDetailView: View {
                         Button(role: .destructive, action: {
                             isShowingDeleteAlert = true
                         }) {
-                            Label(String(localized: "friends_delete_group"), systemImage: "trash")
+                            Label("friends_delete_group".localized(), systemImage: "trash")
                         }
                     } else {
                         Button(role: .destructive, action: {
                             isShowingLeaveAlert = true
                         }) {
-                            Label(String(localized: "friends_leave_group"), systemImage: "rectangle.portrait.and.arrow.right")
+                            Label("friends_leave_group".localized(), systemImage: "rectangle.portrait.and.arrow.right")
                         }
                     }
                 } label: {
@@ -183,7 +183,7 @@ public struct GroupDetailView: View {
                     }
                 }
                 
-                Text("\(liveGroup.memberUids.count) " + String(localized: "friends_members_count"))
+                Text("\(liveGroup.memberUids.count) " + "friends_members_count".localized())
                     .font(AppTypography.footnote())
                     .foregroundColor(AppColor.inkSecondary)
             }

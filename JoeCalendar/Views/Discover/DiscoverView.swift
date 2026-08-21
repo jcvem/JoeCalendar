@@ -77,7 +77,7 @@ public struct DiscoverView: View {
                     .foregroundColor(AppColor.inkTertiary)
                 
                 TextField(
-                    LocalizedStringKey("discover_search_placeholder"),
+                    "discover_search_placeholder".localized(),
                     text: $discoverService.searchQuery
                 )
                 .font(AppTypography.body())

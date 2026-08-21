@@ -265,7 +265,7 @@ public struct FriendsView: View {
                     }
                 }
                 
-                Text("\(group.memberUids.count) " + String(localized: "friends_members_count"))
+                Text("\(group.memberUids.count) " + "friends_members_count".localized())
                     .font(AppTypography.caption())
                     .foregroundColor(AppColor.inkSecondary)
             }
@@ -378,7 +378,7 @@ public struct FriendsView: View {
                         try? await friendService.removeFriend(friendUid: friend.id)
                     }
                 }) {
-                    Label(String(localized: "friends_remove"), systemImage: "person.badge.minus")
+                    Label("friends_remove".localized(), systemImage: "person.badge.minus")
                 }
             } label: {
                 Image(systemName: "ellipsis")

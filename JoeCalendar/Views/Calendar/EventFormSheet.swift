@@ -172,7 +172,7 @@ public struct EventFormSheet: View {
                 .foregroundColor(AppColor.inkSecondary)
             
             TextField(
-                String(localized: "calendar_event_title_placeholder"),
+                "calendar_event_title_placeholder".localized(),
                 text: $title
             )
             .font(AppTypography.title2())
@@ -368,7 +368,7 @@ public struct EventFormSheet: View {
                     .foregroundColor(AppColor.inkTertiary)
                     .frame(width: 20)
                 TextField(
-                    String(localized: "calendar_location"),
+                    "calendar_location".localized(),
                     text: $location
                 )
                 .font(AppTypography.body())
@@ -384,7 +384,7 @@ public struct EventFormSheet: View {
                     .frame(width: 20)
                     .padding(.top, 2)
                 TextField(
-                    String(localized: "calendar_notes_placeholder"),
+                    "calendar_notes_placeholder".localized(),
                     text: $notes,
                     axis: .vertical
                 )

@@ -107,11 +107,11 @@ public struct CreateGroupSheet: View {
                     .foregroundColor(Color(hexString: selectedColorHex))
             }
             
-            Text(groupName.isEmpty ? String(localized: "friends_group_name_placeholder") : groupName)
+            Text(groupName.isEmpty ? "friends_group_name_placeholder".localized() : groupName)
                 .font(AppTypography.title2())
                 .foregroundColor(groupName.isEmpty ? AppColor.inkTertiary : AppColor.inkPrimary)
             
-            Text("\(selectedMemberUids.count + 1) " + String(localized: "friends_members_count"))
+            Text("\(selectedMemberUids.count + 1) " + "friends_members_count".localized())
                 .font(AppTypography.caption())
                 .foregroundColor(AppColor.inkSecondary)
         }
@@ -126,7 +126,7 @@ public struct CreateGroupSheet: View {
                 .foregroundColor(AppColor.inkSecondary)
             
             TextField(
-                String(localized: "friends_group_name_placeholder"),
+                "friends_group_name_placeholder".localized(),
                 text: $groupName
             )
             .font(AppTypography.bodyMedium())
@@ -207,7 +207,7 @@ public struct CreateGroupSheet: View {
                 
                 Spacer()
                 
-                Text("\(selectedMemberUids.count) \(String(localized: "action_selected"))")
+                Text("\(selectedMemberUids.count) \("action_selected".localized())")
                     .font(AppTypography.caption())
                     .foregroundColor(AppColor.inkTertiary)
             }

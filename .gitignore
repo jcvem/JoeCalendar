@@ -26,3 +26,7 @@ functions/lib/
 
 # Node (Cloud Functions deps)
 functions/node_modules/
+
+# Xcode user state (per-user UI junk)
+*.xcuserstate
+*.xcuserdatad/

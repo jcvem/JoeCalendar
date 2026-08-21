@@ -61,5 +61,6 @@ public struct ContentView: View {
         }
         .tint(AppColor.accent)
         .environment(\.locale, localeManager.effectiveLocale)
+        .id("\(localeManager.selectedLanguage.rawValue)_\(localeManager.effectiveLanguageCode)")
     }
 }
