@@ -8,7 +8,7 @@ settings:
   base:
     SWIFT_VERSION: "5.0"
     IPHONEOS_DEPLOYMENT_TARGET: "17.0"
-    DEVELOPMENT_TEAM: ""
+    DEVELOPMENT_TEAM: "7W984BP96U"
 targets:
   JoeCalendar:
     type: application
@@ -25,6 +25,10 @@ targets:
         product: FirebaseFunctions
       - package: Firebase
         product: FirebaseCore
+      - package: GoogleSignIn
+        product: GoogleSignIn
+      - package: GoogleSignIn
+        product: GoogleSignInSwift
     settings:
       base:
         PRODUCT_NAME: JoeCalendar
@@ -41,3 +45,6 @@ packages:
   Firebase:
     url: https://github.com/firebase/firebase-ios-sdk.git
     from: 11.0.0
+  GoogleSignIn:
+    url: https://github.com/google/GoogleSignIn-iOS.git
+    from: 7.0.0

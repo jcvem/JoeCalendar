@@ -10,6 +10,7 @@
 import SwiftUI
 
 public struct SettingsView: View {
+    @ObservedObject private var themeManager = ThemeManager.shared
     @ObservedObject private var localeManager = LocaleManager.shared
     @EnvironmentObject private var eventStore: EventStore
     @StateObject private var firebaseService = FirebaseService.shared
@@ -33,6 +34,9 @@ public struct SettingsView: View {
                 
                 ScrollView {
                     VStack(spacing: AppSpacing.lg) {
+                        // Appearance Section (Theme Switcher)
+                        appearanceSection
+                        
                         // Language Switcher Section (Working i18n switcher)
                         languageSection
                         
@@ -60,6 +64,30 @@ public struct SettingsView: View {
             .sheet(isPresented: $isPaywallPresented) {
                 PaywallView()
             }
+        }
+    }
+    
+    // MARK: - Appearance Section
+    
+    private var appearanceSection: some View {
+        VStack(alignment: .leading, spacing: AppSpacing.sm) {
+            HStack {
+                Image(systemName: "circle.righthalf.filled")
+                    .foregroundColor(AppColor.accent)
+                Text(loc: "appearance_title")
+                    .font(AppTypography.headline())
+                    .foregroundColor(AppColor.inkPrimary)
+            }
+            
+            Picker(selection: $themeManager.current) {
+                ForEach(AppTheme.allCases) { theme in
+                    Text(loc: theme.titleKey)
+                        .tag(theme)
+                }
+            } label: {
+                Text(loc: "appearance_title")
+            }
+            .pickerStyle(.segmented)
         }
     }
     

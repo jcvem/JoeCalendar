@@ -30,7 +30,7 @@ public enum AppColor {
     public static let inkBorderSubtle = Color(light: Color(hex: 0xF2F2EE), dark: Color(hex: 0x25282D))
     
     // Single Restrained Accent (Japanese Indigo / Slate Teal: #2D5D72)
-    public static let accent = Color(light: Color(hex: 0x2D5D72), dark: Color(hex: 0x5D93A8))
+    public static let accent = Color(hex: 0x2D5D72)
     public static let accentLight = Color(light: Color(hex: 0xEDF4F7), dark: Color(hex: 0x1E313B))
     
     // Alert / Status
