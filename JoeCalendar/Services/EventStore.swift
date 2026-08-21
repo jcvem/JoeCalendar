@@ -11,6 +11,10 @@ import Foundation
 import Combine
 import SwiftUI
 
+#if canImport(FirebaseFirestore)
+import FirebaseFirestore
+#endif
+
 public enum CalendarViewMode: String, CaseIterable, Identifiable {
     case month = "month"
     case week = "week"
@@ -257,9 +261,43 @@ public final class EventStore: ObservableObject {
         }
     }
     
-    // MARK: - Firestore REST Mirror
+    // MARK: - Firestore Integration (Real SDK + REST Mirror)
     
     private func pushEventToFirestore(_ event: CalendarEvent) async throws {
+        let createdByUid = event.createdBy.isEmpty ? FriendService.shared.currentUser.id : event.createdBy
+        
+        #if canImport(FirebaseFirestore)
+        if let firestore = FirebaseService.shared.db {
+            let docRef = firestore.collection("events").document(event.id)
+            var data: [String: Any] = [
+                "id": event.id,
+                "title": event.title,
+                "startDate": Timestamp(date: event.startDate),
+                "endDate": Timestamp(date: event.endDate),
+                "isAllDay": event.isAllDay,
+                "calendarType": event.calendarType.rawValue,
+                "visibility": [
+                    "type": event.visibility.type.rawValue,
+                    "groupIds": event.visibility.groupIds
+                ],
+                "recurrence": event.recurrence.rawValue,
+                "createdBy": createdByUid,
+                "colorHex": event.colorHex,
+                "source": event.source ?? event.calendarType.rawValue,
+                "syncStatus": event.syncStatus.rawValue,
+                "createdAt": Timestamp(date: event.createdAt),
+                "updatedAt": Timestamp(date: event.updatedAt)
+            ]
+            if let loc = event.location { data["location"] = loc }
+            if let notes = event.notes { data["notes"] = notes }
+            if let extId = event.externalId { data["externalId"] = extId }
+            if let extCalId = event.externalCalendarId { data["externalCalendarId"] = extCalId }
+            
+            try await docRef.setData(data, merge: true)
+            return
+        }
+        #endif
+        
         let projectId = "joecalendar-e8327"
         guard let url = URL(string: "https://firestore.googleapis.com/v1/projects/\(projectId)/databases/(default)/documents/events/\(event.id)") else { return }
         var request = URLRequest(url: url)
@@ -267,7 +305,6 @@ public final class EventStore: ObservableObject {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let isoFormatter = ISO8601DateFormatter()
-        let createdByUid = event.createdBy.isEmpty ? FriendService.shared.currentUser.id : event.createdBy
         
         var fields: [String: Any] = [
             "title": ["stringValue": event.title],
@@ -307,12 +344,117 @@ public final class EventStore: ObservableObject {
     }
     
     private func deleteEventFromFirestore(eventId: String) async throws {
+        #if canImport(FirebaseFirestore)
+        if let firestore = FirebaseService.shared.db {
+            try await firestore.collection("events").document(eventId).delete()
+            return
+        }
+        #endif
+        
         let projectId = "joecalendar-e8327"
         guard let url = URL(string: "https://firestore.googleapis.com/v1/projects/\(projectId)/databases/(default)/documents/events/\(eventId)") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
         _ = try? await URLSession.shared.data(for: request)
     }
+    
+    #if canImport(FirebaseFirestore)
+    private func fetchFirestoreEvents() async -> [CalendarEvent] {
+        guard let firestore = FirebaseService.shared.db else { return [] }
+        let currentUid = FriendService.shared.currentUser.id
+        let groupIds = FriendService.shared.currentUser.groupIds
+        
+        var results: [CalendarEvent] = []
+        
+        // 1. Fetch events created by user
+        if let ownSnapshot = try? await firestore.collection("events").whereField("createdBy", isEqualTo: currentUid).getDocuments() {
+            for doc in ownSnapshot.documents {
+                if let event = parseFirestoreEvent(id: doc.documentID, data: doc.data()) {
+                    results.append(event)
+                }
+            }
+        }
+        
+        // 2. Fetch public events
+        if let pubSnapshot = try? await firestore.collection("events").whereField("visibility.type", isEqualTo: "public").limit(to: 50).getDocuments() {
+            for doc in pubSnapshot.documents {
+                if let event = parseFirestoreEvent(id: doc.documentID, data: doc.data()), !results.contains(where: { $0.id == event.id }) {
+                    results.append(event)
+                }
+            }
+        }
+        
+        // 3. Fetch group events for user's groups
+        for groupId in groupIds {
+            if let groupSnapshot = try? await firestore.collection("events")
+                .whereField("visibility.type", isEqualTo: "group")
+                .whereField("visibility.groupIds", arrayContains: groupId)
+                .limit(to: 30)
+                .getDocuments() {
+                for doc in groupSnapshot.documents {
+                    if let event = parseFirestoreEvent(id: doc.documentID, data: doc.data()), !results.contains(where: { $0.id == event.id }) {
+                        results.append(event)
+                    }
+                }
+            }
+        }
+        
+        return results
+    }
+    
+    private func parseFirestoreEvent(id: String, data: [String: Any]) -> CalendarEvent? {
+        guard let title = data["title"] as? String else { return nil }
+        
+        let startDate = (data["startDate"] as? Timestamp)?.dateValue() ?? Date()
+        let endDate = (data["endDate"] as? Timestamp)?.dateValue() ?? Date()
+        let isAllDay = data["isAllDay"] as? Bool ?? false
+        let location = data["location"] as? String
+        let notes = data["notes"] as? String
+        let calTypeStr = data["calendarType"] as? String ?? "joe"
+        let calendarType = CalendarType(rawValue: calTypeStr) ?? .joe
+        
+        var visibility = EventVisibility(type: .private)
+        if let visMap = data["visibility"] as? [String: Any] {
+            let typeStr = visMap["type"] as? String ?? "private"
+            let visType = EventVisibilityType(rawValue: typeStr) ?? .private
+            let groupIds = visMap["groupIds"] as? [String] ?? []
+            visibility = EventVisibility(type: visType, groupIds: groupIds)
+        }
+        
+        let recStr = data["recurrence"] as? String ?? "none"
+        let recurrence = EventRecurrence(rawValue: recStr) ?? .none
+        let createdBy = data["createdBy"] as? String ?? ""
+        let colorHex = data["colorHex"] as? String ?? AppColor.GroupPastel.sage.hexString
+        let source = data["source"] as? String ?? calendarType.rawValue
+        let externalId = data["externalId"] as? String
+        let externalCalendarId = data["externalCalendarId"] as? String
+        let syncStatusStr = data["syncStatus"] as? String ?? "synced"
+        let syncStatus = SyncStatus(rawValue: syncStatusStr) ?? .synced
+        let createdAt = (data["createdAt"] as? Timestamp)?.dateValue() ?? Date()
+        let updatedAt = (data["updatedAt"] as? Timestamp)?.dateValue() ?? Date()
+        
+        return CalendarEvent(
+            id: id,
+            title: title,
+            startDate: startDate,
+            endDate: endDate,
+            isAllDay: isAllDay,
+            location: location,
+            notes: notes,
+            calendarType: calendarType,
+            visibility: visibility,
+            recurrence: recurrence,
+            createdBy: createdBy,
+            colorHex: colorHex,
+            source: source,
+            externalId: externalId,
+            externalCalendarId: externalCalendarId,
+            syncStatus: syncStatus,
+            createdAt: createdAt,
+            updatedAt: updatedAt
+        )
+    }
+    #endif
     
     // MARK: - Synchronization
     
@@ -339,11 +481,19 @@ public final class EventStore: ObservableObject {
             googleEvents = (try? await googleService.fetchEvents(startDate: start, endDate: end)) ?? []
         }
         
-        // 3. Merge with local Joe / curated events (Last-write-wins)
+        // 3. Pull Firestore Joe / Group / Public events if configured
+        var firestoreEvents: [CalendarEvent] = []
+        #if canImport(FirebaseFirestore)
+        if FirebaseService.shared.isConfigured {
+            firestoreEvents = await fetchFirestoreEvents()
+        }
+        #endif
+        
+        // 4. Merge with local Joe / curated events (Last-write-wins)
         let nonExternalEvents = events.filter { $0.calendarType == .joe || $0.calendarType == .local || $0.calendarType == .promo }
         
-        // Filter out old external events and replace with fresh sync
         var merged: [CalendarEvent] = nonExternalEvents
+        merged.append(contentsOf: firestoreEvents)
         merged.append(contentsOf: deviceEvents)
         merged.append(contentsOf: googleEvents)
         
@@ -364,6 +514,7 @@ public final class EventStore: ObservableObject {
         self.events = Array(uniqueMap.values).sorted { $0.startDate < $1.startDate }
         persistEvents()
     }
+
     
     // MARK: - Persistence
     

@@ -3,414 +3,401 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		100100000000000000000001 /* JoeCalendarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000001 /* JoeCalendarApp.swift */; };
-		100100000000000000000002 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000002 /* DesignSystem.swift */; };
-		100100000000000000000003 /* CalendarEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000003 /* CalendarEvent.swift */; };
-		100100000000000000000004 /* FriendGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000004 /* FriendGroup.swift */; };
-		100100000000000000000005 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000005 /* User.swift */; };
-		100100000000000000000006 /* LocalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000006 /* LocalCalendar.swift */; };
-		100100000000000000000007 /* Promotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000007 /* Promotion.swift */; };
-		100100000000000000000008 /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000008 /* Subscription.swift */; };
-		100100000000000000000009 /* LocaleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000009 /* LocaleManager.swift */; };
-		100100000000000000000010 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000010 /* FirebaseService.swift */; };
-		100100000000000000000011 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000011 /* ContentView.swift */; };
-		100100000000000000000012 /* MonthCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000012 /* MonthCalendarView.swift */; };
-		100100000000000000000013 /* DayDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000013 /* DayDetailSheet.swift */; };
-		100100000000000000000014 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000014 /* FriendsView.swift */; };
-		100100000000000000000015 /* DiscoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000015 /* DiscoverView.swift */; };
-		100100000000000000000016 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000016 /* SettingsView.swift */; };
-		100100000000000000000017 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000017 /* Assets.xcassets */; };
-		100100000000000000000018 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000018 /* Localizable.xcstrings */; };
-		100100000000000000000021 /* EventKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000021 /* EventKitService.swift */; };
-		100100000000000000000022 /* GoogleCalendarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000022 /* GoogleCalendarService.swift */; };
-		100100000000000000000023 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000023 /* EventStore.swift */; };
-		100100000000000000000024 /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000024 /* WeekView.swift */; };
-		100100000000000000000025 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000025 /* ListView.swift */; };
-		100100000000000000000026 /* EventFormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000026 /* EventFormSheet.swift */; };
-		100100000000000000000027 /* FriendService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000027 /* FriendService.swift */; };
-		100100000000000000000028 /* CreateGroupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000028 /* CreateGroupSheet.swift */; };
-		100100000000000000000029 /* GroupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000029 /* GroupDetailView.swift */; };
-		100100000000000000000030 /* AddFriendSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000030 /* AddFriendSheet.swift */; };
-		100100000000000000000031 /* DiscoverService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000031 /* DiscoverService.swift */; };
-		100100000000000000000032 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000032 /* SubscriptionService.swift */; };
-		100100000000000000000033 /* LocalCalendarDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000033 /* LocalCalendarDetailView.swift */; };
-		100100000000000000000034 /* PromotedCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000034 /* PromotedCardView.swift */; };
-		100100000000000000000035 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200100000000000000000035 /* PaywallView.swift */; };
+		0487490FE8416595D17B59F7 /* AddFriendSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EB9DFC71450EB1A2999E0D /* AddFriendSheet.swift */; };
+		0D003299E2ADDC5DB88908AE /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 85040D718625B8EE2A23BD74 /* FirebaseCore */; };
+		117FF67B195F6AFDBF702793 /* EventKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0328C13518EB70D543F58C5 /* EventKitService.swift */; };
+		1640F9D1075DF085966D3277 /* JoeCalendarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541A65A15CECFDAFF73DE3F8 /* JoeCalendarApp.swift */; };
+		19A27437CF4B1F8F77898CCE /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2D551ABBC70E380E3F2A81 /* EventStore.swift */; };
+		1AA7F180B56EBE27315C227B /* MonthCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB383F9EC382281BD6049266 /* MonthCalendarView.swift */; };
+		29C209B9FB3503FB11A62955 /* CreateGroupSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DFDE71E7761B8043625716 /* CreateGroupSheet.swift */; };
+		324D9454961F8F8A4F3A3E23 /* GroupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62EFD666A6D6BAB3D7B80E9D /* GroupDetailView.swift */; };
+		3A6EFEA8B9D5114E4B5EFDA1 /* FriendGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADF265C477440659B1E053C5 /* FriendGroup.swift */; };
+		4441A4A0ECF636BAD50A92DD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 028323D1CBC1800F2DE8095E /* GoogleService-Info.plist */; };
+		5156E111A10F382CEED61D69 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7098A1DFD78EB285C1503BA /* FriendsView.swift */; };
+		5300B4D91454FB99374E3861 /* GoogleCalendarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE87A0DDE72C79EBE815BE4F /* GoogleCalendarService.swift */; };
+		53268DB3912790492583935E /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95661F05A277EFA27CDF9A01 /* SubscriptionService.swift */; };
+		63052692689BEAB210344B99 /* LocalCalendarDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77B881F43A082CB95E072A84 /* LocalCalendarDetailView.swift */; };
+		639E84D83FAC80F34250B540 /* DiscoverService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6D01A6F9D6C2DDFDD6D19D /* DiscoverService.swift */; };
+		6B56B9299F9B44DB7272ABD5 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF009E03429C41AD522C7AD /* FirebaseService.swift */; };
+		6EC441A8277762DA7246FC71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4B719D622CAEA5E09EA8129 /* Assets.xcassets */; };
+		72B13D13E5E82A3ABCC8E658 /* FriendService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26056D7BB9AD60D20EF44F9 /* FriendService.swift */; };
+		758A447718E6CB089DDCBDD6 /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = F248E3DE624A3DCCC5DF6CC5 /* Subscription.swift */; };
+		75F90C67C47BA6B185C06C01 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAADAB89D63A5FB2F1FFAFCD /* ListView.swift */; };
+		83EB5372C182C4B515F0E7A6 /* PromotedCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D434B195CC0FF326211174 /* PromotedCardView.swift */; };
+		A8576FEA7AE3B68FD91F703B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86850A2E9A370FC3DA08013 /* ContentView.swift */; };
+		C1A980D9219877B0265AC679 /* DiscoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB6A584376B4CFFE86A9E83 /* DiscoverView.swift */; };
+		CA56CC031BEDA634042090B9 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3A339BAA58F6252595DAEB94 /* FirebaseFirestore */; };
+		CA8E455E7C4FC7908FE9E60E /* EventFormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A106134A1757D85DA48A4170 /* EventFormSheet.swift */; };
+		CE89C5010BCE0B7C2F086434 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD7B6BEDB61887EB059CB04 /* DesignSystem.swift */; };
+		D483168B12FD7C95F9C33BB9 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BBD1A65D6C5A0DD0620DCF /* SettingsView.swift */; };
+		D4AEE368D940A491A2C67BA8 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = B6332D927A815856F5DBBDCF /* FirebaseFunctions */; };
+		D907285E5CED2BAB5A265314 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AD937777FB6FE25DD9B5606B /* Localizable.xcstrings */; };
+		D9EA53FB94B6E96A8EBEE952 /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A734DCE08C3EA05B887EA2 /* WeekView.swift */; };
+		DB949CF3E42F142A2F09C804 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271BFC1BD0C3EF42F41DD848 /* User.swift */; };
+		DFD9C8A54A25607C382D2627 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3DA331A20DDE0D1269EBCB25 /* FirebaseAuth */; };
+		E1252F09B78996DC1D7B34CE /* Promotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113677E5DE5B2C93C9BE37CC /* Promotion.swift */; };
+		E4B1BE03669B7CBC2622BA27 /* LocalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABEA35496BC0A336D20EA48 /* LocalCalendar.swift */; };
+		E7FC2404631BB54377817793 /* LocaleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4321E601D02B571CA20E927B /* LocaleManager.swift */; };
+		EB6FD92E7BBD8FFF9313F182 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1279FB4C6C0896B104A04BFC /* PaywallView.swift */; };
+		EEB6EA436B75B41A07B1786F /* DayDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BC560D946EF98F308AEEFF /* DayDetailSheet.swift */; };
+		F0BE853292C418A6E3E2841B /* CalendarEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0210388C031756FF695CFAD0 /* CalendarEvent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		200100000000000000000001 /* JoeCalendarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoeCalendarApp.swift; sourceTree = "<group>"; };
-		200100000000000000000002 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
-		200100000000000000000003 /* CalendarEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEvent.swift; sourceTree = "<group>"; };
-		200100000000000000000004 /* FriendGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendGroup.swift; sourceTree = "<group>"; };
-		200100000000000000000005 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		200100000000000000000006 /* LocalCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCalendar.swift; sourceTree = "<group>"; };
-		200100000000000000000007 /* Promotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Promotion.swift; sourceTree = "<group>"; };
-		200100000000000000000008 /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
-		200100000000000000000009 /* LocaleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleManager.swift; sourceTree = "<group>"; };
-		200100000000000000000010 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
-		200100000000000000000011 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		200100000000000000000012 /* MonthCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthCalendarView.swift; sourceTree = "<group>"; };
-		200100000000000000000013 /* DayDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDetailSheet.swift; sourceTree = "<group>"; };
-		200100000000000000000014 /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
-		200100000000000000000015 /* DiscoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverView.swift; sourceTree = "<group>"; };
-		200100000000000000000016 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		200100000000000000000017 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		200100000000000000000018 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		200100000000000000000019 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		200100000000000000000020 /* JoeCalendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JoeCalendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		200100000000000000000021 /* EventKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventKitService.swift; sourceTree = "<group>"; };
-		200100000000000000000022 /* GoogleCalendarService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleCalendarService.swift; sourceTree = "<group>"; };
-		200100000000000000000023 /* EventStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStore.swift; sourceTree = "<group>"; };
-		200100000000000000000024 /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
-		200100000000000000000025 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
-		200100000000000000000026 /* EventFormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFormSheet.swift; sourceTree = "<group>"; };
-		200100000000000000000027 /* FriendService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendService.swift; sourceTree = "<group>"; };
-		200100000000000000000028 /* CreateGroupSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupSheet.swift; sourceTree = "<group>"; };
-		200100000000000000000029 /* GroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailView.swift; sourceTree = "<group>"; };
-		200100000000000000000030 /* AddFriendSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendSheet.swift; sourceTree = "<group>"; };
-		200100000000000000000031 /* DiscoverService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverService.swift; sourceTree = "<group>"; };
-		200100000000000000000032 /* SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionService.swift; sourceTree = "<group>"; };
-		200100000000000000000033 /* LocalCalendarDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCalendarDetailView.swift; sourceTree = "<group>"; };
-		200100000000000000000034 /* PromotedCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromotedCardView.swift; sourceTree = "<group>"; };
-		200100000000000000000035 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		0210388C031756FF695CFAD0 /* CalendarEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEvent.swift; sourceTree = "<group>"; };
+		028323D1CBC1800F2DE8095E /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0ABEA35496BC0A336D20EA48 /* LocalCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCalendar.swift; sourceTree = "<group>"; };
+		0BD7B6BEDB61887EB059CB04 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		0C6D01A6F9D6C2DDFDD6D19D /* DiscoverService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverService.swift; sourceTree = "<group>"; };
+		113677E5DE5B2C93C9BE37CC /* Promotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Promotion.swift; sourceTree = "<group>"; };
+		1279FB4C6C0896B104A04BFC /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		271BFC1BD0C3EF42F41DD848 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		2BB6A584376B4CFFE86A9E83 /* DiscoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverView.swift; sourceTree = "<group>"; };
+		4321E601D02B571CA20E927B /* LocaleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleManager.swift; sourceTree = "<group>"; };
+		51DFDE71E7761B8043625716 /* CreateGroupSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupSheet.swift; sourceTree = "<group>"; };
+		541A65A15CECFDAFF73DE3F8 /* JoeCalendarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoeCalendarApp.swift; sourceTree = "<group>"; };
+		62EFD666A6D6BAB3D7B80E9D /* GroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailView.swift; sourceTree = "<group>"; };
+		77B881F43A082CB95E072A84 /* LocalCalendarDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCalendarDetailView.swift; sourceTree = "<group>"; };
+		95661F05A277EFA27CDF9A01 /* SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionService.swift; sourceTree = "<group>"; };
+		A0328C13518EB70D543F58C5 /* EventKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventKitService.swift; sourceTree = "<group>"; };
+		A106134A1757D85DA48A4170 /* EventFormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFormSheet.swift; sourceTree = "<group>"; };
+		A2FFC7690FC35E700B5727D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A9BC560D946EF98F308AEEFF /* DayDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDetailSheet.swift; sourceTree = "<group>"; };
+		AB383F9EC382281BD6049266 /* MonthCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthCalendarView.swift; sourceTree = "<group>"; };
+		AD937777FB6FE25DD9B5606B /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		ADF265C477440659B1E053C5 /* FriendGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendGroup.swift; sourceTree = "<group>"; };
+		AE87A0DDE72C79EBE815BE4F /* GoogleCalendarService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleCalendarService.swift; sourceTree = "<group>"; };
+		B121EDC5DFC0DFB506A223BC /* JoeCalendar.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = JoeCalendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B7A734DCE08C3EA05B887EA2 /* WeekView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
+		B86850A2E9A370FC3DA08013 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		BAADAB89D63A5FB2F1FFAFCD /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
+		C2D434B195CC0FF326211174 /* PromotedCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromotedCardView.swift; sourceTree = "<group>"; };
+		D4B719D622CAEA5E09EA8129 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D7098A1DFD78EB285C1503BA /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
+		DBF009E03429C41AD522C7AD /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
+		E26056D7BB9AD60D20EF44F9 /* FriendService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendService.swift; sourceTree = "<group>"; };
+		E3BBD1A65D6C5A0DD0620DCF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		F248E3DE624A3DCCC5DF6CC5 /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
+		F7EB9DFC71450EB1A2999E0D /* AddFriendSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendSheet.swift; sourceTree = "<group>"; };
+		FA2D551ABBC70E380E3F2A81 /* EventStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		600100000000000000000003 /* Frameworks */ = {
+		0B4E0E76BADF34396CEBB3FB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DFD9C8A54A25607C382D2627 /* FirebaseAuth in Frameworks */,
+				CA56CC031BEDA634042090B9 /* FirebaseFirestore in Frameworks */,
+				D4AEE368D940A491A2C67BA8 /* FirebaseFunctions in Frameworks */,
+				0D003299E2ADDC5DB88908AE /* FirebaseCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		300000000000000000000000 = {
+		21C6A6767C1A8110F7D5C1CF /* Friends */ = {
 			isa = PBXGroup;
 			children = (
-				300100000000000000000001 /* JoeCalendar */,
-				300100000000000000000012 /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		300100000000000000000001 /* JoeCalendar */ = {
-			isa = PBXGroup;
-			children = (
-				300100000000000000000002 /* App */,
-				300100000000000000000003 /* DesignSystem */,
-				300100000000000000000004 /* Models */,
-				300100000000000000000005 /* Services */,
-				300100000000000000000006 /* Views */,
-				300100000000000000000011 /* Resources */,
-			);
-			path = JoeCalendar;
-			sourceTree = "<group>";
-		};
-		300100000000000000000002 /* App */ = {
-			isa = PBXGroup;
-			children = (
-				200100000000000000000001 /* JoeCalendarApp.swift */,
-			);
-			path = App;
-			sourceTree = "<group>";
-		};
-		300100000000000000000003 /* DesignSystem */ = {
-			isa = PBXGroup;
-			children = (
-				200100000000000000000002 /* DesignSystem.swift */,
-			);
-			path = DesignSystem;
-			sourceTree = "<group>";
-		};
-		300100000000000000000004 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				200100000000000000000003 /* CalendarEvent.swift */,
-				200100000000000000000004 /* FriendGroup.swift */,
-				200100000000000000000005 /* User.swift */,
-				200100000000000000000006 /* LocalCalendar.swift */,
-				200100000000000000000007 /* Promotion.swift */,
-				200100000000000000000008 /* Subscription.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		300100000000000000000005 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				200100000000000000000009 /* LocaleManager.swift */,
-				200100000000000000000010 /* FirebaseService.swift */,
-				200100000000000000000021 /* EventKitService.swift */,
-				200100000000000000000022 /* GoogleCalendarService.swift */,
-				200100000000000000000023 /* EventStore.swift */,
-				200100000000000000000027 /* FriendService.swift */,
-				200100000000000000000031 /* DiscoverService.swift */,
-				200100000000000000000032 /* SubscriptionService.swift */,
-			);
-			path = Services;
-			sourceTree = "<group>";
-		};
-		300100000000000000000006 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				200100000000000000000011 /* ContentView.swift */,
-				300100000000000000000007 /* Calendar */,
-				300100000000000000000008 /* Friends */,
-				300100000000000000000009 /* Discover */,
-				300100000000000000000010 /* Settings */,
-				300100000000000000000013 /* Paywall */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		300100000000000000000007 /* Calendar */ = {
-			isa = PBXGroup;
-			children = (
-				200100000000000000000012 /* MonthCalendarView.swift */,
-				200100000000000000000013 /* DayDetailSheet.swift */,
-				200100000000000000000024 /* WeekView.swift */,
-				200100000000000000000025 /* ListView.swift */,
-				200100000000000000000026 /* EventFormSheet.swift */,
-			);
-			path = Calendar;
-			sourceTree = "<group>";
-		};
-		300100000000000000000008 /* Friends */ = {
-			isa = PBXGroup;
-			children = (
-				200100000000000000000014 /* FriendsView.swift */,
-				200100000000000000000028 /* CreateGroupSheet.swift */,
-				200100000000000000000029 /* GroupDetailView.swift */,
-				200100000000000000000030 /* AddFriendSheet.swift */,
+				F7EB9DFC71450EB1A2999E0D /* AddFriendSheet.swift */,
+				51DFDE71E7761B8043625716 /* CreateGroupSheet.swift */,
+				D7098A1DFD78EB285C1503BA /* FriendsView.swift */,
+				62EFD666A6D6BAB3D7B80E9D /* GroupDetailView.swift */,
 			);
 			path = Friends;
 			sourceTree = "<group>";
 		};
-		300100000000000000000009 /* Discover */ = {
+		32C1EC4CAF0C6B6EECB01DBB /* App */ = {
 			isa = PBXGroup;
 			children = (
-				200100000000000000000015 /* DiscoverView.swift */,
-				200100000000000000000033 /* LocalCalendarDetailView.swift */,
-				200100000000000000000034 /* PromotedCardView.swift */,
+				541A65A15CECFDAFF73DE3F8 /* JoeCalendarApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		4D8AC493A52924B1C6FB42D1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0210388C031756FF695CFAD0 /* CalendarEvent.swift */,
+				ADF265C477440659B1E053C5 /* FriendGroup.swift */,
+				0ABEA35496BC0A336D20EA48 /* LocalCalendar.swift */,
+				113677E5DE5B2C93C9BE37CC /* Promotion.swift */,
+				F248E3DE624A3DCCC5DF6CC5 /* Subscription.swift */,
+				271BFC1BD0C3EF42F41DD848 /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		76C35FB98B515D7893BDFB22 /* Discover */ = {
+			isa = PBXGroup;
+			children = (
+				2BB6A584376B4CFFE86A9E83 /* DiscoverView.swift */,
+				77B881F43A082CB95E072A84 /* LocalCalendarDetailView.swift */,
+				C2D434B195CC0FF326211174 /* PromotedCardView.swift */,
 			);
 			path = Discover;
 			sourceTree = "<group>";
 		};
-		300100000000000000000010 /* Settings */ = {
+		7899DF5D75C05DC2BA99E2BC = {
 			isa = PBXGroup;
 			children = (
-				200100000000000000000016 /* SettingsView.swift */,
+				E327EB61356D0A0EF9924ABD /* JoeCalendar */,
+				D471B1BEBD06FE2CF00030DE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		81A0931576437520934DF08A /* Paywall */ = {
+			isa = PBXGroup;
+			children = (
+				1279FB4C6C0896B104A04BFC /* PaywallView.swift */,
+			);
+			path = Paywall;
+			sourceTree = "<group>";
+		};
+		8EDFF4BC003E719B518A4ADA /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				A9BC560D946EF98F308AEEFF /* DayDetailSheet.swift */,
+				A106134A1757D85DA48A4170 /* EventFormSheet.swift */,
+				BAADAB89D63A5FB2F1FFAFCD /* ListView.swift */,
+				AB383F9EC382281BD6049266 /* MonthCalendarView.swift */,
+				B7A734DCE08C3EA05B887EA2 /* WeekView.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
+		9A44202C8EA6D88566FEE326 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				E3BBD1A65D6C5A0DD0620DCF /* SettingsView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
 		};
-		300100000000000000000011 /* Resources */ = {
+		B60C4AB70227832112D5C09F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				200100000000000000000019 /* Info.plist */,
-				200100000000000000000018 /* Localizable.xcstrings */,
-				200100000000000000000017 /* Assets.xcassets */,
+				D4B719D622CAEA5E09EA8129 /* Assets.xcassets */,
+				028323D1CBC1800F2DE8095E /* GoogleService-Info.plist */,
+				A2FFC7690FC35E700B5727D2 /* Info.plist */,
+				AD937777FB6FE25DD9B5606B /* Localizable.xcstrings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		300100000000000000000012 /* Products */ = {
+		BE10373F8ED01C0A9BA374B2 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
-				200100000000000000000020 /* JoeCalendar.app */,
+				0BD7B6BEDB61887EB059CB04 /* DesignSystem.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		D471B1BEBD06FE2CF00030DE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B121EDC5DFC0DFB506A223BC /* JoeCalendar.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		300100000000000000000013 /* Paywall */ = {
+		DC0E026B143CFA1183AC415D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				200100000000000000000035 /* PaywallView.swift */,
+				B86850A2E9A370FC3DA08013 /* ContentView.swift */,
+				8EDFF4BC003E719B518A4ADA /* Calendar */,
+				76C35FB98B515D7893BDFB22 /* Discover */,
+				21C6A6767C1A8110F7D5C1CF /* Friends */,
+				81A0931576437520934DF08A /* Paywall */,
+				9A44202C8EA6D88566FEE326 /* Settings */,
 			);
-			path = Paywall;
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E327EB61356D0A0EF9924ABD /* JoeCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				32C1EC4CAF0C6B6EECB01DBB /* App */,
+				BE10373F8ED01C0A9BA374B2 /* DesignSystem */,
+				4D8AC493A52924B1C6FB42D1 /* Models */,
+				B60C4AB70227832112D5C09F /* Resources */,
+				F0F76A08F9DC8DD73F298974 /* Services */,
+				DC0E026B143CFA1183AC415D /* Views */,
+			);
+			path = JoeCalendar;
+			sourceTree = "<group>";
+		};
+		F0F76A08F9DC8DD73F298974 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				0C6D01A6F9D6C2DDFDD6D19D /* DiscoverService.swift */,
+				A0328C13518EB70D543F58C5 /* EventKitService.swift */,
+				FA2D551ABBC70E380E3F2A81 /* EventStore.swift */,
+				DBF009E03429C41AD522C7AD /* FirebaseService.swift */,
+				E26056D7BB9AD60D20EF44F9 /* FriendService.swift */,
+				AE87A0DDE72C79EBE815BE4F /* GoogleCalendarService.swift */,
+				4321E601D02B571CA20E927B /* LocaleManager.swift */,
+				95661F05A277EFA27CDF9A01 /* SubscriptionService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		400100000000000000000001 /* JoeCalendar */ = {
+		A8B76C064559E20A40E5B2F5 /* JoeCalendar */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 800200000000000000000001 /* Build configuration list for PBXNativeTarget "JoeCalendar" */;
+			buildConfigurationList = 54A2970F66D5102CC028B891 /* Build configuration list for PBXNativeTarget "JoeCalendar" */;
 			buildPhases = (
-				600100000000000000000001 /* Sources */,
-				600100000000000000000003 /* Frameworks */,
-				600100000000000000000002 /* Resources */,
+				F6030A9F88BE5DBB600B0BF0 /* Sources */,
+				6EB70D29C6835627F3953DD5 /* Resources */,
+				0B4E0E76BADF34396CEBB3FB /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = JoeCalendar;
+			packageProductDependencies = (
+				3DA331A20DDE0D1269EBCB25 /* FirebaseAuth */,
+				3A339BAA58F6252595DAEB94 /* FirebaseFirestore */,
+				B6332D927A815856F5DBBDCF /* FirebaseFunctions */,
+				85040D718625B8EE2A23BD74 /* FirebaseCore */,
+			);
 			productName = JoeCalendar;
-			productReference = 200100000000000000000020 /* JoeCalendar.app */;
+			productReference = B121EDC5DFC0DFB506A223BC /* JoeCalendar.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		500100000000000000000001 /* Project object */ = {
+		EB663EA1E09D2A8D257AD1F6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1500;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
-					400100000000000000000001 = {
-						CreatedOnToolsVersion = 15.0;
+					A8B76C064559E20A40E5B2F5 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
-			buildConfigurationList = 800100000000000000000001 /* Build configuration list for PBXProject "JoeCalendar" */;
-			compatibilityVersion = "Xcode 14.0";
+			buildConfigurationList = BB8328E090F75BAAC234C118 /* Build configuration list for PBXProject "JoeCalendar" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				en,
 				ja,
 				"zh-Hant",
 			);
-			mainGroup = 300000000000000000000000;
-			productRefGroup = 300100000000000000000012 /* Products */;
+			mainGroup = 7899DF5D75C05DC2BA99E2BC;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B7E483E6D80ADCB3C6F7D8DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = D471B1BEBD06FE2CF00030DE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				400100000000000000000001 /* JoeCalendar */,
+				A8B76C064559E20A40E5B2F5 /* JoeCalendar */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		600100000000000000000002 /* Resources */ = {
+		6EB70D29C6835627F3953DD5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				100100000000000000000017 /* Assets.xcassets in Resources */,
-				100100000000000000000018 /* Localizable.xcstrings in Resources */,
+				6EC441A8277762DA7246FC71 /* Assets.xcassets in Resources */,
+				4441A4A0ECF636BAD50A92DD /* GoogleService-Info.plist in Resources */,
+				D907285E5CED2BAB5A265314 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		600100000000000000000001 /* Sources */ = {
+		F6030A9F88BE5DBB600B0BF0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				100100000000000000000001 /* JoeCalendarApp.swift in Sources */,
-				100100000000000000000002 /* DesignSystem.swift in Sources */,
-				100100000000000000000003 /* CalendarEvent.swift in Sources */,
-				100100000000000000000004 /* FriendGroup.swift in Sources */,
-				100100000000000000000005 /* User.swift in Sources */,
-				100100000000000000000006 /* LocalCalendar.swift in Sources */,
-				100100000000000000000007 /* Promotion.swift in Sources */,
-				100100000000000000000008 /* Subscription.swift in Sources */,
-				100100000000000000000009 /* LocaleManager.swift in Sources */,
-				100100000000000000000010 /* FirebaseService.swift in Sources */,
-				100100000000000000000011 /* ContentView.swift in Sources */,
-				100100000000000000000012 /* MonthCalendarView.swift in Sources */,
-				100100000000000000000013 /* DayDetailSheet.swift in Sources */,
-				100100000000000000000014 /* FriendsView.swift in Sources */,
-				100100000000000000000015 /* DiscoverView.swift in Sources */,
-				100100000000000000000016 /* SettingsView.swift in Sources */,
-				100100000000000000000021 /* EventKitService.swift in Sources */,
-				100100000000000000000022 /* GoogleCalendarService.swift in Sources */,
-				100100000000000000000023 /* EventStore.swift in Sources */,
-				100100000000000000000024 /* WeekView.swift in Sources */,
-				100100000000000000000025 /* ListView.swift in Sources */,
-				100100000000000000000026 /* EventFormSheet.swift in Sources */,
-				100100000000000000000027 /* FriendService.swift in Sources */,
-				100100000000000000000028 /* CreateGroupSheet.swift in Sources */,
-				100100000000000000000029 /* GroupDetailView.swift in Sources */,
-				100100000000000000000030 /* AddFriendSheet.swift in Sources */,
-				100100000000000000000031 /* DiscoverService.swift in Sources */,
-				100100000000000000000032 /* SubscriptionService.swift in Sources */,
-				100100000000000000000033 /* LocalCalendarDetailView.swift in Sources */,
-				100100000000000000000034 /* PromotedCardView.swift in Sources */,
-				100100000000000000000035 /* PaywallView.swift in Sources */,
+				0487490FE8416595D17B59F7 /* AddFriendSheet.swift in Sources */,
+				F0BE853292C418A6E3E2841B /* CalendarEvent.swift in Sources */,
+				A8576FEA7AE3B68FD91F703B /* ContentView.swift in Sources */,
+				29C209B9FB3503FB11A62955 /* CreateGroupSheet.swift in Sources */,
+				EEB6EA436B75B41A07B1786F /* DayDetailSheet.swift in Sources */,
+				CE89C5010BCE0B7C2F086434 /* DesignSystem.swift in Sources */,
+				639E84D83FAC80F34250B540 /* DiscoverService.swift in Sources */,
+				C1A980D9219877B0265AC679 /* DiscoverView.swift in Sources */,
+				CA8E455E7C4FC7908FE9E60E /* EventFormSheet.swift in Sources */,
+				117FF67B195F6AFDBF702793 /* EventKitService.swift in Sources */,
+				19A27437CF4B1F8F77898CCE /* EventStore.swift in Sources */,
+				6B56B9299F9B44DB7272ABD5 /* FirebaseService.swift in Sources */,
+				3A6EFEA8B9D5114E4B5EFDA1 /* FriendGroup.swift in Sources */,
+				72B13D13E5E82A3ABCC8E658 /* FriendService.swift in Sources */,
+				5156E111A10F382CEED61D69 /* FriendsView.swift in Sources */,
+				5300B4D91454FB99374E3861 /* GoogleCalendarService.swift in Sources */,
+				324D9454961F8F8A4F3A3E23 /* GroupDetailView.swift in Sources */,
+				1640F9D1075DF085966D3277 /* JoeCalendarApp.swift in Sources */,
+				75F90C67C47BA6B185C06C01 /* ListView.swift in Sources */,
+				E4B1BE03669B7CBC2622BA27 /* LocalCalendar.swift in Sources */,
+				63052692689BEAB210344B99 /* LocalCalendarDetailView.swift in Sources */,
+				E7FC2404631BB54377817793 /* LocaleManager.swift in Sources */,
+				1AA7F180B56EBE27315C227B /* MonthCalendarView.swift in Sources */,
+				EB6FD92E7BBD8FFF9313F182 /* PaywallView.swift in Sources */,
+				83EB5372C182C4B515F0E7A6 /* PromotedCardView.swift in Sources */,
+				E1252F09B78996DC1D7B34CE /* Promotion.swift in Sources */,
+				D483168B12FD7C95F9C33BB9 /* SettingsView.swift in Sources */,
+				758A447718E6CB089DDCBDD6 /* Subscription.swift in Sources */,
+				53268DB3912790492583935E /* SubscriptionService.swift in Sources */,
+				DB949CF3E42F142A2F09C804 /* User.swift in Sources */,
+				D9EA53FB94B6E96A8EBEE952 /* WeekView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		700100000000000000000001 /* Debug */ = {
+		228BC60B27918532C454715F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDEFINED_VARIABLES = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = JoeCalendar/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.vemstudio.joecalendar;
+				PRODUCT_NAME = JoeCalendar;
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Debug;
+			name = Release;
 		};
-		700100000000000000000002 /* Release */ = {
+		62E2CCB61FFE3BE40BA57285 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -438,33 +425,35 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDEFINED_VARIABLES = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				VALIDATE_PRODUCT = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
-		700100000000000000000003 /* Debug */ = {
+		C10ECFD91572C25E82D86CDB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7W984BP96U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = JoeCalendar/Resources/Info.plist;
@@ -473,70 +462,134 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vemstudio.joecalendar;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				PRODUCT_NAME = JoeCalendar;
+				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		700100000000000000000004 /* Release */ = {
+		D09903368E421EA53C32C811 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7W984BP96U;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = JoeCalendar/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					"@executable_path/Frameworks",
+					"DEBUG=1",
 				);
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.vemstudio.joecalendar;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
 			};
-			name = Release;
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		800100000000000000000001 /* Build configuration list for PBXProject "JoeCalendar" */ = {
+		54A2970F66D5102CC028B891 /* Build configuration list for PBXNativeTarget "JoeCalendar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				700100000000000000000001 /* Debug */,
-				700100000000000000000002 /* Release */,
+				C10ECFD91572C25E82D86CDB /* Debug */,
+				228BC60B27918532C454715F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		800200000000000000000001 /* Build configuration list for PBXNativeTarget "JoeCalendar" */ = {
+		BB8328E090F75BAAC234C118 /* Build configuration list for PBXProject "JoeCalendar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				700100000000000000000003 /* Debug */,
-				700100000000000000000004 /* Release */,
+				D09903368E421EA53C32C811 /* Debug */,
+				62E2CCB61FFE3BE40BA57285 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B7E483E6D80ADCB3C6F7D8DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3A339BAA58F6252595DAEB94 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B7E483E6D80ADCB3C6F7D8DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		3DA331A20DDE0D1269EBCB25 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B7E483E6D80ADCB3C6F7D8DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		85040D718625B8EE2A23BD74 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B7E483E6D80ADCB3C6F7D8DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		B6332D927A815856F5DBBDCF /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B7E483E6D80ADCB3C6F7D8DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFunctions;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 500100000000000000000001 /* Project object */;
+	rootObject = EB663EA1E09D2A8D257AD1F6 /* Project object */;
 }

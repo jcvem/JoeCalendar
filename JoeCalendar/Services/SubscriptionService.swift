@@ -13,6 +13,10 @@ import StoreKit
 import Combine
 import SwiftUI
 
+#if canImport(FirebaseFirestore)
+import FirebaseFirestore
+#endif
+
 public enum SubscriptionPlanType: String, CaseIterable, Identifiable {
     case monthly = "joecalendar_pro_monthly"
     case yearly = "joecalendar_pro_yearly"
@@ -288,9 +292,27 @@ public final class SubscriptionService: ObservableObject {
         }
     }
     
-    // MARK: - Firestore REST Sync
+    // MARK: - Firestore Sync (Real SDK + REST Mirror)
     
     private func pushSubscriptionToFirestore(_ subscription: Subscription) async throws {
+        #if canImport(FirebaseFirestore)
+        if let firestore = FirebaseService.shared.db {
+            let docRef = firestore.collection("subscriptions").document(subscription.id)
+            let data: [String: Any] = [
+                "id": subscription.id,
+                "isAdFree": subscription.isAdFree,
+                "planId": subscription.planId,
+                "status": subscription.status.rawValue,
+                "currentPeriodStart": Timestamp(date: subscription.currentPeriodStart),
+                "currentPeriodEnd": Timestamp(date: subscription.currentPeriodEnd),
+                "cancelAtPeriodEnd": subscription.cancelAtPeriodEnd,
+                "updatedAt": Timestamp(date: Date())
+            ]
+            try? await docRef.setData(data, merge: true)
+            return
+        }
+        #endif
+        
         guard let url = URL(string: "\(firestoreBaseURL)/subscriptions/\(subscription.id)") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "PATCH"
@@ -312,6 +334,17 @@ public final class SubscriptionService: ObservableObject {
     }
     
     private func updateFirestoreUserAdFree(uid: String, isAdFree: Bool) async throws {
+        #if canImport(FirebaseFirestore)
+        if let firestore = FirebaseService.shared.db {
+            let docRef = firestore.collection("users").document(uid)
+            try? await docRef.updateData([
+                "isAdFree": isAdFree,
+                "updatedAt": Timestamp(date: Date())
+            ])
+            return
+        }
+        #endif
+        
         guard let url = URL(string: "\(firestoreBaseURL)/users/\(uid)?updateMask.fieldPaths=isAdFree") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "PATCH"
