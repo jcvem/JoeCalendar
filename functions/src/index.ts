@@ -204,3 +204,22 @@ export const publishLocalCalendarWindow = functions
     console.log(`Updated 14-day sliding window for ${snapshot.size} curated local calendars.`);
     return null;
   });
+
+// MARK: - 4. Taiwan Family Events Auto-Curation (Phase A: Taipei)
+import { runCurateTaiwanFamilyEvents } from "./curateTaiwanFamilyEvents";
+
+/**
+ * Daily scheduled function (running at 01:00 UTC / 09:00 Asia/Taipei) to ingest,
+ * filter, and curate parent-child / family events into localCalendars/taipei_qinzi.
+ */
+export const curateTaiwanFamilyEvents = functions
+  .region("asia-east1")
+  .pubsub
+  .schedule("0 1 * * *")
+  .timeZone("Asia/Taipei")
+  .onRun(async () => {
+    const stats = await runCurateTaiwanFamilyEvents(db);
+    console.log(`curateTaiwanFamilyEvents completed successfully:`, stats);
+    return stats;
+  });
+
