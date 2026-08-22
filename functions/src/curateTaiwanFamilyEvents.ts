@@ -342,6 +342,7 @@ export async function fetchCultureTwQinziFeed(): Promise<NormalizedCuratedEvent[
         }
 
         const items = (await response.json()) as CultureTwItem[];
+
         if (!Array.isArray(items)) continue;
 
         for (const item of items) {

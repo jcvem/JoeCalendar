@@ -20,6 +20,9 @@
         }
       }
     },
+    "%@: VEM Studio" : {
+
+    },
     "%lld" : {
 
     },
@@ -32,6 +35,9 @@
           }
         }
       }
+    },
+    "↗" : {
+
     },
     "action_cancel" : {
       "extractionState" : "manual",
@@ -240,29 +246,6 @@
         }
       }
     },
-    "appearance_title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Appearance"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "外観"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "外觀"
-          }
-        }
-      }
-    },
     "app_name" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -282,6 +265,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "JoeCalendar"
+          }
+        }
+      }
+    },
+    "appearance_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "外観"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "外觀"
           }
         }
       }
@@ -1735,6 +1741,29 @@
         }
       }
     },
+    "discover_region_new_taipei" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Taipei"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新北"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新北"
+          }
+        }
+      }
+    },
     "discover_region_osaka" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1777,29 +1806,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "台北"
-          }
-        }
-      }
-    },
-    "discover_region_new_taipei" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "New Taipei"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新北"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新北"
           }
         }
       }
@@ -4199,29 +4205,6 @@
         }
       }
     },
-    "settings_google_email_label" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Google Account Email"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Google アカウントのメール"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Google 帳號電子郵件"
-          }
-        }
-      }
-    },
     "settings_google_demo_mode" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4241,6 +4224,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "示範模式（模擬同步）"
+          }
+        }
+      }
+    },
+    "settings_google_email_label" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google Account Email"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google アカウントのメール"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google 帳號電子郵件"
           }
         }
       }
@@ -5010,6 +5016,39 @@
     "user@gmail.com" : {
 
     },
+    "Version %@ (build %@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Version %1$@ (build %2$@)"
+          }
+        }
+      }
+    },
+    "view_event" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View event"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "イベントを見る"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看活動"
+          }
+        }
+      }
+    },
     "Visibility" : {
 
     },
@@ -5055,29 +5094,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "僅限自己（私人）"
-          }
-        }
-      }
-    },
-    "view_event" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "View event"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "イベントを見る"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "查看活動"
           }
         }
       }
