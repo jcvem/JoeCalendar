@@ -167,9 +167,9 @@ export const targetPromotionsForUser = functions
   };
 });
 
-// MARK: - 3. Local Calendar Publish (14-Day Sliding Discovery Window)
+// MARK: - 3. Local Calendar Publish (30-Day Sliding Discovery Window)
 /**
- * Daily scheduled function (running at 00:00 UTC) to manage the curated 14-day window for local calendars.
+ * Daily scheduled function (running at 00:00 UTC) to manage the curated 30-day window for local calendars.
  * Updates publication flags and aggregates upcoming curated local event feeds.
  */
 export const publishLocalCalendarWindow = functions
@@ -179,10 +179,10 @@ export const publishLocalCalendarWindow = functions
   .timeZone("Asia/Tokyo")
   .onRun(async (context) => {
     const now = new Date();
-    const twoWeeksLater = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+    const thirtyDaysLater = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
 
     console.log(
-      `Running local calendar window update for window: ${now.toISOString()} to ${twoWeeksLater.toISOString()}`
+      `Running local calendar window update for window: ${now.toISOString()} to ${thirtyDaysLater.toISOString()}`
     );
 
     const snapshot = await db
@@ -195,22 +195,23 @@ export const publishLocalCalendarWindow = functions
     snapshot.docs.forEach((doc) => {
       batch.update(doc.ref, {
         windowStartDate: admin.firestore.Timestamp.fromDate(now),
-        windowEndDate: admin.firestore.Timestamp.fromDate(twoWeeksLater),
+        windowEndDate: admin.firestore.Timestamp.fromDate(thirtyDaysLater),
         updatedAt: admin.firestore.FieldValue.serverTimestamp(),
       });
     });
 
     await batch.commit();
-    console.log(`Updated 14-day sliding window for ${snapshot.size} curated local calendars.`);
+    console.log(`Updated 30-day sliding window for ${snapshot.size} curated local calendars.`);
     return null;
   });
 
-// MARK: - 4. Taiwan Family Events Auto-Curation (Phase A: Taipei)
+// MARK: - 4. Taiwan Family Events Auto-Curation (Phase B: Taipei & New Taipei)
 import { runCurateTaiwanFamilyEvents } from "./curateTaiwanFamilyEvents";
 
 /**
  * Daily scheduled function (running at 01:00 UTC / 09:00 Asia/Taipei) to ingest,
- * filter, and curate parent-child / family events into localCalendars/taipei_qinzi.
+ * filter, and curate parent-child / family events into localCalendars/taipei_qinzi
+ * and localCalendars/newtaipei_qinzi.
  */
 export const curateTaiwanFamilyEvents = functions
   .region("asia-east1")

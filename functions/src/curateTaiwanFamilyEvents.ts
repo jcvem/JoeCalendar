@@ -10,6 +10,7 @@ import * as admin from "firebase-admin";
 // MARK: - Configuration & Constants
 
 export const TAIPEI_QINZI_CALENDAR_ID = "taipei_qinzi";
+export const NEWTAIPEI_QINZI_CALENDAR_ID = "newtaipei_qinzi";
 export const WINDOW_DAYS = 30;
 
 export const FAMILY_KEYWORDS = [
@@ -36,19 +37,44 @@ export const FAMILY_KEYWORDS = [
   "遊樂"
 ];
 
-export const CALENDAR_METADATA = {
-  id: TAIPEI_QINZI_CALENDAR_ID,
-  title: "臺北 親子活動",
-  region: "Taipei",
-  category: "親子活動",
-  isCurated: true,
-  tags: ["親子", "Taipei", "family"],
-  colorHex: "#2D5D72",
+export const CALENDARS_METADATA: Record<string, {
+  id: string;
+  title: string;
+  description: string;
+  region: string;
+  category: string;
+  isCurated: boolean;
+  tags: string[];
+  colorHex: string;
+}> = {
+  [TAIPEI_QINZI_CALENDAR_ID]: {
+    id: TAIPEI_QINZI_CALENDAR_ID,
+    title: "臺北 親子活動",
+    description: "臺北市嚴選親子活動、兒童劇團、手作體驗與展演年曆。",
+    region: "Taipei",
+    category: "親子活動",
+    isCurated: true,
+    tags: ["親子", "Taipei", "family"],
+    colorHex: "#2D5D72",
+  },
+  [NEWTAIPEI_QINZI_CALENDAR_ID]: {
+    id: NEWTAIPEI_QINZI_CALENDAR_ID,
+    title: "新北 親子活動",
+    description: "新北市嚴選親子活動、藝文體驗、兒童劇場與圖書館活動年曆。",
+    region: "New Taipei",
+    category: "親子活動",
+    isCurated: true,
+    tags: ["親子", "New Taipei", "family"],
+    colorHex: "#2D5D72",
+  },
 };
+
+export const CALENDAR_METADATA = CALENDARS_METADATA[TAIPEI_QINZI_CALENDAR_ID];
 
 // API Endpoints
 export const TAIPEI_TRAVEL_API_URL = "https://www.travel.taipei/open-api/zh-tw/Events/Activity";
-export const CULTURE_MOC_API_URL = "https://cloud.culture.tw/frontsite/trans/SearchShowAction.do?method=doFindTypeJ&category=4";
+export const CULTURE_MOC_API_BASE_URL = "https://cloud.culture.tw/frontsite/trans/SearchShowAction.do?method=doFindTypeJ";
+export const CULTURE_MOC_API_URL = `${CULTURE_MOC_API_BASE_URL}&category=4`;
 
 // MARK: - Data Interfaces
 
@@ -273,83 +299,103 @@ export async function fetchTravelTaipeiFeed(): Promise<NormalizedCuratedEvent[]>
 }
 
 /**
- * Fetches parent-child cultural events from Ministry of Culture (文化部) Open API (Category 4: 親子活動).
- * Filters to venues located in Taipei / New Taipei.
+ * Fetches parent-child cultural events from Ministry of Culture (文化部) Open API.
+ * Primary category: Category 4 (親子活動), supplemented by family-matching shows from Categories 2 (戲劇) & 6 (展覽).
+ * Categorizes shows into Taipei (taipei_qinzi) vs New Taipei (newtaipei_qinzi) by venue location.
+ * 
+ * Note on NTPC Open Data:
+ * We attempted direct access to data.ntpc.gov.tw datasets API, which returns HTTP 403 / "Request Rejected"
+ * due to official government WAF bot protection. Thus, per architecture requirements, we ingest New Taipei
+ * family activities from cloud.culture.tw filtered by New Taipei venue/city fields.
  */
 export async function fetchCultureTwQinziFeed(): Promise<NormalizedCuratedEvent[]> {
-  console.log(`[Curation] Fetching culture.tw 親子活動 from: ${CULTURE_MOC_API_URL}`);
+  console.log(`[Curation] Fetching culture.tw parent-child & family activities`);
 
   try {
-    const response = await fetch(CULTURE_MOC_API_URL, {
-      method: "GET",
-      headers: {
-        "Accept": "application/json",
-        "User-Agent": "JoeCalendar-Curator/1.0 (asia-east1; Node.js 20)",
-      },
-    });
-
-    if (!response.ok) {
-      console.warn(`[Curation] culture.tw returned HTTP status ${response.status} (${response.statusText}).`);
-      return [];
-    }
-
-    const items = (await response.json()) as CultureTwItem[];
-    if (!Array.isArray(items)) {
-      console.warn(`[Curation] culture.tw returned unexpected payload structure.`);
-      return [];
-    }
-
-    console.log(`[Curation] culture.tw returned ${items.length} raw parent-child activities.`);
+    const categories = [4, 2, 6];
     const results: NormalizedCuratedEvent[] = [];
 
-    for (const item of items) {
-      if (!item.UID || !item.title) continue;
-
-      const title = item.title.trim();
-      const showInfos = Array.isArray(item.showInfo) ? item.showInfo : [];
-      const notes = item.webSales || item.sourceWebPromote || item.descriptionFilterHtml || item.comment || null;
-
-      // Filter shows by Taipei / New Taipei region
-      const taipeiShows = showInfos.filter((show) => {
-        const loc = `${show.location || ""} ${show.locationName || ""}`;
-        return loc.includes("臺北") || loc.includes("台北") || loc.includes("新北");
-      });
-
-      if (taipeiShows.length === 0) {
-        continue;
-      }
-
-      // If multiple show times exist, create an event entry per unique show session
-      taipeiShows.forEach((show, index) => {
-        const start = parseDateString(show.time) || parseDateString(item.startDate);
-        const end = parseDateString(show.endTime) || parseDateString(show.time) || parseDateString(item.endDate) || start;
-
-        if (!start || !end) return;
-
-        const originId = taipeiShows.length > 1 ? `${item.UID}_${index}` : item.UID;
-        const externalId = `culture.tw_${originId}`;
-        const venue = [show.locationName, show.location].filter(Boolean).join(" - ") || "Taipei, Taiwan";
-
-        results.push({
-          externalId,
-          externalCalendarId: TAIPEI_QINZI_CALENDAR_ID,
-          source: "culture.tw",
-          title,
-          startDate: start,
-          endDate: end,
-          isAllDay: false,
-          location: venue,
-          notes,
-          calendarType: "local",
-          visibility: { type: "public", groupIds: [] },
-          recurrence: "none",
-          syncStatus: "synced",
-          createdBy: "system_curator",
-          colorHex: CALENDAR_METADATA.colorHex,
+    for (const cat of categories) {
+      const url = `${CULTURE_MOC_API_BASE_URL}&category=${cat}`;
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json",
+            "User-Agent": "JoeCalendar-Curator/1.0 (asia-east1; Node.js 20)",
+          },
         });
-      });
+
+        if (!response.ok) {
+          console.warn(`[Curation] culture.tw category ${cat} returned HTTP ${response.status}.`);
+          continue;
+        }
+
+        const items = (await response.json()) as CultureTwItem[];
+        if (!Array.isArray(items)) continue;
+
+        for (const item of items) {
+          if (!item.UID || !item.title) continue;
+
+          const title = item.title.trim();
+          const desc = item.descriptionFilterHtml || item.comment || "";
+          
+          // For category 4 (親子活動), all items are family activities.
+          // For categories 2 and 6, filter by family keywords.
+          if (cat !== 4 && !matchesFamilyKeywords(`${title} ${desc}`)) {
+            continue;
+          }
+
+          const showInfos = Array.isArray(item.showInfo) ? item.showInfo : [];
+          const notes = item.webSales || item.sourceWebPromote || item.descriptionFilterHtml || item.comment || null;
+
+          showInfos.forEach((show, index) => {
+            const loc = `${show.location || ""} ${show.locationName || ""}`;
+            const isNewTaipei = loc.includes("新北");
+            const isTaipei = (loc.includes("臺北") || loc.includes("台北")) && !isNewTaipei;
+
+            if (!isNewTaipei && !isTaipei) {
+              return;
+            }
+
+            const externalCalendarId = isNewTaipei ? NEWTAIPEI_QINZI_CALENDAR_ID : TAIPEI_QINZI_CALENDAR_ID;
+            const meta = CALENDARS_METADATA[externalCalendarId] || CALENDAR_METADATA;
+
+            const start = parseDateString(show.time) || parseDateString(item.startDate);
+            const end = parseDateString(show.endTime) || parseDateString(show.time) || parseDateString(item.endDate) || start;
+
+            if (!start || !end) return;
+
+            const originId = showInfos.length > 1 ? `${item.UID}_${index}` : item.UID;
+            const externalId = `culture.tw_${originId}`;
+            const defaultCity = isNewTaipei ? "New Taipei, Taiwan" : "Taipei, Taiwan";
+            const venue = [show.locationName, show.location].filter(Boolean).join(" - ") || defaultCity;
+
+            results.push({
+              externalId,
+              externalCalendarId,
+              source: "culture.tw",
+              title,
+              startDate: start,
+              endDate: end,
+              isAllDay: false,
+              location: venue,
+              notes,
+              calendarType: "local",
+              visibility: { type: "public", groupIds: [] },
+              recurrence: "none",
+              syncStatus: "synced",
+              createdBy: "system_curator",
+              colorHex: meta.colorHex,
+            });
+          });
+        }
+      } catch (catError: any) {
+        console.warn(`[Curation] Failed to fetch category ${cat}:`, catError?.message || catError);
+      }
     }
 
+    console.log(`[Curation] culture.tw returned ${results.length} total mapped show sessions across Taipei & New Taipei.`);
     return results;
   } catch (error: any) {
     console.error(`[Curation] Failed to fetch culture.tw feed:`, error?.message || error);
@@ -360,56 +406,73 @@ export async function fetchCultureTwQinziFeed(): Promise<NormalizedCuratedEvent[
 // MARK: - Firestore Sync Pipeline
 
 /**
- * Ensures the parent curated calendar doc exists in `localCalendars/{calendarId}`
- * and refreshes its 30-day sliding window.
+ * Ensures parent curated calendar docs exist in `localCalendars/{calendarId}`
+ * and refreshes their 30-day sliding window.
+ */
+export async function ensureCuratedCalendarDocs(
+  db: admin.firestore.Firestore,
+  now: Date,
+  windowDays: number = WINDOW_DAYS
+): Promise<void> {
+  const windowStartDate = admin.firestore.Timestamp.fromDate(now);
+  const windowEndDate = admin.firestore.Timestamp.fromDate(
+    new Date(now.getTime() + windowDays * 24 * 60 * 60 * 1000)
+  );
+
+  for (const calendarId of [TAIPEI_QINZI_CALENDAR_ID, NEWTAIPEI_QINZI_CALENDAR_ID]) {
+    const meta = CALENDARS_METADATA[calendarId];
+    if (!meta) continue;
+
+    const calRef = db.collection("localCalendars").doc(calendarId);
+    const calDoc = await calRef.get();
+
+    if (!calDoc.exists) {
+      console.log(`[Curation] Creating curated calendar doc: localCalendars/${calendarId}`);
+      await calRef.set({
+        id: calendarId,
+        title: meta.title,
+        description: meta.description,
+        region: meta.region,
+        category: meta.category,
+        isCurated: meta.isCurated,
+        tags: meta.tags,
+        colorHex: meta.colorHex,
+        windowStartDate,
+        windowEndDate,
+        subscriberCount: 0,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+    } else {
+      console.log(`[Curation] Updating 30-day sliding window on localCalendars/${calendarId}`);
+      await calRef.set(
+        {
+          title: meta.title,
+          description: meta.description,
+          region: meta.region,
+          category: meta.category,
+          isCurated: meta.isCurated,
+          tags: meta.tags,
+          colorHex: meta.colorHex,
+          windowStartDate,
+          windowEndDate,
+          updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        },
+        { merge: true }
+      );
+    }
+  }
+}
+
+/**
+ * Backwards-compatible alias for ensureCuratedCalendarDoc.
  */
 export async function ensureCuratedCalendarDoc(
   db: admin.firestore.Firestore,
   now: Date,
   windowDays: number = WINDOW_DAYS
 ): Promise<void> {
-  const calRef = db.collection("localCalendars").doc(TAIPEI_QINZI_CALENDAR_ID);
-  const calDoc = await calRef.get();
-
-  const windowStartDate = admin.firestore.Timestamp.fromDate(now);
-  const windowEndDate = admin.firestore.Timestamp.fromDate(
-    new Date(now.getTime() + windowDays * 24 * 60 * 60 * 1000)
-  );
-
-  if (!calDoc.exists) {
-    console.log(`[Curation] Creating curated calendar doc: localCalendars/${TAIPEI_QINZI_CALENDAR_ID}`);
-    await calRef.set({
-      id: TAIPEI_QINZI_CALENDAR_ID,
-      title: CALENDAR_METADATA.title,
-      description: "臺北市及周邊嚴選親子活動、兒童劇團、手作體驗與展演年曆。",
-      region: CALENDAR_METADATA.region,
-      category: CALENDAR_METADATA.category,
-      isCurated: true,
-      tags: CALENDAR_METADATA.tags,
-      colorHex: CALENDAR_METADATA.colorHex,
-      windowStartDate,
-      windowEndDate,
-      subscriberCount: 0,
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-    });
-  } else {
-    console.log(`[Curation] Updating 30-day sliding window on localCalendars/${TAIPEI_QINZI_CALENDAR_ID}`);
-    await calRef.set(
-      {
-        title: CALENDAR_METADATA.title,
-        region: CALENDAR_METADATA.region,
-        category: CALENDAR_METADATA.category,
-        isCurated: true,
-        tags: CALENDAR_METADATA.tags,
-        colorHex: CALENDAR_METADATA.colorHex,
-        windowStartDate,
-        windowEndDate,
-        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-      },
-      { merge: true }
-    );
-  }
+  return ensureCuratedCalendarDocs(db, now, windowDays);
 }
 
 /**
@@ -452,10 +515,11 @@ export async function upsertCuratedEvents(
         const isSameTitle = data?.title === event.title;
         const isSameLocation = data?.location === event.location;
         const isSameNotes = data?.notes === event.notes;
+        const isSameCalId = data?.externalCalendarId === event.externalCalendarId;
         const isSameStart = (data?.startDate as admin.firestore.Timestamp)?.toMillis() === startTimestamp.toMillis();
         const isSameEnd = (data?.endDate as admin.firestore.Timestamp)?.toMillis() === endTimestamp.toMillis();
 
-        if (isSameTitle && isSameLocation && isSameNotes && isSameStart && isSameEnd) {
+        if (isSameTitle && isSameLocation && isSameNotes && isSameCalId && isSameStart && isSameEnd) {
           skippedCount++;
           continue;
         }
@@ -503,12 +567,12 @@ export async function upsertCuratedEvents(
  */
 export async function runCurateTaiwanFamilyEvents(
   db: admin.firestore.Firestore
-): Promise<{ totalFetched: number; validEvents: number; upserted: number; skipped: number }> {
+): Promise<{ totalFetched: number; validEvents: number; upserted: number; skipped: number; taipeiCount: number; newTaipeiCount: number }> {
   const now = new Date();
-  console.log(`[Curation] Starting Taiwan Family Events curation job at ${now.toISOString()}`);
+  console.log(`[Curation] Starting Taiwan Family Events curation job (Taipei & New Taipei) at ${now.toISOString()}`);
 
-  // 1. Ensure parent curated calendar document exists and window is refreshed
-  await ensureCuratedCalendarDoc(db, now, WINDOW_DAYS);
+  // 1. Ensure parent curated calendar documents exist and windows are refreshed
+  await ensureCuratedCalendarDocs(db, now, WINDOW_DAYS);
 
   // 2. Fetch feeds (travel.taipei + culture.tw)
   const [taipeiEvents, cultureEvents] = await Promise.all([
@@ -517,11 +581,15 @@ export async function runCurateTaiwanFamilyEvents(
   ]);
 
   const allEvents = [...taipeiEvents, ...cultureEvents];
-  console.log(`[Curation] Total fetched events matching family keywords: ${allEvents.length} (Taipei: ${taipeiEvents.length}, Culture.tw: ${cultureEvents.length})`);
+  console.log(`[Curation] Total fetched events matching family keywords: ${allEvents.length} (Taipei travel: ${taipeiEvents.length}, Culture.tw: ${cultureEvents.length})`);
 
   // 3. Filter to next 30-day window
   const windowEvents = allEvents.filter((ev) => isWithinWindow(ev.startDate, ev.endDate, now, WINDOW_DAYS));
   console.log(`[Curation] Events within upcoming ${WINDOW_DAYS}-day window: ${windowEvents.length}`);
+
+  const taipeiCount = windowEvents.filter(e => e.externalCalendarId === TAIPEI_QINZI_CALENDAR_ID).length;
+  const newTaipeiCount = windowEvents.filter(e => e.externalCalendarId === NEWTAIPEI_QINZI_CALENDAR_ID).length;
+  console.log(`[Curation] Breakdown: Taipei=${taipeiCount}, New Taipei=${newTaipeiCount}`);
 
   // 4. Idempotently upsert to Firestore
   const { upsertedCount, skippedCount } = await upsertCuratedEvents(db, windowEvents);
@@ -532,5 +600,7 @@ export async function runCurateTaiwanFamilyEvents(
     validEvents: windowEvents.length,
     upserted: upsertedCount,
     skipped: skippedCount,
+    taipeiCount,
+    newTaipeiCount,
   };
 }

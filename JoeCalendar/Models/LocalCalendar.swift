@@ -35,7 +35,7 @@ public struct LocalCalendar: Identifiable, Codable, Equatable, Hashable {
         colorHex: String = AppColor.GroupPastel.sage.hexString,
         tags: [String] = [],
         windowStartDate: Date = Date(),
-        windowEndDate: Date = Calendar.current.date(byAdding: .day, value: 14, to: Date()) ?? Date(),
+        windowEndDate: Date = Calendar.current.date(byAdding: .day, value: 30, to: Date()) ?? Date(),
         subscriberCount: Int = 0,
         isCurated: Bool = true,
         createdAt: Date = Date(),
