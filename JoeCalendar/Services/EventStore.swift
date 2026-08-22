@@ -430,6 +430,8 @@ public final class EventStore: ObservableObject {
         let externalCalendarId = data["externalCalendarId"] as? String
         let syncStatusStr = data["syncStatus"] as? String ?? "synced"
         let syncStatus = SyncStatus(rawValue: syncStatusStr) ?? .synced
+        let coverImageUrl = data["coverImageUrl"] as? String
+        let eventUrl = data["eventUrl"] as? String
         let createdAt = (data["createdAt"] as? Timestamp)?.dateValue() ?? Date()
         let updatedAt = (data["updatedAt"] as? Timestamp)?.dateValue() ?? Date()
         
@@ -450,6 +452,8 @@ public final class EventStore: ObservableObject {
             externalId: externalId,
             externalCalendarId: externalCalendarId,
             syncStatus: syncStatus,
+            coverImageUrl: coverImageUrl,
+            eventUrl: eventUrl,
             createdAt: createdAt,
             updatedAt: updatedAt
         )

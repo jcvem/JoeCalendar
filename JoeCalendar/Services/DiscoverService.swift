@@ -447,6 +447,8 @@ public final class DiscoverService: ObservableObject {
                     let syncStatus = SyncStatus(rawValue: rawSync) ?? .synced
                     let rawRecurrence = data["recurrence"] as? String ?? "none"
                     let recurrence = EventRecurrence(rawValue: rawRecurrence) ?? .none
+                    let coverImageUrl = data["coverImageUrl"] as? String
+                    let eventUrl = data["eventUrl"] as? String
                     let createdAt = (data["createdAt"] as? Timestamp)?.dateValue() ?? Date()
                     let updatedAt = (data["updatedAt"] as? Timestamp)?.dateValue() ?? Date()
                     
@@ -475,6 +477,8 @@ public final class DiscoverService: ObservableObject {
                         externalId: externalId,
                         externalCalendarId: externalCalendarId,
                         syncStatus: syncStatus,
+                        coverImageUrl: coverImageUrl,
+                        eventUrl: eventUrl,
                         createdAt: createdAt,
                         updatedAt: updatedAt
                     )
@@ -534,6 +538,8 @@ public final class DiscoverService: ObservableObject {
                 let syncStatus = SyncStatus(rawValue: rawSync) ?? .synced
                 let rawRecurrence = (fields["recurrence"] as? [String: Any])?["stringValue"] as? String ?? "none"
                 let recurrence = EventRecurrence(rawValue: rawRecurrence) ?? .none
+                let coverImageUrl = (fields["coverImageUrl"] as? [String: Any])?["stringValue"] as? String
+                let eventUrl = (fields["eventUrl"] as? [String: Any])?["stringValue"] as? String
                 let createdAt = parseIsoDate((fields["createdAt"] as? [String: Any])?["timestampValue"] as? String) ?? Date()
                 let updatedAt = parseIsoDate((fields["updatedAt"] as? [String: Any])?["timestampValue"] as? String) ?? Date()
                 
@@ -554,6 +560,8 @@ public final class DiscoverService: ObservableObject {
                     externalId: externalId,
                     externalCalendarId: externalCalendarId,
                     syncStatus: syncStatus,
+                    coverImageUrl: coverImageUrl,
+                    eventUrl: eventUrl,
                     createdAt: createdAt,
                     updatedAt: updatedAt
                 )

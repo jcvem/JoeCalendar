@@ -97,6 +97,8 @@ export interface NormalizedCuratedEvent {
   syncStatus: "synced";
   createdBy: string;
   colorHex: string;
+  coverImageUrl?: string | null;
+  eventUrl?: string | null;
 }
 
 interface TravelTaipeiApiItem {
@@ -108,6 +110,8 @@ interface TravelTaipeiApiItem {
   location?: string;
   address?: string;
   url?: string;
+  image?: string;
+  imageUrl?: string;
   update?: string;
   posted?: string;
   [key: string]: any;
@@ -139,6 +143,8 @@ interface CultureTwItem {
   comment?: string;
   webSales?: string;
   sourceWebPromote?: string;
+  imageUrl?: string;
+  image?: string;
   startDate?: string;
   endDate?: string;
   [key: string]: any;
@@ -268,6 +274,8 @@ export async function fetchTravelTaipeiFeed(): Promise<NormalizedCuratedEvent[]>
       const externalId = `travel.taipei_${originId}`;
       const location = item.location || item.address || "Taipei, Taiwan";
       const notes = item.url || (desc.length > 500 ? desc.slice(0, 500) + "..." : desc) || null;
+      const coverImageUrl = (typeof item.image === "string" && item.image.trim()) ? item.image.trim() : (typeof item.imageUrl === "string" && item.imageUrl.trim() ? item.imageUrl.trim() : null);
+      const eventUrl = (typeof item.url === "string" && item.url.trim()) ? item.url.trim() : null;
 
       // Determine isAllDay
       const isAllDay = (item.begin?.includes("00:00:00") && item.end?.includes("23:59:59")) || false;
@@ -288,6 +296,8 @@ export async function fetchTravelTaipeiFeed(): Promise<NormalizedCuratedEvent[]>
         syncStatus: "synced",
         createdBy: "system_curator",
         colorHex: CALENDAR_METADATA.colorHex,
+        coverImageUrl,
+        eventUrl,
       });
     }
 
@@ -348,6 +358,9 @@ export async function fetchCultureTwQinziFeed(): Promise<NormalizedCuratedEvent[
 
           const showInfos = Array.isArray(item.showInfo) ? item.showInfo : [];
           const notes = item.webSales || item.sourceWebPromote || item.descriptionFilterHtml || item.comment || null;
+          const coverImageUrl = (typeof item.imageUrl === "string" && item.imageUrl.trim()) ? item.imageUrl.trim() : (typeof item.image === "string" && item.image.trim() ? item.image.trim() : null);
+          const rawEventUrl = item.webSales || item.sourceWebPromote || null;
+          const eventUrl = (typeof rawEventUrl === "string" && rawEventUrl.trim()) ? rawEventUrl.trim() : null;
 
           showInfos.forEach((show, index) => {
             const loc = `${show.location || ""} ${show.locationName || ""}`;
@@ -387,6 +400,8 @@ export async function fetchCultureTwQinziFeed(): Promise<NormalizedCuratedEvent[
               syncStatus: "synced",
               createdBy: "system_curator",
               colorHex: meta.colorHex,
+              coverImageUrl,
+              eventUrl,
             });
           });
         }
@@ -518,8 +533,10 @@ export async function upsertCuratedEvents(
         const isSameCalId = data?.externalCalendarId === event.externalCalendarId;
         const isSameStart = (data?.startDate as admin.firestore.Timestamp)?.toMillis() === startTimestamp.toMillis();
         const isSameEnd = (data?.endDate as admin.firestore.Timestamp)?.toMillis() === endTimestamp.toMillis();
+        const isSameCoverImage = (data?.coverImageUrl ?? null) === (event.coverImageUrl ?? null);
+        const isSameEventUrl = (data?.eventUrl ?? null) === (event.eventUrl ?? null);
 
-        if (isSameTitle && isSameLocation && isSameNotes && isSameCalId && isSameStart && isSameEnd) {
+        if (isSameTitle && isSameLocation && isSameNotes && isSameCalId && isSameStart && isSameEnd && isSameCoverImage && isSameEventUrl) {
           skippedCount++;
           continue;
         }
@@ -542,6 +559,8 @@ export async function upsertCuratedEvents(
         syncStatus: event.syncStatus,
         createdBy: event.createdBy,
         colorHex: event.colorHex,
+        coverImageUrl: event.coverImageUrl ?? null,
+        eventUrl: event.eventUrl ?? null,
         updatedAt: admin.firestore.FieldValue.serverTimestamp(),
       };
 
