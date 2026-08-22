@@ -110,6 +110,8 @@ public struct CalendarEvent: Identifiable, Codable, Equatable, Hashable {
     public var externalId: String?
     public var externalCalendarId: String?
     public var syncStatus: SyncStatus
+    public var coverImageUrl: String? = nil
+    public var eventUrl: String? = nil
     public var createdAt: Date
     public var updatedAt: Date
     
@@ -130,6 +132,8 @@ public struct CalendarEvent: Identifiable, Codable, Equatable, Hashable {
         externalId: String? = nil,
         externalCalendarId: String? = nil,
         syncStatus: SyncStatus = .localOnly,
+        coverImageUrl: String? = nil,
+        eventUrl: String? = nil,
         createdAt: Date = Date(),
         updatedAt: Date = Date()
     ) {
@@ -149,6 +153,8 @@ public struct CalendarEvent: Identifiable, Codable, Equatable, Hashable {
         self.externalId = externalId
         self.externalCalendarId = externalCalendarId
         self.syncStatus = syncStatus
+        self.coverImageUrl = coverImageUrl
+        self.eventUrl = eventUrl
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }

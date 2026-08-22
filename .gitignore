@@ -30,3 +30,7 @@ functions/node_modules/
 # Xcode user state (per-user UI junk)
 *.xcuserstate
 *.xcuserdatad/
+
+# Generated build artifacts
+JoeCalendar/Generated/BuildInfo.generated.swift
+*.generated.swift

@@ -14,6 +14,7 @@ public struct LocalCalendarDetailView: View {
     @ObservedObject private var discoverService = DiscoverService.shared
     @ObservedObject private var subscriptionService = SubscriptionService.shared
     @EnvironmentObject private var localeManager: LocaleManager
+    @Environment(\.openURL) private var openURL
     
     @State private var showingPaywallSheet: Bool = false
     
@@ -232,6 +233,7 @@ public struct LocalCalendarDetailView: View {
                 Text(event.title)
                     .font(AppTypography.headline())
                     .foregroundColor(AppColor.inkPrimary)
+                    .lineLimit(2)
                 
                 if let loc = event.location {
                     HStack(spacing: 3) {
@@ -239,6 +241,7 @@ public struct LocalCalendarDetailView: View {
                             .font(.system(size: 10))
                         Text(loc)
                             .font(AppTypography.caption())
+                            .lineLimit(1)
                     }
                     .foregroundColor(AppColor.inkSecondary)
                 }
@@ -251,9 +254,113 @@ public struct LocalCalendarDetailView: View {
                 }
             }
             
-            Spacer()
+            Spacer(minLength: 4)
+            
+            // Right-side photo thumbnail with gradient overlay and action link
+            eventPhotoThumbnail(event: event)
         }
         .paperCard(padding: AppSpacing.md)
+    }
+    
+    @ViewBuilder
+    private func eventPhotoThumbnail(event: CalendarEvent) -> some View {
+        let validEventUrl: URL? = {
+            guard let urlStr = event.eventUrl?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  !urlStr.isEmpty,
+                  let url = URL(string: urlStr) else {
+                return nil
+            }
+            return url
+        }()
+        
+        let content = ZStack(alignment: .bottom) {
+            // Background Image / Gradient Placeholder
+            if let coverUrlStr = event.coverImageUrl?.trimmingCharacters(in: .whitespacesAndNewlines),
+               !coverUrlStr.isEmpty,
+               let coverUrl = URL(string: coverUrlStr) {
+                AsyncImage(url: coverUrl) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    case .failure:
+                        brandGradientPlaceholder
+                    case .empty:
+                        ZStack {
+                            brandGradientPlaceholder
+                            ProgressView()
+                                .tint(.white)
+                                .scaleEffect(0.7)
+                        }
+                    @unknown default:
+                        brandGradientPlaceholder
+                    }
+                }
+            } else {
+                brandGradientPlaceholder
+            }
+            
+            // Tasteful Linear Gradient Overlay (Darker at bottom for label legibility)
+            LinearGradient(
+                colors: [
+                    Color.clear,
+                    AppColor.inkPrimary.opacity(0.15),
+                    AppColor.inkPrimary.opacity(0.75)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            
+            // Bottom Action Link if eventUrl is present
+            if validEventUrl != nil {
+                HStack(spacing: 2) {
+                    Text(loc: "view_event")
+                        .font(.system(size: 9, weight: .medium))
+                    Text("↗")
+                        .font(.system(size: 8, weight: .bold))
+                }
+                .foregroundColor(.white)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 3)
+                .background(Color.black.opacity(0.35))
+                .clipShape(Capsule())
+                .padding(5)
+            }
+        }
+        .frame(width: 88, height: 88)
+        .clipShape(RoundedRectangle(cornerRadius: AppRadius.sm, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: AppRadius.sm, style: .continuous)
+                .stroke(AppColor.inkBorderSubtle, lineWidth: 0.5)
+        )
+        
+        if let url = validEventUrl {
+            Button(action: {
+                openURL(url)
+            }) {
+                content
+            }
+            .buttonStyle(.plain)
+        } else {
+            content
+        }
+    }
+    
+    private var brandGradientPlaceholder: some View {
+        LinearGradient(
+            colors: [
+                AppColor.accent,
+                Color(hex: 0x1B3845)
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+        .overlay(
+            Image(systemName: "photo")
+                .font(.system(size: 18))
+                .foregroundColor(Color.white.opacity(0.3))
+        )
     }
     
     // MARK: - Editorial Back-Office Note

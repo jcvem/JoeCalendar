@@ -48,6 +48,8 @@
 		EB6FD92E7BBD8FFF9313F182 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1279FB4C6C0896B104A04BFC /* PaywallView.swift */; };
 		EEB6EA436B75B41A07B1786F /* DayDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BC560D946EF98F308AEEFF /* DayDetailSheet.swift */; };
 		F0BE853292C418A6E3E2841B /* CalendarEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0210388C031756FF695CFAD0 /* CalendarEvent.swift */; };
+		AA1000042C68000100000004 /* BuildInfo.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000032C68000100000003 /* BuildInfo.generated.swift */; };
+		AA1000072C68000100000007 /* LegalLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000062C68000100000006 /* LegalLinks.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +90,9 @@
 		F248E3DE624A3DCCC5DF6CC5 /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
 		F7EB9DFC71450EB1A2999E0D /* AddFriendSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendSheet.swift; sourceTree = "<group>"; };
 		FA2D551ABBC70E380E3F2A81 /* EventStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStore.swift; sourceTree = "<group>"; };
+		AA1000032C68000100000003 /* BuildInfo.generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildInfo.generated.swift; sourceTree = "<group>"; };
+		AA1000052C68000100000005 /* BuildInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildInfo.swift; sourceTree = "<group>"; };
+		AA1000062C68000100000006 /* LegalLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalLinks.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,12 +236,22 @@
 			children = (
 				32C1EC4CAF0C6B6EECB01DBB /* App */,
 				BE10373F8ED01C0A9BA374B2 /* DesignSystem */,
+				AA1000022C68000100000002 /* Generated */,
 				4D8AC493A52924B1C6FB42D1 /* Models */,
 				B60C4AB70227832112D5C09F /* Resources */,
 				F0F76A08F9DC8DD73F298974 /* Services */,
 				DC0E026B143CFA1183AC415D /* Views */,
 			);
 			path = JoeCalendar;
+			sourceTree = "<group>";
+		};
+		AA1000022C68000100000002 /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				AA1000032C68000100000003 /* BuildInfo.generated.swift */,
+				AA1000052C68000100000005 /* BuildInfo.swift */,
+			);
+			path = Generated;
 			sourceTree = "<group>";
 		};
 		F0F76A08F9DC8DD73F298974 /* Services */ = {
@@ -248,6 +263,7 @@
 				DBF009E03429C41AD522C7AD /* FirebaseService.swift */,
 				E26056D7BB9AD60D20EF44F9 /* FriendService.swift */,
 				AE87A0DDE72C79EBE815BE4F /* GoogleCalendarService.swift */,
+				AA1000062C68000100000006 /* LegalLinks.swift */,
 				4321E601D02B571CA20E927B /* LocaleManager.swift */,
 				95661F05A277EFA27CDF9A01 /* SubscriptionService.swift */,
 			);
@@ -261,6 +277,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 54A2970F66D5102CC028B891 /* Build configuration list for PBXNativeTarget "JoeCalendar" */;
 			buildPhases = (
+				AA1000012C68000100000001 /* Generate BuildInfo */,
 				F6030A9F88BE5DBB600B0BF0 /* Sources */,
 				6EB70D29C6835627F3953DD5 /* Resources */,
 				0B4E0E76BADF34396CEBB3FB /* Frameworks */,
@@ -335,12 +352,36 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		AA1000012C68000100000001 /* Generate BuildInfo */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Generate BuildInfo";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/JoeCalendar/Generated/BuildInfo.generated.swift",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\nOUTPUT_DIR=\"${SRCROOT}/JoeCalendar/Generated\"\nOUTPUT_FILE=\"${OUTPUT_DIR}/BuildInfo.generated.swift\"\n\nmkdir -p \"${OUTPUT_DIR}\"\n\nAPP_VERSION=\"1.0.0\"\nINFO_PLIST=\"${SRCROOT}/JoeCalendar/Resources/Info.plist\"\nif [ -f \"${INFO_PLIST}\" ]; then\n    VERSION_FROM_PLIST=$(/usr/libexec/PlistBuddy -c \"Print :CFBundleShortVersionString\" \"${INFO_PLIST}\" 2>/dev/null || true)\n    if [ -n \"${VERSION_FROM_PLIST}\" ]; then\n        APP_VERSION=\"${VERSION_FROM_PLIST}\"\n    fi\nfi\n\nGIT_HASH=$(git -C \"${SRCROOT}\" rev-parse --short HEAD 2>/dev/null || echo \"unknown\")\nif [ -z \"${GIT_HASH}\" ]; then\n    GIT_HASH=\"unknown\"\nfi\n\nBUILD_DATE=$(date -u +\"%Y-%m-%dT%H:%M:%SZ\" 2>/dev/null || echo \"\")\n\nTEMP_FILE=\"${OUTPUT_FILE}.tmp\"\ncat << EOF > \"${TEMP_FILE}\"\n// Generated at build time by Xcode Run Script. Do not edit directly.\nimport Foundation\n\npublic let APP_VERSION = \"${APP_VERSION}\"\npublic let GIT_HASH = \"${GIT_HASH}\"\npublic let BUILD_DATE = \"${BUILD_DATE}\"\nEOF\n\nif [ ! -f \"${OUTPUT_FILE}\" ] || ! cmp -s \"${TEMP_FILE}\" \"${OUTPUT_FILE}\"; then\n    mv \"${TEMP_FILE}\" \"${OUTPUT_FILE}\"\nelse\n    rm -f \"${TEMP_FILE}\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		F6030A9F88BE5DBB600B0BF0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				0487490FE8416595D17B59F7 /* AddFriendSheet.swift in Sources */,
+				AA1000042C68000100000004 /* BuildInfo.generated.swift in Sources */,
 				F0BE853292C418A6E3E2841B /* CalendarEvent.swift in Sources */,
 				A8576FEA7AE3B68FD91F703B /* ContentView.swift in Sources */,
 				29C209B9FB3503FB11A62955 /* CreateGroupSheet.swift in Sources */,
@@ -358,6 +399,7 @@
 				5300B4D91454FB99374E3861 /* GoogleCalendarService.swift in Sources */,
 				324D9454961F8F8A4F3A3E23 /* GroupDetailView.swift in Sources */,
 				1640F9D1075DF085966D3277 /* JoeCalendarApp.swift in Sources */,
+				AA1000072C68000100000007 /* LegalLinks.swift in Sources */,
 				75F90C67C47BA6B185C06C01 /* ListView.swift in Sources */,
 				E4B1BE03669B7CBC2622BA27 /* LocalCalendar.swift in Sources */,
 				63052692689BEAB210344B99 /* LocalCalendarDetailView.swift in Sources */,

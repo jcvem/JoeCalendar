@@ -455,7 +455,7 @@ public struct SettingsView: View {
             
             VStack(spacing: 0) {
                 HStack {
-                    Text(loc: "settings_version")
+                    Text("Version \(APP_VERSION) (build \(GIT_HASH))")
                         .font(AppTypography.footnote())
                         .foregroundColor(AppColor.inkSecondary)
                     Spacer()
@@ -466,29 +466,48 @@ public struct SettingsView: View {
                     .background(AppColor.inkBorderSubtle)
                 
                 HStack {
-                    Text(loc: "settings_privacy_policy")
+                    Text("\("settings_development_team".localized()): VEM Studio")
                         .font(AppTypography.footnote())
-                        .foregroundColor(AppColor.accent)
+                        .foregroundColor(AppColor.inkSecondary)
                     Spacer()
-                    Image(systemName: "arrow.up.right")
-                        .font(.system(size: 10))
-                        .foregroundColor(AppColor.inkTertiary)
                 }
                 .padding(AppSpacing.md)
                 
                 Divider()
                     .background(AppColor.inkBorderSubtle)
                 
-                HStack {
-                    Text(loc: "settings_terms_of_service")
-                        .font(AppTypography.footnote())
-                        .foregroundColor(AppColor.accent)
-                    Spacer()
-                    Image(systemName: "arrow.up.right")
-                        .font(.system(size: 10))
-                        .foregroundColor(AppColor.inkTertiary)
+                Link(destination: PRIVACY_URL) {
+                    HStack {
+                        Text(loc: "settings_privacy_policy")
+                            .font(AppTypography.footnote())
+                            .foregroundColor(AppColor.accent)
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                            .font(.system(size: 10))
+                            .foregroundColor(AppColor.inkTertiary)
+                    }
+                    .padding(AppSpacing.md)
+                    .contentShape(Rectangle())
                 }
-                .padding(AppSpacing.md)
+                .buttonStyle(.plain)
+                
+                Divider()
+                    .background(AppColor.inkBorderSubtle)
+                
+                Link(destination: TERMS_URL) {
+                    HStack {
+                        Text(loc: "settings_terms_of_service")
+                            .font(AppTypography.footnote())
+                            .foregroundColor(AppColor.accent)
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                            .font(.system(size: 10))
+                            .foregroundColor(AppColor.inkTertiary)
+                    }
+                    .padding(AppSpacing.md)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
             }
             .background(AppColor.surface)
             .clipShape(RoundedRectangle(cornerRadius: AppRadius.md, style: .continuous))

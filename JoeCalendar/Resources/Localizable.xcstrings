@@ -4061,6 +4061,29 @@
         }
       }
     },
+    "settings_development_team" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Development Team"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開発チーム"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開發團隊"
+          }
+        }
+      }
+    },
     "settings_disconnect" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5032,6 +5055,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "僅限自己（私人）"
+          }
+        }
+      }
+    },
+    "view_event" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View event"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "イベントを見る"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看活動"
           }
         }
       }
