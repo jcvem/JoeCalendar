@@ -3,7 +3,7 @@
 //  JoeCalendar
 //
 //  Created for JoeCalendar Phase 0 Foundation & Extended for Phase 3 Discover & Monetization.
-//  Curated Local Calendars (next-14-days window), frequency-capped native promotions,
+//  Curated Local Calendars (next-30-days window), frequency-capped native promotions,
 //  and Pro subscription integration with TimeTree-inspired Japanese calm aesthetic.
 //
 
@@ -17,7 +17,7 @@ public struct DiscoverView: View {
     @State private var showingPaywall: Bool = false
     
     // Available region filter tabs
-    private let availableRegions = ["all", "Tokyo", "Kyoto", "Taipei", "Osaka"]
+    private let availableRegions = ["all", "Taipei", "New Taipei", "Tokyo", "Kyoto", "Osaka"]
     
     public init() {}
     
@@ -37,7 +37,7 @@ public struct DiscoverView: View {
                             promotionsSection
                         }
                         
-                        // 3. Section B: Followed Local Calendars & 14-Day Feed
+                        // 3. Section B: Followed Local Calendars & 30-Day Feed
                         followedFeedSection
                         
                         // 4. Section C: Curated Local Calendars List
@@ -117,7 +117,7 @@ public struct DiscoverView: View {
                                 .overlay(
                                     Capsule()
                                         .stroke(isSelected ? AppColor.accent : AppColor.inkBorder, lineWidth: 1)
-                                )
+                                 )
                         }
                     }
                 }
@@ -227,7 +227,7 @@ public struct DiscoverView: View {
                     }
                 }
                 
-                // 14-day upcoming events from followed calendars
+                // 30-day upcoming events from followed calendars
                 let upcoming = discoverService.upcomingFollowedEvents
                 if upcoming.isEmpty {
                     Text(loc: "discover_no_upcoming_followed_events")
@@ -236,7 +236,7 @@ public struct DiscoverView: View {
                         .paperCard(padding: AppSpacing.md)
                 } else {
                     VStack(spacing: AppSpacing.xs) {
-                        ForEach(upcoming.prefix(4)) { event in
+                        ForEach(upcoming.prefix(6)) { event in
                             followedEventRow(event: event)
                         }
                     }
@@ -326,6 +326,7 @@ public struct DiscoverView: View {
     
     private func localCalendarCard(cal: LocalCalendar) -> some View {
         let isFollowed = discoverService.isFollowing(cal.id)
+        let events = discoverService.events(for: cal.id)
         
         return VStack(alignment: .leading, spacing: AppSpacing.sm) {
             // Category Color Bar
@@ -372,6 +373,38 @@ public struct DiscoverView: View {
                 .font(AppTypography.footnote())
                 .foregroundColor(AppColor.inkSecondary)
                 .lineLimit(2)
+            
+            // Upcoming Events Preview
+            if !events.isEmpty {
+                VStack(alignment: .leading, spacing: 6) {
+                    ForEach(events.prefix(2)) { event in
+                        HStack(spacing: AppSpacing.sm) {
+                            Text(event.startDate, format: .dateTime.month(.abbreviated).day())
+                                .font(AppTypography.captionMedium())
+                                .foregroundColor(AppColor.accent)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(AppColor.accentLight)
+                                .clipShape(RoundedRectangle(cornerRadius: AppRadius.xs, style: .continuous))
+                            
+                            Text(event.title)
+                                .font(AppTypography.captionMedium())
+                                .foregroundColor(AppColor.inkPrimary)
+                                .lineLimit(1)
+                            
+                            Spacer()
+                            
+                            if let loc = event.location {
+                                Text(loc)
+                                    .font(AppTypography.caption())
+                                    .foregroundColor(AppColor.inkTertiary)
+                                    .lineLimit(1)
+                            }
+                        }
+                    }
+                }
+                .padding(.vertical, 2)
+            }
             
             HStack {
                 // Tags
@@ -473,6 +506,8 @@ public struct DiscoverView: View {
             return String.localizedStringWithFormat(NSLocalizedString("discover_region_kyoto", comment: ""))
         case "taipei":
             return String.localizedStringWithFormat(NSLocalizedString("discover_region_taipei", comment: ""))
+        case "new taipei", "newtaipei":
+            return String.localizedStringWithFormat(NSLocalizedString("discover_region_new_taipei", comment: ""))
         case "osaka":
             return String.localizedStringWithFormat(NSLocalizedString("discover_region_osaka", comment: ""))
         default:

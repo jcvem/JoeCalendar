@@ -1097,19 +1097,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "14-Day Feed"
+            "value" : "30-Day Feed"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "14日間の予定"
+            "value" : "30日間の予定"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "14 天在地動態"
+            "value" : "30 天在地動態"
           }
         }
       }
@@ -1120,19 +1120,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "14-Day Window"
+            "value" : "30-Day Window"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "14日間配信"
+            "value" : "30日間配信"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "14 天即時動態"
+            "value" : "30 天即時動態"
           }
         }
       }
@@ -1235,19 +1235,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Follow curated city and interest calendars below to see upcoming 14-day local highlights here."
+            "value" : "Follow curated city and interest calendars below to see upcoming 30-day local highlights here."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "下の厳選ローカルカレンダーをフォローすると、今後14日間の予定がここに表示されます。"
+            "value" : "下の厳選ローカルカレンダーをフォローすると、今後30日間の予定がここに表示されます。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "追蹤下方精選城市與主題行事曆，即可在此即時瀏覽未來 14 天的精彩在地行程。"
+            "value" : "追蹤下方精選城市與主題行事曆，即可在此即時瀏覽未來 30 天的精彩在地行程。"
           }
         }
       }
@@ -1281,19 +1281,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Upcoming in Next 14 Days"
+            "value" : "Upcoming in Next 30 Days"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "フォロー中の今後14日間の予定"
+            "value" : "フォロー中の今後30日間の予定"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "已追蹤行事曆未來 14 天動態"
+            "value" : "已追蹤行事曆未來 30 天動態"
           }
         }
       }
@@ -1419,19 +1419,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "What's on in your city over the next 14 days"
+            "value" : "What's on in your city over the next 30 days"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "お住まいの地域で今後14日間に開催されるイベント"
+            "value" : "お住まいの地域で今後30日間に開催されるイベント"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "未來 14 天城市熱門活動動態"
+            "value" : "未來 30 天城市熱門活動動態"
           }
         }
       }
@@ -1465,19 +1465,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No events scheduled in the current 14-day window."
+            "value" : "No events scheduled in the current 30-day window."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "現在配信中の14日間に予定はありません。"
+            "value" : "現在配信中の30日間に予定はありません。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "目前的 14 天期間內暫無行程。"
+            "value" : "目前的 30 天期間內暫無行程。"
           }
         }
       }
@@ -1488,19 +1488,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No scheduled events for the next 14 days in your followed calendars."
+            "value" : "No scheduled events for the next 30 days in your followed calendars."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "フォロー中のカレンダーに今後14日間の予定はありません。"
+            "value" : "フォロー中のカレンダーに今後30日間の予定はありません。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "已追蹤的行事曆在未來 14 天內暫無新行程。"
+            "value" : "已追蹤的行事曆在未來 30 天內暫無新行程。"
           }
         }
       }
@@ -1781,6 +1781,29 @@
         }
       }
     },
+    "discover_region_new_taipei" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Taipei"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新北"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新北"
+          }
+        }
+      }
+    },
     "discover_region_tokyo" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1925,19 +1948,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tap follow to add next 14-day events to your feed."
+            "value" : "Tap follow to add next 30-day events to your feed."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "フォローすると今後14日間の予定がフィードに追加されます。"
+            "value" : "フォローすると今後30日間の予定がフィードに追加されます。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "點擊追蹤即可將未來 14 天動態加入探索動態。"
+            "value" : "點擊追蹤即可將未來 30 天動態加入探索動態。"
           }
         }
       }
@@ -1971,19 +1994,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Next 14 Days Events"
+            "value" : "Next 30 Days Events"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "今後14日間の予定一覧"
+            "value" : "今後30日間の予定一覧"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "未來 14 天精選行程"
+            "value" : "未來 30 天精選行程"
           }
         }
       }
@@ -3489,19 +3512,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "14-Day Curated Feeds"
+            "value" : "30-Day Curated Feeds"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "14日間厳選フィード"
+            "value" : "30日間厳選フィード"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "14 天即時精選動態"
+            "value" : "30 天即時精選動態"
           }
         }
       }

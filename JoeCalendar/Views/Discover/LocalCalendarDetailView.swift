@@ -3,7 +3,7 @@
 //  JoeCalendar
 //
 //  Created for JoeCalendar Phase 3 Discover & Monetization.
-//  Curated Local Calendar detail view displaying next-14-days events feed,
+//  Curated Local Calendar detail view displaying next-30-days events feed,
 //  follow/unfollow actions with free-tier limit checks, and back-office editorial notice.
 //
 
@@ -31,10 +31,10 @@ public struct LocalCalendarDetailView: View {
                     // Header Banner Card
                     headerCard
                     
-                    // 14-Day Sliding Window Notice
+                    // 30-Day Sliding Window Notice
                     slidingWindowBanner
                     
-                    // Upcoming Events Feed (Next 14 Days)
+                    // Upcoming Events Feed (Next 30 Days)
                     eventsSection
                     
                     // Editorial Operating Team Note (Per P3 Requirements)
